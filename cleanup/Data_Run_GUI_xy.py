@@ -338,7 +338,7 @@ class Motor_Movement(QGroupBox):
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 
-	def disable():
+	def disable(self):
 		self.mc.disable()
 
 	def stop_now(self):
