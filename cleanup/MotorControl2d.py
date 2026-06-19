@@ -1,22 +1,20 @@
-'''
+"""
 Motor_Control_2D controls two motors (x and y), using Single_Motor_Control
 In this case, the x motor moves in axial direction and y motor moves in theta direction.
 
 Modified by: Yuchen Qian
 Oct 2017
-'''
+"""
 
-import math
 from Single_Motor_Control import Motor_Control
 import time
-import numpy
 
 
 #############################################################################################
 #############################################################################################
 
 
-class Motor_Control_2D:
+class MotorControl2d:
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None):
 

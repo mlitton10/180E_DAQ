@@ -17,7 +17,7 @@ import os
 import os.path
 import time
 import datetime
-from Motor_Control_2D import Motor_Control_2D
+from MotorControl2d import MotorControl2d
 from LecroyScope import LecroyScope, WAVEDESC_SIZE
 from LecroyScope import EXPANDED_TRACE_NAMES
 import tkinter
@@ -310,7 +310,7 @@ class MotorMovement(QGroupBox):
 
 		self.setLayout(MMLayout)
 
-		self.mc = Motor_Control_2D(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
+		self.mc = MotorControl2d(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
 
 #----------------------------------------------------------------------
 
@@ -602,7 +602,7 @@ class DataRunThread(QRunnable):
 
 		#============================
 
-		mc = Motor_Control_2D(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
+		mc = MotorControl2d(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
 
 
 		######### HDF5 OUTPUT FILE SETUP #########
