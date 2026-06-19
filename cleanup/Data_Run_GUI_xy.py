@@ -29,18 +29,13 @@ dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
 from PyQt5 import QtCore
-# from PyQt5.QtWidgets import (QApplication, QBoxLayout, QCheckBox, QComboBox,
-# 		 QDial, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QScrollBar,
-# 		 QSlider, QSpinBox, QStackedWidget, QWidget, QLineEdit, QPushButton, QSizePolicy, QMessageBox)
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from mpl_toolkits.mplot3d import axes3d
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.patches as patches
-from scipy.linalg import norm
 
 data_running = False
 #############################################################################################
