@@ -26,7 +26,7 @@ import time
 import os.path
 import sys
 
-from LeCroy_Scope import LeCroy_Scope, WAVEDESC_SIZE
+from LecroyScope import LecroyScope, WAVEDESC_SIZE
 from Motor_Control_2D import Motor_Control_2D
 #from wavegen_control import wavegen_control
 
@@ -154,7 +154,7 @@ def Acquire_Scope_Data_2D(get_hdf5_filename, get_positions, get_channel_descript
 	pos_ds.attrs['ypos'] = ypos                                                     # not legacy
 
 	# create the scope access object, and iterate over positions
-	with LeCroy_Scope(ip_addresses['scope'], verbose=False) as scope:
+	with LecroyScope(ip_addresses['scope'], verbose=False) as scope:
 		if not scope:
 			print('Scope not found at '+ip_addresses['scope'])      # I think we have raised an exception if this is the case, so we never get here
 			return

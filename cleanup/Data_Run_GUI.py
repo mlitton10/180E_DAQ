@@ -19,8 +19,8 @@ import os.path
 import time
 import datetime
 from Motor_Control_2D import Motor_Control_2D
-from LeCroy_Scope import LeCroy_Scope, WAVEDESC_SIZE
-from LeCroy_Scope import EXPANDED_TRACE_NAMES
+from LecroyScope import LecroyScope, WAVEDESC_SIZE
+from LecroyScope import EXPANDED_TRACE_NAMES
 import tkinter
 from tkinter import filedialog
 import tkinter.messagebox
@@ -650,7 +650,7 @@ class Data_Run_Thread(QRunnable):
 			pos_ds.attrs['ypos'] = ypos                                                     # not legacy                                                     # not legacy
 
 			# create the scope access object, and iterate over positions
-			with LeCroy_Scope(self.ip_addrs['scope'], verbose=False) as scope:
+			with LecroyScope(self.ip_addrs['scope'], verbose=False) as scope:
 				if not scope:
 					print('Scope not found at '+self.ip_addrs['scope'])      # I think we have raised an exception if this is the case, so we never get here
 					return
@@ -794,7 +794,7 @@ class Test_Shot_Thread(QRunnable):
 		scope.set_trigger_mode('NORM')   # resume triggering
 
 	def run(self):
-		with LeCroy_Scope(self.ip_addrs['scope'], verbose=False) as scope:
+		with LecroyScope(self.ip_addrs['scope'], verbose=False) as scope:
 			if not scope:
 				print('Scope not found at '+self.ip_addrs['scope'])      # I think we have raised an exception if this is the case, so we never get here
 				return

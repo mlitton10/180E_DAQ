@@ -11,7 +11,7 @@
 import numpy
 import math
 from Acquire_Scope_Data_2D import Acquire_Scope_Data_2D
-from LeCroy_Scope import EXPANDED_TRACE_NAMES
+from LecroyScope import EXPANDED_TRACE_NAMES
 import tkinter
 from tkinter import filedialog
 
