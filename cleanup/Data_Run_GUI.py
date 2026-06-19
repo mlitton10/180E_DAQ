@@ -12,7 +12,6 @@
 #
 
 import numpy
-import math
 import sys
 import os
 import os.path
@@ -30,18 +29,13 @@ dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="02/24/2018 1:33pm"			# update this when a change has been made
 
 from PyQt5 import QtCore
-# from PyQt5.QtWidgets import (QApplication, QBoxLayout, QCheckBox, QComboBox,
-# 		 QDial, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QScrollBar,
-# 		 QSlider, QSpinBox, QStackedWidget, QWidget, QLineEdit, QPushButton, QSizePolicy, QMessageBox)
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from mpl_toolkits.mplot3d import axes3d
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.patches as patches
-from scipy.linalg import norm
 
 data_running = False
 #############################################################################################
@@ -120,7 +114,7 @@ class MyMplCanvas(FigureCanvas):
 
 
 
-class Axis_Controls(QGroupBox):
+class AxisControls(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.xupInput = QSpinBox()
@@ -162,7 +156,7 @@ class Axis_Controls(QGroupBox):
 #############################################################################################
 
 
-class Position_Controls(QGroupBox):
+class PositionControls(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.setTitle("Set up DAQ position")
@@ -236,7 +230,7 @@ class Position_Controls(QGroupBox):
 ######################################################################################################
 
 
-class Acquisition_Controls(QGroupBox):
+class AcquisitionControls(QGroupBox):
 
 	def __init__(self):
 		super().__init__()
@@ -254,15 +248,15 @@ class Acquisition_Controls(QGroupBox):
 ######################################################################################################
 
 
-class Motor_Movement(QGroupBox):
+class MotorMovement(QGroupBox):
 
-	def __init__(self, x_ip_addr = None, y_ip_addr = None, MOTOR_PORT = None):
+	def __init__(self, x_ip_addr = None, y_ip_addr = None, motor_port = None):
 		super().__init__()
 		self.setTitle("Motor Movement Control")
 
 		self.x_ip_addr = x_ip_addr
 		self.y_ip_addr = y_ip_addr
-		self.MOTOR_PORT = MOTOR_PORT
+		self.MOTOR_PORT = motor_port
 
 		# (cm) Move probe to absolute position along the shaft counted by motor encoder
 		self.xMoveLabel = QLabel("Move z motor to:")
@@ -373,7 +367,7 @@ class Motor_Movement(QGroupBox):
 #############################################################################################
 
 
-class Scope_Channel(QGroupBox):
+class ScopeChannel(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.titleLabel = QLabel("Enter channel descriptions")
@@ -405,7 +399,7 @@ update_pos = None
 #############################################################################################
 #############################################################################################
 
-class Software_Version(QGroupBox):
+class SoftwareVersion(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.mod_timestr=(os.path.getmtime(dir_path))
@@ -429,10 +423,10 @@ class Signals(QObject):
 	finished_position = pyqtSignal(float, float)
 	cancel = pyqtSignal()
 
-class Data_Run_Thread(QRunnable):
+class DataRunThread(QRunnable):
 
 	def __init__(self, hdf5_filename, pos_param, channel_description, ip_addrs):
-		super(Data_Run_Thread, self).__init__()
+		super(DataRunThread, self).__init__()
 
 		self.hdf5_filename = hdf5_filename
 		self.pos_param = pos_param
@@ -500,7 +494,7 @@ class Data_Run_Thread(QRunnable):
 		avoid_overwrite = True     # <-- setting this to False will allow overwriting an existing file without a prompt
 
 		fn = self.hdf5_filename
-		if fn == None  or len(fn) == 0  or  (avoid_overwrite  and  os.path.isfile(fn)):
+		if fn is None or len(fn) == 0  or  (avoid_overwrite and os.path.isfile(fn)):
 			# if we are not allowing possible overwrites as default, and the file already exists, use file open dialog
 			tk = tkinter.Tk()
 			tk.withdraw()		# prevent tk GUI from popping up
@@ -772,10 +766,10 @@ class Data_Run_Thread(QRunnable):
 
 
 
-class Test_Shot_Thread(QRunnable):
+class TestShotThread(QRunnable):
 
 	def __init__(self, ip_addrs):
-		super(Test_Shot_Thread, self).__init__()
+		super(TestShotThread, self).__init__()
 		self.signals = Signals()
 		self.ip_addrs = ip_addrs
 
@@ -810,17 +804,17 @@ class Window(QWidget):
 	def __init__(self):
 		super(Window, self).__init__()
 
-		self.pc = Position_Controls()
+		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
-		self.ac = Acquisition_Controls()
-		self.axc = Axis_Controls()
-		self.sv = Software_Version()
-		self.sc = Scope_Channel()
+		self.ac = AcquisitionControls()
+		self.axc = AxisControls()
+		self.sv = SoftwareVersion()
+		self.sc = ScopeChannel()
 		self.x_ip = "192.168.0.50"
 		self.y_ip = "192.168.0.40"
 		self.scope_ip = "192.168.0.60"
 		self.port_ip = int(7776)
-		self.mm = Motor_Movement(x_ip_addr = self.x_ip, y_ip_addr = self.y_ip, MOTOR_PORT = self.port_ip)
+		self.mm = MotorMovement(x_ip_addr = self.x_ip, y_ip_addr = self.y_ip, motor_port= self.port_ip)
 		self.mm.set_input_usage(2)
 
 		self.axc.xupInput.valueChanged.connect(self.axis_change)
@@ -876,7 +870,7 @@ class Window(QWidget):
 
 
 	def update_current_position(self):
-		if data_running == False:
+		if not data_running:
 			self.xnow, self.ynow = self.mm.current_probe_position()
 			self.canvas.point.remove()
 			self.canvas.update_probe(self.xnow, self.ynow)
@@ -887,7 +881,7 @@ class Window(QWidget):
 
 
 	def update_current_position_during_data_run(self, xnow, ynow):
-		if data_running == True:
+		if data_running:
 			self.xnow = xnow
 			self.ynow = ynow
 			self.canvas.point.remove()
@@ -901,7 +895,7 @@ class Window(QWidget):
 		self.ScopeScreen.setPixmap(self.pixmap)
 
 	def mark_finished_positions(self, x, y):
-		if data_running == True:
+		if data_running:
 			self.xdone = x
 			self.ydone = y
 			self.canvas.visited_points.remove()
@@ -932,7 +926,7 @@ class Window(QWidget):
 	def update_geometry(self):
 		self.param = self.update_parameters()
 
-		if self.update == True:
+		if self.update:
 			self.canvas.matrix.remove()
 			self.canvas.update_figure(self.param)
 		else:
@@ -961,7 +955,7 @@ class Window(QWidget):
 		self.ip_addrs['y'] = self.y_ip
 		self.ip_addrs['scope'] = self.scope_ip
 
-		self.data_run = Data_Run_Thread(self.hdf5_filename, self.pos_param, self.channel_description, self.ip_addrs)
+		self.data_run = DataRunThread(self.hdf5_filename, self.pos_param, self.channel_description, self.ip_addrs)
 		self.freeze_all_controls()
 		self.data_run.signals.finished.connect(self.data_run_finished)
 		self.data_run.signals.cancel.connect(self.acquisition_canceled)
@@ -1019,7 +1013,7 @@ class Window(QWidget):
 	def start_test_shot(self):
 		self.ip_addrs = {}
 		self.ip_addrs['scope'] = self.scope_ip
-		self.test_shot = Test_Shot_Thread(self.ip_addrs)
+		self.test_shot = TestShotThread(self.ip_addrs)
 		self.test_shot.signals.finished.connect(self.test_shot_finished)
 		self.test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
 		self.threadpool.start(self.test_shot)
