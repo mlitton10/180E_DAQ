@@ -24,7 +24,7 @@ import subprocess
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # throws this exception if search fails
 
-class find_ip_addr_error(Exception):
+class FindIpAddrError(Exception):
 	""" our local error exception; has no behavior of its own"""
 	pass
 
@@ -36,7 +36,7 @@ def my_ip_addr() -> str:
 		test_ip_addr = '8.8.8.8'
 		r = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect((test_ip_addr, 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
 		if len(r) == 0:
-			raise find_ip_addr_error('*** my_ip_addr(): This computer does not seem to have an IP address')
+			raise FindIpAddrError('*** my_ip_addr(): This computer does not seem to have an IP address')
 		return r
 		# this opaque technique is from http://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
 		# I'm not sure it works, since it returns the same result when the RJ45 connection is unplugged and there is no internet connection, AND also when the wifi subsequently connects with a different IP address
@@ -58,7 +58,7 @@ def find_ip_addr(search_str, ip_range='') -> ():
 	if len(ip_range) == 0:
 		ip_addr = my_ip_addr()
 		if len(ip_addr) == 0:
-			raise find_ip_addr_error('*** find_ip_addr(): local ip address not determined')
+			raise FindIpAddrError('*** find_ip_addr(): local ip address not determined')
 		ip_range = ip_addr[0:ip_addr.rfind('.')] + '.*'   # change last byte to '*'
 
 	if sys.platform == 'linux':
@@ -72,7 +72,7 @@ def find_ip_addr(search_str, ip_range='') -> ():
 		dl = [d for d in os.listdir(WPF) if d.lower().find('nmap') == 0]
 		if len(dl) == 0:
 			print("*** find_ip_addr(): cannot find nmap.exe (see https://nmap.org)")   # note: this is windows we are failing on
-			raise(find_ip_addr_error("cannot find nmap.exe (see https://nmap.org)"))
+			raise(FindIpAddrError("cannot find nmap.exe (see https://nmap.org)"))
 		nmap_path = os.path.join(WPF, dl[-1], 'nmap.exe')        # use last occurrence, which is presumably the highest version
 
 	args = [nmap_path, "-n", "-sn", ip_range]        # e.g.   nmap -n -sn 192.168.1.*
@@ -86,7 +86,6 @@ def find_ip_addr(search_str, ip_range='') -> ():
 	#      t = os.spawnv(os.P_WAIT, args[0], args)
 	# instead, do this (and capture the output):
 
-	nmap_results = ''
 	if sys.hexversion < 0x03050000:
 		# ugh bumped into this because Pi ships with Python 3.4, which does not have subprocess.run()
 		sco = subprocess.check_output(args)
@@ -95,7 +94,7 @@ def find_ip_addr(search_str, ip_range='') -> ():
 	else:
 		cpo = subprocess.run(args, stdout=subprocess.PIPE)
 		if cpo.returncode != 0:
-			raise find_ip_addr_error('Failed to run "'+args[0]+'"')
+			raise FindIpAddrError('Failed to run "' + args[0] + '"')
 		nmap_results = str(cpo.stdout)
 
 	""" nmap output is a series of 3-line descriptions of the form
@@ -113,8 +112,8 @@ def find_ip_addr(search_str, ip_range='') -> ():
 		k = i + len(search_str)
 		i = nmap_results[0:i].rfind("report for ")   # backwards search starting at our target
 		if i < 0:
-			raise find_ip_addr_error('nmap results are funny: found "'+search_str+'" but could not find the text "report for"')
-			return addrs
+			raise FindIpAddrError('nmap results are funny: found "' + search_str + '" but could not find the text "report for"')
+
 		i += len("report for ")
 		j = nmap_results[i:].find("\\r\\n")
 		if j < 0:
@@ -124,7 +123,7 @@ def find_ip_addr(search_str, ip_range='') -> ():
 
 	if len(addrs) == 0:
 		print(' -> not found')
-		raise find_ip_addr_error('nmap did not find "'+search_str+'"')
+		raise FindIpAddrError('nmap did not find "' + search_str + '"')
 	else:
 		print(' ->',addrs)
 	return addrs
@@ -139,24 +138,24 @@ if __name__ == '__main__':
 	import tkinter.messagebox
 	try:
 		pi_addrs = find_ip_addr("Raspberry Pi")
-	except find_ip_addr_error:
+	except FindIpAddrError:
 		pi_addrs = ()
 
 	try:
 		lecroy_addrs = find_ip_addr("Avalue Technology")  # LeCroy
-	except find_ip_addr_error:
+	except FindIpAddrError:
 		lecroy_addrs = ()
 
 	if len(lecroy_addrs) == 0:
 		try:
 			lecroy_addrs = find_ip_addr("BCM Computers")  # LeCroy
-		except find_ip_addr_error:
+		except FindIpAddrError:
 			lecroy_addrs = ()
 
 	if len(lecroy_addrs) == 0:
 		try:
 			lecroy_addrs = find_ip_addr("iPOX Technology")  # LeCroy
-		except find_ip_addr_error:
+		except FindIpAddrError:
 			lecroy_addrs = ()
 
 	w = tkinter.Tk()  # create tk window, so that we can eliminate it after the messagebox is finished
