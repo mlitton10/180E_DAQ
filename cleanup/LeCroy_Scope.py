@@ -40,7 +40,6 @@ import collections
 import struct
 import sys
 import pylab as plt
-import matplotlib.image as mpimg
 import time
 
 # the header recorded for each trace
