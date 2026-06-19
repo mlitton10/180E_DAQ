@@ -7,7 +7,7 @@ Oct 2017
 '''
 
 import math
-from Single_Motor_Control import Motor_Control
+from Single_Motor_Control import MotorControl
 import time
 import numpy
 
@@ -20,8 +20,8 @@ class Motor_Control_2D:
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None):
 
-		self.x_mc = Motor_Control(verbose=True, server_ip_addr= x_ip_addr)
-		self.y_mc = Motor_Control(verbose=True, server_ip_addr= y_ip_addr)
+		self.x_mc = MotorControl(verbose=True, server_ip_addr= x_ip_addr)
+		self.y_mc = MotorControl(verbose=True, server_ip_addr= y_ip_addr)
 
 
 		self.steps_per_cm = 200000.0 # For EG=20000steps/rev motor and 1mm/rev shaft
