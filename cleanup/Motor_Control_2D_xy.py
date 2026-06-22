@@ -9,7 +9,6 @@ Oct 2017
 import math
 from Single_Motor_Control import MotorControl
 import time
-import numpy
 
 
 #############################################################################################
