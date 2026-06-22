@@ -390,7 +390,7 @@ class LecroyScope:
     def set_averaging_count(self, channel='C1', n_sweeps=1):
         """ set count of averages for a given channel (not used)
         """
-        Cn = self.validate_channel(channel)
+        cn = self.validate_channel(channel)
         if n_sweeps < 1:
             n_sweeps = 1
         if n_sweeps > 1000000:
