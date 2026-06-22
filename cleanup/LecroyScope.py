@@ -381,8 +381,8 @@ class LecroyScope:
     def averaging_count(self, channel='C1') -> int:
         """ get count of averages specified for the channel, default = read from channel 'C1'
         """
-        Cn = self.validate_channel(channel)
-        NSweeps = int(self.scope.query('VBS? "Return=app.Acquisition.'+Cn+'.AverageSweeps"'))
+        cn = self.validate_channel(channel)
+        NSweeps = int(self.scope.query('VBS? "Return=app.Acquisition.'+cn+'.AverageSweeps"'))
         #todo: should this deal with traces rather than channels?
         return NSweeps
 
