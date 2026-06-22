@@ -203,7 +203,7 @@ class LecroyScope:
             throw an exception if any of the above fails
             eventually we need to call rm_close()
         """
-        if self.rm != None:
+        if self.rm is not None:
             return True
 
         if self.verbose: print('<:> constructing resource manager')
@@ -384,7 +384,7 @@ class LecroyScope:
         cn = self.validate_channel(channel)
         n_sweeps = int(self.scope.query('VBS? "Return=app.Acquisition.'+cn+'.AverageSweeps"'))
         #todo: should this deal with traces rather than channels?
-        return NSweeps
+        return n_sweeps
 
 
     def set_averaging_count(self, channel='C1', n_sweeps=1):
@@ -403,33 +403,33 @@ class LecroyScope:
             returns #sweeps and corresponding channel. To display progress, use
             self.averaging_count(cc) where cc is the returned channel
         """
-        NSweeps = 0
+        n_sweeps = 0
         ach = None
         for ch in self.displayed_channels():
             n = self.averaging_count(ch)
-            if n > NSweeps:
-                NSweeps = n
+            if n > n_sweeps:
+                n_sweeps = n
                 ach = ch
         if ach is None:
             # throw an exception if no channels had sweeps
             err = '**** max_averaging_count(): no displayed channels'
             raise(RuntimeError(err)).with_traceback(sys.exc_info()[2])
-        return NSweeps, ach
+        return n_sweeps, ach
 
     #-------------------------------------------------------------------------
 
     def wait_for_max_sweeps(self, aux_text='', timeout=100)  -> (bool,int):
         """ determine maximum averaging count across all displayed channels, then wait for that many sweeps
         """
-        NSweeps, ach = self.max_averaging_count()
-        self.write_status_msg(aux_text + 'Waiting for averaging('+str(NSweeps)+') to complete')
+        n_sweeps, ach = self.max_averaging_count()
+        self.write_status_msg(aux_text + 'Waiting for averaging('+str(n_sweeps)+') to complete')
 
-        timed_out,N = self.wait_for_sweeps(ach, NSweeps, timeout)
+        timed_out,N = self.wait_for_sweeps(ach, n_sweeps, timeout)
 
         if timed_out:
-            msg = 'averaging('+str(NSweeps)+') timed out: '+str(N)+' at %.6g s' % timeout
+            msg = 'averaging('+str(n_sweeps)+') timed out: '+str(N)+' at %.6g s' % timeout
         else:
-            msg = 'averaging('+str(NSweeps)+'), completed, got '+str(N)
+            msg = 'averaging('+str(n_sweeps)+'), completed, got '+str(N)
         self.write_status_msg(aux_text + msg)
         return timed_out,N
 
@@ -573,17 +573,17 @@ class LecroyScope:
 
         if self.hdr.comm_type == 0:
             # data returned as signed chars
-            NSamples = self.hdr.wave_array_1
+            n_samples = self.hdr.wave_array_1
         elif self.hdr.comm_type == 1:
             # data returned as shorts
-            NSamples = int(self.hdr.wave_array_1/2)
+            n_samples = int(self.hdr.wave_array_1/2)
         else:
             # throw an exception if we don't recognize comm_type
             err = '**** hdr.comm_type = ' + str(self.hdr.comm_type) + '; expected value is either 0 or 1'
             raise(RuntimeError(err)).with_traceback(sys.exc_info()[2])
 
-        if self.verbose: print('<:> NSamples =',NSamples)
-        if NSamples == 0:
+        if self.verbose: print('<:> NSamples =',n_samples)
+        if n_samples == 0:
             # throw an exception if there are no samples (i.e. scope not triggered, trace not displayed)
             err = '**** fail because NSamples = 0 (possible cause: trace has no data? scope not triggered?)\nIF SCOPE IS IN 2-CHANNEL MODE BUT CHANNEL 1 or 4 ARE SELECTED, they have no data'
             raise(RuntimeError(err)).with_traceback(sys.exc_info()[2])
@@ -609,15 +609,15 @@ class LecroyScope:
         ndx0 = (15+WAVEDESC_SIZE) + self.hdr.user_text + self.hdr.trigtime_array + self.hdr.ris_time_array + self.hdr.res_array1
 
         if self.hdr.comm_type == 1:       # data returned in words (short integers)
-            ndx1 = ndx0 + NSamples*2
-            wdata = struct.unpack(str(NSamples)+'h', self.trace_bytes[ndx0:ndx1])              # unpack returns a tuple, so
+            ndx1 = ndx0 + n_samples*2
+            wdata = struct.unpack(str(n_samples)+'h', self.trace_bytes[ndx0:ndx1])              # unpack returns a tuple, so
             if raw:
                 data = wdata
             else:
                 data = numpy.array(wdata) * self.hdr.vertical_gain - self.hdr.vertical_offset      # we need to convert tuple to array in order to work with it
         if self.hdr.comm_type == 0:       # data returned in bytes (signed char)
-            ndx1 = ndx0 + NSamples
-            cdata = struct.unpack(str(NSamples)+'b', self.trace_bytes[ndx0:ndx1])              # unpack returns a tuple
+            ndx1 = ndx0 + n_samples
+            cdata = struct.unpack(str(n_samples)+'b', self.trace_bytes[ndx0:ndx1])              # unpack returns a tuple
             if raw:
                 data = cdata
             else:
@@ -635,13 +635,13 @@ class LecroyScope:
         """ return a numpy array containing sample times
             note: only valid after a call to acquire
         """
-        NSamples = int(0)
+        n_samples = int(0)
         if self.hdr.comm_type == 0:
-            NSamples = self.hdr.wave_array_1            # data returned as signed chars
+            n_samples = self.hdr.wave_array_1            # data returned as signed chars
         elif self.hdr.comm_type == 1:
-            NSamples = int(self.hdr.wave_array_1/2)     # data returned as shorts
+            n_samples = int(self.hdr.wave_array_1/2)     # data returned as shorts
         t0 = self.hdr.horiz_offset
-        return numpy.linspace(t0, t0+NSamples*self.hdr.horiz_interval, NSamples, endpoint=False)
+        return numpy.linspace(t0, t0+n_samples*self.hdr.horiz_interval, n_samples, endpoint=False)
         #note on linspace construction here: suppose we have 2 samples and the trace is 10ms, the samples should be at 0 and 5 ms,
         #                                    rather than 0 and 10ms as linspace(0,N*dt,N) would return
         # Assume this is the case, because when requesting 10000 samples the scope actually returns 10001.  todo: test this, e.g. sample 1 kHz with 1000 pts, look at aliasing. Need the 1 kHz to be referenced to same frequency as scope
@@ -739,8 +739,8 @@ class LecroyScope:
                 print('hist=',hist, end="     ")
                 print('edges=',e)
 
-            NSamples = numpy.size(data)
-            if hist[1] > (1-self.offscale_fraction)*NSamples:   # e.g. we want 99% of all samples in the OK bin
+            n_samples = numpy.size(data)
+            if hist[1] > (1-self.offscale_fraction)*n_samples:   # e.g. we want 99% of all samples in the OK bin
                 status = True
                 break
 
