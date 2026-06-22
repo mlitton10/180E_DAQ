@@ -137,7 +137,6 @@ class AxisControls(QGroupBox):
 		self.xaxisLabel = QLabel("x axis range:")
 		self.yaxisLabel = QLabel("y axis range:")
 		self.toLabel = QLabel("to")
-		self.toLabel2 = QLabel("to")
 		self.blankLabel = QLabel("  ")
 
 		axisLayout = QGridLayout()
