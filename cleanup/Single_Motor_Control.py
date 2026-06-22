@@ -110,9 +110,9 @@ class MotorControl:
     def send_text(self, text, timeout:int=None) -> str:
         """worker for below - opens a connection to send commands to the motor control server, closes when done"""
         """ note: timeout is not working - needs some MS specific iocontrol stuff (I think) """
-        RETRIES = 30
+        retries = 30
         retry_count = 0
-        while retry_count < RETRIES:  # Retries added 17-07-11
+        while retry_count < retries:  # Retries added 17-07-11
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 ##if timeout is not None:
@@ -123,13 +123,13 @@ class MotorControl:
             except ConnectionRefusedError:
                 retry_count += 1
                 print('...connection refused, at',time.ctime(),' Is motor_server process running on remote machine?',
-                           '  Retry', retry_count, '/', RETRIES, "on", str(self.server_ip_addr))
+                           '  Retry', retry_count, '/', retries, "on", str(self.server_ip_addr))
             except TimeoutError:
                 retry_count += 1
                 print('...connection attempt timed out, at',time.ctime(),
-                           '  Retry', retry_count, '/', RETRIES, "on", str(self.server_ip_addr))
+                           '  Retry', retry_count, '/', retries, "on", str(self.server_ip_addr))
 
-        if retry_count >= RETRIES:
+        if retry_count >= retries:
             input(" pausing in motor_control.py send_text() function, hit Enter to try again, or ^C: ")
             s.close()
             return self.send_text(text, timeout)  # tail-recurse if retry is requested
@@ -145,8 +145,8 @@ class MotorControl:
 
         s.send(buf)
 
-        BUF_SIZE = 1024
-        data = s.recv(BUF_SIZE)
+        buf_size = 1024
+        data = s.recv(buf_size)
         s.close()
         return_text = data.decode('ASCII')
         return return_text
