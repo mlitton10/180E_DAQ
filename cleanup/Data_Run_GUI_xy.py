@@ -17,7 +17,7 @@ import os
 import os.path
 import time
 import datetime
-from Motor_Control_2D_xy import Motor_Control_2D
+from Motor_Control_2D_xy import MotorControl2d
 from LecroyScope import LecroyScope, WAVEDESC_SIZE
 from LecroyScope import EXPANDED_TRACE_NAMES
 import tkinter
