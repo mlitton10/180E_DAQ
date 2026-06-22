@@ -16,7 +16,7 @@ import numpy
 #############################################################################################
 
 
-class Motor_Control_2D:
+class MotorControl2d:
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None):
 
