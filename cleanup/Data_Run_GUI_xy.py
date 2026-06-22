@@ -621,7 +621,7 @@ class DataRunThread(QRunnable):
 
 		#============================
 
-		mc = Motor_Control_2D(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
+		mc = MotorControl2d(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
 
 
 		######### HDF5 OUTPUT FILE SETUP #########
