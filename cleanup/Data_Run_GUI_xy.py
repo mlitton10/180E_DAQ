@@ -64,6 +64,8 @@ class MyMplCanvas(FigureCanvas):
 
 		self.matrix = self.ax.scatter(0, 0, 0, color = 'blue', marker = 'o')
 		self.point = self.ax.scatter(0, 0, 0, color = 'red', marker = '*')
+		self.xlabel = self.ax.set_xlabel("x-axis [cm]")
+		self.ylabel = self.ax.set_ylabel("y-axis [cm]")
 		self.initialize_visited_points()
 
 	def update_figure(self, param):
