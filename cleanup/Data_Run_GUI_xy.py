@@ -147,7 +147,7 @@ class AxisControls(QGroupBox):
 		axisLayout.addWidget(self.blankLabel, 0, 4)
 		axisLayout.addWidget(self.yaxisLabel, 0, 5)
 		axisLayout.addWidget(self.ylowInput, 0, 6)
-		axisLayout.addWidget(self.toLabel2, 0, 7)
+		axisLayout.addWidget(self.toLabel, 0, 7)
 		axisLayout.addWidget(self.yupInput, 0, 8)
 		self.setLayout(axisLayout)
 
