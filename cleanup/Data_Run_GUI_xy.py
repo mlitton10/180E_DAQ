@@ -324,7 +324,7 @@ class MotorMovement(QGroupBox):
 
 		self.setLayout(MMLayout)
 
-		self.mc = Motor_Control_2D(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
+		self.mc = MotorControl2d(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
 
 #----------------------------------------------------------------------
 
