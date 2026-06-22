@@ -33,7 +33,7 @@ NI VISA Manuals:
 """
 
 import numpy
-import visa
+import pyvisa as visa
 from pyvisa.resources import MessageBasedResource
 from pyvisa.errors import VisaIOError
 import collections
