@@ -4,7 +4,7 @@ In this case, the x motor moves in x direction and y motor moves in y direction.
 
 Modified by: Yuchen Qian
 Oct 2017
-'''
+"""
 
 
 from Single_Motor_Control import MotorControl
