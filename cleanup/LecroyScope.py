@@ -395,7 +395,7 @@ class LecroyScope:
             n_sweeps = 1
         if n_sweeps > 1000000:
             n_sweeps = 1000000
-        self.scope.write('VBS "app.Acquisition.' + Cn +'.AverageSweeps=' + str(n_sweeps) + '"')
+        self.scope.write('VBS "app.Acquisition.' + cn +'.AverageSweeps=' + str(n_sweeps) + '"')
 
 
     def max_averaging_count(self) -> (int,int):
