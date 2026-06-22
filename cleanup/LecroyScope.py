@@ -363,8 +363,8 @@ class LecroyScope:
     def vertical_scale(self, trace) -> float:
         """ get vertical scale setting for the trace
         """
-        Tn = self.validate_trace(trace)
-        scale = float(self.scope.query('VBS? "Return=app.Acquisition.'+Tn+'.VerScale"'))
+        tn = self.validate_trace(trace)
+        scale = float(self.scope.query('VBS? "Return=app.Acquisition.'+tn+'.VerScale"'))
         return scale
 
 
