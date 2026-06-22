@@ -139,17 +139,17 @@ class AxisControls(QGroupBox):
 		self.toLabel = QLabel("to")
 		self.blankLabel = QLabel("  ")
 
-		axisLayout = QGridLayout()
-		axisLayout.addWidget(self.xaxisLabel, 0, 0)
-		axisLayout.addWidget(self.xlowInput, 0, 1)
-		axisLayout.addWidget(self.toLabel, 0, 2)
-		axisLayout.addWidget(self.xupInput, 0, 3)
-		axisLayout.addWidget(self.blankLabel, 0, 4)
-		axisLayout.addWidget(self.yaxisLabel, 0, 5)
-		axisLayout.addWidget(self.ylowInput, 0, 6)
-		axisLayout.addWidget(self.toLabel, 0, 7)
-		axisLayout.addWidget(self.yupInput, 0, 8)
-		self.setLayout(axisLayout)
+		axis_layout = QGridLayout()
+		axis_layout.addWidget(self.xaxisLabel, 0, 0)
+		axis_layout.addWidget(self.xlowInput, 0, 1)
+		axis_layout.addWidget(self.toLabel, 0, 2)
+		axis_layout.addWidget(self.xupInput, 0, 3)
+		axis_layout.addWidget(self.blankLabel, 0, 4)
+		axis_layout.addWidget(self.yaxisLabel, 0, 5)
+		axis_layout.addWidget(self.ylowInput, 0, 6)
+		axis_layout.addWidget(self.toLabel, 0, 7)
+		axis_layout.addWidget(self.yupInput, 0, 8)
+		self.setLayout(axis_layout)
 
 
 
@@ -189,25 +189,25 @@ class PositionControls(QGroupBox):
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
 
-		controlsLayout = QGridLayout()
-		controlsLayout.addWidget(self.xMaxLabel, 0, 0)
-		controlsLayout.addWidget(self.xMinLabel, 1, 0)
-		controlsLayout.addWidget(self.yMaxLabel, 2, 0)
-		controlsLayout.addWidget(self.yMinLabel, 3, 0)
-		controlsLayout.addWidget(self.nxLabel, 4, 0)
-		controlsLayout.addWidget(self.nyLabel, 5, 0)
+		controls_layout = QGridLayout()
+		controls_layout.addWidget(self.xMaxLabel, 0, 0)
+		controls_layout.addWidget(self.xMinLabel, 1, 0)
+		controls_layout.addWidget(self.yMaxLabel, 2, 0)
+		controls_layout.addWidget(self.yMinLabel, 3, 0)
+		controls_layout.addWidget(self.nxLabel, 4, 0)
+		controls_layout.addWidget(self.nyLabel, 5, 0)
 
 
-		controlsLayout.addWidget(self.xMaxInput, 0, 1)
-		controlsLayout.addWidget(self.xMinInput, 1, 1)
-		controlsLayout.addWidget(self.yMaxInput, 2, 1)
-		controlsLayout.addWidget(self.yMinInput, 3, 1)
-		controlsLayout.addWidget(self.nxInput, 4, 1)
-		controlsLayout.addWidget(self.nyInput, 5, 1)
+		controls_layout.addWidget(self.xMaxInput, 0, 1)
+		controls_layout.addWidget(self.xMinInput, 1, 1)
+		controls_layout.addWidget(self.yMaxInput, 2, 1)
+		controls_layout.addWidget(self.yMinInput, 3, 1)
+		controls_layout.addWidget(self.nxInput, 4, 1)
+		controls_layout.addWidget(self.nyInput, 5, 1)
 
-		controlsLayout.addWidget(self.ConfirmButton, 6, 1)
+		controls_layout.addWidget(self.ConfirmButton, 6, 1)
 
-		self.setLayout(controlsLayout)
+		self.setLayout(controls_layout)
 
 	# def update_parameters(self):
 	#     self.parameters = {}
@@ -247,15 +247,15 @@ class AcquisitionControls(QGroupBox):
 		self.num_run.setValue(1)
 		self.num_shots.setValue(1)
 
-		ACLayout = QGridLayout()
-		ACLayout.addWidget(self.DataRun, 0, 0)
-		ACLayout.addWidget(self.TestShot, 0, 1)
-		ACLayout.addWidget(self.num_run_label, 1, 0)
-		ACLayout.addWidget(self.num_shots_label, 2, 0)
-		ACLayout.addWidget(self.num_run, 1, 1)
-		ACLayout.addWidget(self.num_shots, 2, 1)
+		ac_layout = QGridLayout()
+		ac_layout.addWidget(self.DataRun, 0, 0)
+		ac_layout.addWidget(self.TestShot, 0, 1)
+		ac_layout.addWidget(self.num_run_label, 1, 0)
+		ac_layout.addWidget(self.num_shots_label, 2, 0)
+		ac_layout.addWidget(self.num_run, 1, 1)
+		ac_layout.addWidget(self.num_shots, 2, 1)
 
-		self.setLayout(ACLayout)
+		self.setLayout(ac_layout)
 
 
 ######################################################################################################
@@ -303,26 +303,26 @@ class MotorMovement(QGroupBox):
 		self.velocityInput = QLineEdit(readOnly = True)
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
-		MMLayout = QGridLayout()
-		MMLayout.addWidget(self.xMoveLabel, 0, 0)
-		MMLayout.addWidget(self.yMoveLabel, 0, 1)
-		MMLayout.addWidget(self.xMoveInput, 1, 0)
-		MMLayout.addWidget(self.yMoveInput, 1, 1)
-		MMLayout.addWidget(self.MoveButton, 1, 2)
-		MMLayout.addWidget(self.xvLabel, 2, 0)
-		MMLayout.addWidget(self.yvLabel, 2, 1)
-		MMLayout.addWidget(self.xvInput, 3, 0)
-		MMLayout.addWidget(self.yvInput, 3, 1)
-		MMLayout.addWidget(self.SetVelocity, 3, 2)
-		MMLayout.addWidget(self.SetZero, 4, 0)
-		MMLayout.addWidget(self.StopNowButton, 4, 1)
-		MMLayout.addWidget(self.CurposLabel, 5, 0)
-		MMLayout.addWidget(self.CurposInput, 5, 1, 1, 2)
-		MMLayout.addWidget(self.velocityButton, 6, 0)
-		MMLayout.addWidget(self.velocityInput, 6, 1, 1, 2)
+		mm_layout = QGridLayout()
+		mm_layout.addWidget(self.xMoveLabel, 0, 0)
+		mm_layout.addWidget(self.yMoveLabel, 0, 1)
+		mm_layout.addWidget(self.xMoveInput, 1, 0)
+		mm_layout.addWidget(self.yMoveInput, 1, 1)
+		mm_layout.addWidget(self.MoveButton, 1, 2)
+		mm_layout.addWidget(self.xvLabel, 2, 0)
+		mm_layout.addWidget(self.yvLabel, 2, 1)
+		mm_layout.addWidget(self.xvInput, 3, 0)
+		mm_layout.addWidget(self.yvInput, 3, 1)
+		mm_layout.addWidget(self.SetVelocity, 3, 2)
+		mm_layout.addWidget(self.SetZero, 4, 0)
+		mm_layout.addWidget(self.StopNowButton, 4, 1)
+		mm_layout.addWidget(self.CurposLabel, 5, 0)
+		mm_layout.addWidget(self.CurposInput, 5, 1, 1, 2)
+		mm_layout.addWidget(self.velocityButton, 6, 0)
+		mm_layout.addWidget(self.velocityInput, 6, 1, 1, 2)
 
 
-		self.setLayout(MMLayout)
+		self.setLayout(mm_layout)
 
 		self.mc = MotorControl2d(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
 
@@ -399,17 +399,17 @@ class ScopeChannel(QGroupBox):
 		self.c4Input = QLineEdit()
 
 
-		SCLayout = QGridLayout()
-		SCLayout.addWidget(self.titleLabel, 0, 0, 1, 2)
-		SCLayout.addWidget(self.c1Label, 1, 0)
-		SCLayout.addWidget(self.c2Label, 2, 0)
-		SCLayout.addWidget(self.c3Label, 3, 0)
-		SCLayout.addWidget(self.c4Label, 4, 0)
-		SCLayout.addWidget(self.c1Input, 1, 1)
-		SCLayout.addWidget(self.c2Input, 2, 1)
-		SCLayout.addWidget(self.c3Input, 3, 1)
-		SCLayout.addWidget(self.c4Input, 4, 1)
-		self.setLayout(SCLayout)
+		sc_layout = QGridLayout()
+		sc_layout.addWidget(self.titleLabel, 0, 0, 1, 2)
+		sc_layout.addWidget(self.c1Label, 1, 0)
+		sc_layout.addWidget(self.c2Label, 2, 0)
+		sc_layout.addWidget(self.c3Label, 3, 0)
+		sc_layout.addWidget(self.c4Label, 4, 0)
+		sc_layout.addWidget(self.c1Input, 1, 1)
+		sc_layout.addWidget(self.c2Input, 2, 1)
+		sc_layout.addWidget(self.c3Input, 3, 1)
+		sc_layout.addWidget(self.c4Input, 4, 1)
+		self.setLayout(sc_layout)
 
 
 update_pos = None
@@ -426,11 +426,11 @@ class SoftwareVersion(QGroupBox):
 		self.lastmodified = QLabel(self.mod_datetime)
 		self.version = QLabel("Version: "+version_number)
 
-		SVLayout = QGridLayout()
-		SVLayout.addWidget(self.vLabel, 0, 0)
-		SVLayout.addWidget(self.lastmodified, 1, 0)
-		SVLayout.addWidget(self.version, 2, 0)
-		self.setLayout(SVLayout)
+		sv_layout = QGridLayout()
+		sv_layout.addWidget(self.vLabel, 0, 0)
+		sv_layout.addWidget(self.lastmodified, 1, 0)
+		sv_layout.addWidget(self.version, 2, 0)
+		self.setLayout(sv_layout)
 
 #############################################################################################
 #############################################################################################
@@ -546,8 +546,8 @@ class DataRunThread(QRunnable):
 
 		for tr in traces:
 			try:
-				NPos,NTimes = datasets[tr].shape
-				datasets[tr][pos_ndx,0:NTimes] = scope.acquire(tr)[0:NTimes]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
+				n_pos,n_times = datasets[tr].shape
+				datasets[tr][pos_ndx,0:n_times] = scope.acquire(tr)[0:n_times]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
 				#?# datasets[tr].flush()
 			except KeyError:
 				print(tr + ' is displayed on the scope but not recorded. To record this channel, please display the trace before starting the data run.')
@@ -671,8 +671,8 @@ class DataRunThread(QRunnable):
 
 				scope_grp.attrs['ScopeType'] = scope.idn_string
 
-				NPos = len(positions)
-				NTimes = scope.max_samples()
+				n_pos = len(positions)
+				n_times = scope.max_samples()
 
 				datasets = {}
 				hdr_data = {}
@@ -691,7 +691,7 @@ class DataRunThread(QRunnable):
 				for tr in traces:
 					name = scope.expanded_name(tr)
 					# ds = scope_grp.create_dataset(name, (NPos,NTimes), chunks=(1,NTimes), fletcher32=True, compression='gzip', compression_opts=9)
-					ds = scope_grp.create_dataset(name, shape=(NPos,NTimes), fletcher32=True, compression='gzip', compression_opts=9)
+					ds = scope_grp.create_dataset(name, shape=(n_pos,n_times), fletcher32=True, compression='gzip', compression_opts=9)
 					datasets[tr] = ds
 
 				# For each trace we are storing, we will write one header per position (immediately after
@@ -699,10 +699,10 @@ class DataRunThread(QRunnable):
 				# For whatever stupid reason we need to write the header as a binary blob using an "HDF5 opaque" type - here void type 'V346'  (otherwise I could not manage to avoid invisible string processing and interpretation)
 				for tr in traces:
 					name = scope.expanded_name(tr)
-					hdr_data[tr] = header_grp.create_dataset(name, shape=(NPos,), dtype="V%i"%(WAVEDESC_SIZE), fletcher32=True, compression='gzip', compression_opts=9)  # V346 = void type, 346 bytes long
+					hdr_data[tr] = header_grp.create_dataset(name, shape=(n_pos,), dtype="V%i"%(WAVEDESC_SIZE), fletcher32=True, compression='gzip', compression_opts=9)  # V346 = void type, 346 bytes long
 
 				# create "time" dataset
-				time_ds = scope_grp.create_dataset('time', shape=(NTimes,), fletcher32=True, compression='gzip', compression_opts=9)
+				time_ds = scope_grp.create_dataset('time', shape=(n_times,), fletcher32=True, compression='gzip', compression_opts=9)
 
 				# at this point all datasets should be created, so we can
 				# switch to SWMR mode
@@ -762,7 +762,7 @@ class DataRunThread(QRunnable):
 
 						# at least get one time array recorded for swmr functions
 						if pos[0] == 1:
-							time_ds[0:NTimes] = scope.time_array()[0:NTimes]
+							time_ds[0:n_times] = scope.time_array()[0:n_times]
 							#time_ds.flush()
 
 					######### END MAIN ACQUISITION LOOP #########
@@ -771,7 +771,7 @@ class DataRunThread(QRunnable):
 					print('\n______Halted due to Ctrl-C______', '  at', time.ctime())
 
 				# copy the array of time values, corresponding to the last acquired trace, to the times_dataset
-				time_ds[0:NTimes] = scope.time_array()[0:NTimes]      # specify number of points, sometimes scope return extras
+				time_ds[0:n_times] = scope.time_array()[0:n_times]      # specify number of points, sometimes scope return extras
 				if type(time_ds) == 'stupid':
 					print(' this is only included to make the linter happy, otherwise it thinks time_ds is not used')
 
@@ -779,7 +779,7 @@ class DataRunThread(QRunnable):
 				# Also add the text descriptions.    Do these together to be able to be able to make a note in the description
 				for tr in traces:
 					if datasets[tr].len() == 0:
-						datasets[tr] = numpy.zeros(shape=(NPos,NTimes))
+						datasets[tr] = numpy.zeros(shape=(n_pos,n_times))
 						datasets[tr].attrs['description'] = 'NOT RECORDED: ' + self.get_channel_description(tr)           # callback arg to the current function
 						datasets[tr].attrs['recorded']    = False
 					else:
