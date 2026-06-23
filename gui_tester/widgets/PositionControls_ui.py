@@ -14,28 +14,12 @@ class PositionControls(QGroupBox):
 		super().__init__()
 		self.setTitle("Set up DAQ position")
 
-		self.xMaxLabel = QLabel("Max x:")
-		self.xMinLabel = QLabel("Min x:")
-		self.yMaxLabel = QLabel("Max y:")
-		self.yMinLabel = QLabel("Min y:")
-		self.nxLabel = QLabel("nx:")
-		self.nyLabel = QLabel("ny:")
-
-		#valueLabel = QLabel("Current value:")
-
-		self.xMaxInput = QLineEdit()
-		self.xMinInput = QLineEdit()
-		self.yMaxInput = QLineEdit()
-		self.yMinInput = QLineEdit()
-		self.nxInput = QLineEdit()
-		self.nyInput = QLineEdit()
-
-		self.xMaxInput.setText("0")
-		self.xMinInput.setText("0")
-		self.yMaxInput.setText("0")
-		self.yMinInput.setText("0")
-		self.nxInput.setText("1")
-		self.nyInput.setText("1")
+		self.xMax = UserSettingsRow("Max x:")
+		self.xMin = UserSettingsRow("Min x:")
+		self.yMax = UserSettingsRow("Max y:")
+		self.yMin = UserSettingsRow("Min y:")
+		self.nx = UserSettingsRow("Nx:")
+		self.ny = UserSettingsRow("Ny:")
 
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)
