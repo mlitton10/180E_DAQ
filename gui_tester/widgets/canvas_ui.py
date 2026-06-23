@@ -75,7 +75,6 @@ class MyMplCanvas(FigureCanvas):
 				index += 1
 		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
 		self.draw()
-		print(parameters)
 
 	def update_probe(self, x_now, y_now):
 		self.point = self.ax.scatter(x_now, y_now, color ='red', marker ='*')
