@@ -43,7 +43,6 @@ data_running = False
 
 
 
-
 class Window(QWidget):
 
 	def __init__(self):
