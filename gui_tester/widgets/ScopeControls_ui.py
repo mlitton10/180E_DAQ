@@ -21,7 +21,7 @@ class ScopeChannel(QGroupBox):
 		self.build_layout()
 
 	def build_layout(self):
-		sc_layout = QGridLayout()
+		sc_layout = QGridLayout(self)
 
 		channel_box = make_form_table([self.c1, self.c2, self.c3, self.c4])
 
