@@ -44,7 +44,8 @@ class PositionControls(QGroupBox):
 
 		layout.addWidget(positions_box, 0, 0, 5, 1)
 
-		layout.addWidget(self.ConfirmButton, 6, 1)
+		layout.addWidget(self.ConfirmButton, 5, 0, 1, 1)
+		self.setLayout(layout)
 
 	def initialize_boxes(self):
 		self.xMax.update_text("0")
