@@ -106,8 +106,8 @@ class MotorMovement(QGroupBox):
 
 
 	def set_velocity(self):
-		xv = self.xvInput.text()
-		yv = self.yvInput.text()
+		xv = self.x_velocity_box.read_text()
+		yv = self.y_velocity_box.read_text()
 		print("set velocity: ", xv, ", ", yv)
 
 
