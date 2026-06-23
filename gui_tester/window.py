@@ -165,9 +165,8 @@ class Window(QWidget):
 			pass
 
 	def update_channel_information(self):
-		channel_info = {"C1": self.sc.c1Input.text(), "C2": self.sc.c2Input.text(), "C3": self.sc.c3Input.text(),
-                        "C4": self.sc.c4Input.text()}
-		return channel_info
+		channel_description = self.sc.get_channel_description()
+		return channel_description
 
 	def start_data_run(self):
 		# start data_run threading
