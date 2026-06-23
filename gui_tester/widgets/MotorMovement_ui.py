@@ -125,7 +125,7 @@ class MotorMovement(QGroupBox):
 	def current_probe_position(self):
 		return 0,0
 
-	def update_current_speed(self):
+	def display_current_speed(self):
 		speedx, speedy = self.ask_velocity()
 		self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
