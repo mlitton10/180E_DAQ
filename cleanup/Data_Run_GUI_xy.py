@@ -980,7 +980,6 @@ class Window(QWidget):
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
 
-
 		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
 		self.freeze_all_controls()
 		data_run.signals.finished.connect(self.data_run_finished)
