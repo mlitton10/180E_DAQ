@@ -28,12 +28,7 @@ class MyMplCanvas(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
 	def __init__(self, parent=None, width=6, height=3, dpi=100):
-		fig = Figure(figsize=(width, height), dpi=dpi)
-		self.ax = fig.add_subplot(111)
-		self.ax.set_xlim(-35, 35)
-		self.ax.set_ylim(-35, 35)
 
-		FigureCanvas.__init__(self, fig)
 		self.setParent(parent)
 
 		FigureCanvas.setSizePolicy(self,
