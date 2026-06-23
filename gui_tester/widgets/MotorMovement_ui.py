@@ -28,7 +28,7 @@ class MotorMovement(QGroupBox):
 		self.x_position_box = UserSettingsRow("Move x motor to:")
 		self.y_position_box = UserSettingsRow("Move y motor to:")
 
-		position_box = QGroupBox("Move to position")
+		position_box = QWidget()
 		position_layout = QFormLayout(position_box)
 		position_layout.addRow(self.x_position_box)
 		position_layout.addRow(self.y_position_box)
@@ -37,7 +37,7 @@ class MotorMovement(QGroupBox):
 		self.x_velocity_box = UserSettingsRow("Set x velocity to:")
 		self.y_velocity_box = UserSettingsRow("Set y velocity to:")
 
-		velocity_box = QGroupBox("Set velocity")
+		velocity_box = QWidget()
 		velocity_layout = QFormLayout(velocity_box)
 		velocity_layout.addRow(self.x_velocity_box)
 		velocity_layout.addRow(self.y_velocity_box)
@@ -54,7 +54,7 @@ class MotorMovement(QGroupBox):
 
 		# Position display
 		self.current_position_display = UserSettingsRow("Current probe position (cm, cm):", read_only=False)
-		current_position_box = QGroupBox("Current position")
+		current_position_box = QWidget()
 		position_layout = QFormLayout(current_position_box)
 		position_layout.addRow(self.current_position_display)
 
