@@ -25,6 +25,7 @@ class PositionControls(QGroupBox):
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
 		self.build_layout()
+		self.initialize_boxes()
 
 
 	def build_layout(self):
