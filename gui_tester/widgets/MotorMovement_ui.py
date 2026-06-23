@@ -118,7 +118,8 @@ class MotorMovement(QGroupBox):
 		self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def set_input_usage(self, usage):
-		self.mc.set_input_usage(usage)
+		print('Usage update call:', usage)
+		self.usage_update = True
 
 	def set_steps_per_rev(self, stepsx, stepsy):
 		self.mc.set_steps_per_rev(stepsx, stepsy)
