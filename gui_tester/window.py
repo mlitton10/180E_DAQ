@@ -141,19 +141,9 @@ class Window(QWidget):
 			self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def update_parameters(self):
-		parameters = {}
+		parameters = self.pc.collect_parameters()
 		self.update = True
-		try:
-			parameters["xmax"] = float(self.pc.xMax.read_text())
-			parameters["xmin"] = float(self.pc.xMin.read_text())
-			parameters["ymax"] = float(self.pc.yMax.read_text())
-			parameters["ymin"] = float(self.pc.yMin.read_text())
-			parameters["nx"] = int(self.pc.nx.read_text())
-			parameters["ny"] = int(self.pc.ny.read_text())
-			return parameters
-		except ValueError:
-			QMessageBox.about(self, "Error", "Position should be valid numbers.")
-			self.update = False
+		return parameters
 
 	def update_geometry(self):
 		param = self.update_parameters()
