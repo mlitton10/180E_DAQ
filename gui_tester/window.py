@@ -91,13 +91,6 @@ class Window(QWidget):
 		self.timer.timeout.connect(self.update_current_position)
 		self.timer.start(500)
 
-	# def update_timer(self):
-	# 	if data_running == False:
-	# 		self.timer = QtCore.QTimer(self)
-	# 		self.timer.timeout.connect(self.update_current_position)
-	# 		self.timer.start(500)
-	# 	else:
-	# 		pass
 
 	def axis_change(self):
 		xup = self.axc.xupInput.value()
