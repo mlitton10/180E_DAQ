@@ -31,34 +31,31 @@ class MyMplCanvas(FigureCanvas):
 
 		self.setParent(parent)
 
+		self.ax, self.matrix, self.point = self.initialize_canvas(width, height, dpi)
+		self.finished_x, self. finished_y = self.initialize_visited_points()
+
+	def initialize_canvas(self, width, height, dpi):
+		fig = Figure(figsize=(width, height), dpi=dpi)
+		ax = fig.add_subplot(111)
+		ax.set_xlim(-35, 35)
+		ax.set_ylim(-35, 35)
+		FigureCanvas.__init__(self, fig)
+
 		FigureCanvas.setSizePolicy(self,
-		                           QSizePolicy.Expanding,
-		                           QSizePolicy.Expanding)
+								   QSizePolicy.Expanding,
+								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
 
-		self.ax.grid(which = 'both')
-		self.ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill = False, edgecolor = 'red'))
+		ax.grid(which='both')
+		ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill=False, edgecolor='red'))
 
-		self.probe_position_plotting_params = {
-			'color': 'red',
-			'marker': '*'
-		}
+		matrix = ax.scatter(0, 0, 0, **self.queued_probe_position_plotting_params)
+		point = ax.scatter(0, 0, 0, **self.probe_position_plotting_params)
+		ax.set_xlabel("x-axis [cm]")
+		ax.set_ylabel("y-axis [cm]")
 
-		self.queued_probe_position_plotting_params = {
-			'color': 'blue',
-			'marker': 'o'
-		}
+		return ax, matrix, point
 
-		self.visited_probe_position_plotting_params = {
-			'color': 'green',
-			'marker': 'o'
-		}
-
-		self.matrix = self.ax.scatter(0, 0, 0, **self.queued_probe_position_plotting_params)
-		self.point = self.ax.scatter(0, 0, 0, **self.probe_position_plotting_params)
-		self.x_label = self.ax.set_xlabel("x-axis [cm]")
-		self.y_label = self.ax.set_ylabel("y-axis [cm]")
-		self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def compute_point_grid(self, parameters):
 
