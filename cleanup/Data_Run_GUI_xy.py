@@ -106,13 +106,13 @@ class MyMplCanvas(FigureCanvas):
 	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
 		self.draw()
 
 	def initialize_visited_points(self):
 		finished_x = []
 		finished_y = []
-		visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
 		return finished_x, finished_y
 
 
