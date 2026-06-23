@@ -136,7 +136,7 @@ class Window(QWidget):
 			print("Why is this called when data_running == False ?")
 
 
-	def update_current_speed(self):
+	def display_current_speed(self):
 		self.mm.display_current_speed()
 
 	def update_parameters(self):
