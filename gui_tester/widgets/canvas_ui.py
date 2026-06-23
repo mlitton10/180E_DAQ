@@ -28,13 +28,6 @@ class MyMplCanvas(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
 	def __init__(self, parent=None, width=6, height=3, dpi=100):
-
-		self.setParent(parent)
-
-		self.ax, self.matrix, self.point = self.initialize_canvas(width, height, dpi)
-		self.finished_x, self. finished_y = self.initialize_visited_points()
-
-	def initialize_canvas(self, width, height, dpi):
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
 		ax.set_xlim(-35, 35)
@@ -45,7 +38,27 @@ class MyMplCanvas(FigureCanvas):
 								   QSizePolicy.Expanding,
 								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
+		self.probe_position_plotting_params = {
+			'color': 'red',
+			'marker': '*'
+		}
 
+		self.queued_probe_position_plotting_params = {
+			'color': 'blue',
+			'marker': 'o'
+		}
+
+		self.visited_probe_position_plotting_params = {
+			'color': 'green',
+			'marker': 'o'
+		}
+
+		self.setParent(parent)
+
+		self.ax, self.matrix, self.point = self.initialize_canvas(ax)
+		self.finished_x, self. finished_y = self.initialize_visited_points()
+
+	def initialize_canvas(self, ax):
 		ax.grid(which='both')
 		ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill=False, edgecolor='red'))
 
