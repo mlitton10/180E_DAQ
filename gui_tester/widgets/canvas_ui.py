@@ -53,7 +53,7 @@ class MyMplCanvas(FigureCanvas):
 			'color': 'blue',
 			'marker': 'o'
 		}
-		
+
 		self.visited_probe_position_plotting_params = {
 			'color': 'green',
 			'marker': 'o'
