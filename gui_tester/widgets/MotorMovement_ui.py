@@ -57,6 +57,14 @@ class MotorMovement(QGroupBox):
 		self.velocityInput.setReadOnly(True)
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
+
+	def build_layout(self):
+		main_layout = QGridLayout(self)
+
+		position_box = make_form_table([self.x_position_box, self.y_position_box])
+		velocity_box = make_form_table([self.x_velocity_box, self.y_velocity_box])
+		current_position_box = make_form_table([self.current_position_display])
+
 		main_layout.addWidget(position_box, 0, 0, 1, 1)
 		main_layout.addWidget(self.MoveButton, 0, 1)
 
