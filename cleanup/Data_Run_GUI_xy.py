@@ -64,30 +64,30 @@ class MyMplCanvas(FigureCanvas):
 
 		self.matrix = self.ax.scatter(0, 0, 0, color = 'blue', marker = 'o')
 		self.point = self.ax.scatter(0, 0, 0, color = 'red', marker = '*')
-		self.xlabel = self.ax.set_xlabel("x-axis [cm]")
-		self.ylabel = self.ax.set_ylabel("y-axis [cm]")
+		self.x_label = self.ax.set_xlabel("x-axis [cm]")
+		self.y_label = self.ax.set_ylabel("y-axis [cm]")
 		self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def update_figure(self, param):
 
 		parameters = param
 
-		xmax = parameters['xmax']
-		xmin = parameters['xmin']
-		ymax = parameters['ymax']
-		ymin = parameters['ymin']
+		x_max = parameters['xmax']
+		x_min = parameters['xmin']
+		y_max = parameters['ymax']
+		y_min = parameters['ymin']
 		nx = parameters['nx']
 		ny = parameters['ny']
 
-		xpos = numpy.linspace(xmin, xmax, nx)
-		ypos = numpy.linspace(ymin, ymax, ny)
+		x_pos = numpy.linspace(x_min, x_max, nx)
+		y_pos = numpy.linspace(y_min, y_max, ny)
 
 		X = numpy.zeros(nx * ny)
 		Y = numpy.zeros(nx * ny)
 
 		index = 0
-		for xx in xpos:
-			for yy in ypos:
+		for xx in x_pos:
+			for yy in y_pos:
 				X[index] = xx
 				Y[index] = yy
 				index += 1
@@ -95,8 +95,8 @@ class MyMplCanvas(FigureCanvas):
 		self.draw()
 		print(parameters)
 
-	def update_probe(self, xnow, ynow):
-		self.point = self.ax.scatter(xnow, ynow, color = 'red', marker = '*')
+	def update_probe(self, x_now, y_now):
+		self.point = self.ax.scatter(x_now, y_now, color ='red', marker ='*')
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
