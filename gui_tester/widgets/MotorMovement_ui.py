@@ -129,6 +129,10 @@ class MotorMovement(QGroupBox):
 		speedx, speedy = self.ask_velocity()
 		self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
+	def display_current_position(self):
+		xnow, ynow = self.current_probe_position()
+		self.current_position_display.update_text("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) + ")")
+
 	def set_input_usage(self, usage):
 		print('Usage update call:', usage)
 		self.usage_update = True
