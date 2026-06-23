@@ -1,5 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout
 
+def make_form_table(rows):
+    widget = QWidget()
+    widget_layout = QFormLayout(widget)
+    for row in rows:
+        widget_layout.addRow(row)
+
+    return widget
+
 
 class UserSettingsRow(QWidget):
     def __init__(self, label_string, read_only=False):
