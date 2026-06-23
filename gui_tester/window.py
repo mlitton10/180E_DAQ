@@ -105,7 +105,7 @@ class Window(QWidget):
 			xnow, ynow = self.mm.current_probe_position()
 			self.canvas.point.remove()
 			self.canvas.update_probe(xnow, ynow)
-			self.mm.current_position_display.update_text("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
+			self.mm.display_current_position()
 
 		else:
 			pass
