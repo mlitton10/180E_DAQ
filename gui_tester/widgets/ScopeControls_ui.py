@@ -12,7 +12,7 @@ from PyQt5.QtCore import *
 class ScopeChannel(QGroupBox):
 	def __init__(self):
 		super().__init__()
-		self.titleLabel = QLabel("Enter channel descriptions")
+		self.setTitle("Enter channel descriptions")
 		self.c1 = UserSettingsRow("Channel 1:")
 		self.c2 = UserSettingsRow("Channel 2:")
 		self.c3 = UserSettingsRow("Channel 3:")
