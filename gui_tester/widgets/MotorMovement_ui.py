@@ -12,6 +12,8 @@ class MotorMovement(QGroupBox):
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None, motor_port = None):
 		super().__init__()
+		self.enabled = None
+		self.usage_update = None
 		self.setTitle("Motor Movement Control")
 
 		self.x_ip_addr = x_ip_addr
@@ -77,18 +79,19 @@ class MotorMovement(QGroupBox):
 		try:
 			x_pos = float(self.xMoveInput.text())
 			y_pos = float(self.yMoveInput.text())
-			self.mc.enable()
-			self.mc.move_to_position(x_pos, y_pos)
-			self.mc.disable()
+
+			print(x_pos, y_pos)
+			
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 
 	def disable(self):
-		self.mc.disable()
+		print('Disabled')
+		self.enabled = False
 
 	def stop_now(self):
 		# Stop motor movement now
-		self.mc.stop_now()
+		print('Stopped')
 
 
 	def zero(self):
@@ -97,21 +100,21 @@ class MotorMovement(QGroupBox):
 			QMessageBox.Yes, QMessageBox.No)
 		if zeroreply == QMessageBox.Yes:
 			QMessageBox.about(self, "Set Zero", "Probe position is now (0,0).")
-			self.mc.set_zero()
+			print('set zero')
 
 
 	def ask_velocity(self):
-		return self.mc.ask_velocity()
+		return 1,1
 
 
 	def set_velocity(self):
 		xv = self.xvInput.text()
 		yv = self.yvInput.text()
-		self.mc.set_velocity(xv, yv)
+		print("set velocity: ", xv, ", ", yv)
 
 
 	def current_probe_position(self):
-		return self.mc.current_probe_position()
+		return 0,0
 
 	def update_current_speed(self):
 		speedx, speedy = self.ask_velocity()
@@ -122,5 +125,5 @@ class MotorMovement(QGroupBox):
 		self.usage_update = True
 
 	def set_steps_per_rev(self, stepsx, stepsy):
-		self.mc.set_steps_per_rev(stepsx, stepsy)
+		print("Set speed: ", stepsx, ", ", stepsy)
 
