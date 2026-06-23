@@ -144,12 +144,12 @@ class Window(QWidget):
 		parameters = {}
 		self.update = True
 		try:
-			parameters["xmax"] = float(self.pc.xMaxInput.text())
-			parameters["xmin"] = float(self.pc.xMinInput.text())
-			parameters["ymax"] = float(self.pc.yMaxInput.text())
-			parameters["ymin"] = float(self.pc.yMinInput.text())
-			parameters["nx"] = int(self.pc.nxInput.text())
-			parameters["ny"] = int(self.pc.nyInput.text())
+			parameters["xmax"] = float(self.pc.xMax.read_text())
+			parameters["xmin"] = float(self.pc.xMin.read_text())
+			parameters["ymax"] = float(self.pc.yMax.read_text())
+			parameters["ymin"] = float(self.pc.yMin.read_text())
+			parameters["nx"] = int(self.pc.nx.read_text())
+			parameters["ny"] = int(self.pc.ny.read_text())
 			return parameters
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
