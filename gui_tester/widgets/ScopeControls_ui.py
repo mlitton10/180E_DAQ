@@ -1,0 +1,53 @@
+import numpy
+import sys
+import os
+import os.path
+import time
+import datetime
+from Motor_Control_2D_xy import MotorControl2d
+from LecroyScope import LecroyScope, WAVEDESC_SIZE
+from LecroyScope import EXPANDED_TRACE_NAMES
+import tkinter
+from tkinter import filedialog
+import tkinter.messagebox
+import h5py as h5py
+
+dir_path=os.path.dirname(os.path.realpath(__file__))
+version_number="03/01/2018 12:37pm"			# update this when a change has been made
+
+from PyQt5 import QtCore
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.patches as patches
+
+
+class ScopeChannel(QGroupBox):
+	def __init__(self):
+		super().__init__()
+		self.titleLabel = QLabel("Enter channel descriptions")
+		self.c1Label = QLabel("Channel 1:")
+		self.c2Label = QLabel("Channel 2:")
+		self.c3Label = QLabel("Channel 3:")
+		self.c4Label = QLabel("Channel 4:")
+		self.c1Input = QLineEdit()
+		self.c2Input = QLineEdit()
+		self.c3Input = QLineEdit()
+		self.c4Input = QLineEdit()
+
+
+		sc_layout = QGridLayout()
+		sc_layout.addWidget(self.titleLabel, 0, 0, 1, 2)
+		sc_layout.addWidget(self.c1Label, 1, 0)
+		sc_layout.addWidget(self.c2Label, 2, 0)
+		sc_layout.addWidget(self.c3Label, 3, 0)
+		sc_layout.addWidget(self.c4Label, 4, 0)
+		sc_layout.addWidget(self.c1Input, 1, 1)
+		sc_layout.addWidget(self.c2Input, 2, 1)
+		sc_layout.addWidget(self.c3Input, 3, 1)
+		sc_layout.addWidget(self.c4Input, 4, 1)
+		self.setLayout(sc_layout)
+

@@ -17,7 +17,7 @@ import os
 import os.path
 import time
 import datetime
-from Motor_Control_2D_xy import Motor_Control_2D
+from Motor_Control_2D_xy import MotorControl2d
 from LecroyScope import LecroyScope, WAVEDESC_SIZE
 from LecroyScope import EXPANDED_TRACE_NAMES
 import tkinter
@@ -64,54 +64,56 @@ class MyMplCanvas(FigureCanvas):
 
 		self.matrix = self.ax.scatter(0, 0, 0, color = 'blue', marker = 'o')
 		self.point = self.ax.scatter(0, 0, 0, color = 'red', marker = '*')
-		self.initialize_visited_points()
+		self.x_label = self.ax.set_xlabel("x-axis [cm]")
+		self.y_label = self.ax.set_ylabel("y-axis [cm]")
+		self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def update_figure(self, param):
 
-		self.parameters = param
+		parameters = param
 
-		self.xmax = self.parameters['xmax']
-		self.xmin = self.parameters['xmin']
-		self.ymax = self.parameters['ymax']
-		self.ymin = self.parameters['ymin']
-		self.nx = self.parameters['nx']
-		self.ny = self.parameters['ny']
+		x_max = parameters['xmax']
+		x_min = parameters['xmin']
+		y_max = parameters['ymax']
+		y_min = parameters['ymin']
+		nx = parameters['nx']
+		ny = parameters['ny']
 
-		self.xpos = numpy.linspace(self.xmin,self.xmax,self.nx)
-		self.ypos = numpy.linspace(self.ymin,self.ymax,self.ny)
+		x_pos = numpy.linspace(x_min, x_max, nx)
+		y_pos = numpy.linspace(y_min, y_max, ny)
 
-		self.X = numpy.zeros(self.nx*self.ny)
-		self.Y = numpy.zeros(self.nx*self.ny)
+		X = numpy.zeros(nx * ny)
+		Y = numpy.zeros(nx * ny)
 
 		index = 0
-		for xx in self.xpos:
-			for yy in self.ypos:
-				self.X[index] = xx
-				self.Y[index] = yy
+		for xx in x_pos:
+			for yy in y_pos:
+				X[index] = xx
+				Y[index] = yy
 				index += 1
-		self.matrix = self.ax.scatter(self.X, self.Y, color = 'blue', marker = 'o')
+		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
 		self.draw()
-		print(self.parameters)
+		print(parameters)
 
-	def update_probe(self, xnow, ynow):
-		self.point = self.ax.scatter(xnow, ynow, color = 'red', marker = '*')
+	def update_probe(self, x_now, y_now):
+		self.point = self.ax.scatter(x_now, y_now, color ='red', marker ='*')
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
 		self.ax.set_xlim(x2, x1)
 		self.ax.set_ylim(y2, y1)
 
-	def finished_positions(self, x, y):
+	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
 		self.draw()
 
 	def initialize_visited_points(self):
-		self.finished_x = []
-		self.finished_y = []
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
-
+		finished_x = []
+		finished_y = []
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		return finished_x, finished_y
 
 
 class AxisControls(QGroupBox):
@@ -135,20 +137,19 @@ class AxisControls(QGroupBox):
 		self.xaxisLabel = QLabel("x axis range:")
 		self.yaxisLabel = QLabel("y axis range:")
 		self.toLabel = QLabel("to")
-		self.toLabel2 = QLabel("to")
 		self.blankLabel = QLabel("  ")
 
-		axisLayout = QGridLayout()
-		axisLayout.addWidget(self.xaxisLabel, 0, 0)
-		axisLayout.addWidget(self.xlowInput, 0, 1)
-		axisLayout.addWidget(self.toLabel, 0, 2)
-		axisLayout.addWidget(self.xupInput, 0, 3)
-		axisLayout.addWidget(self.blankLabel, 0, 4)
-		axisLayout.addWidget(self.yaxisLabel, 0, 5)
-		axisLayout.addWidget(self.ylowInput, 0, 6)
-		axisLayout.addWidget(self.toLabel2, 0, 7)
-		axisLayout.addWidget(self.yupInput, 0, 8)
-		self.setLayout(axisLayout)
+		axis_layout = QGridLayout()
+		axis_layout.addWidget(self.xaxisLabel, 0, 0)
+		axis_layout.addWidget(self.xlowInput, 0, 1)
+		axis_layout.addWidget(self.toLabel, 0, 2)
+		axis_layout.addWidget(self.xupInput, 0, 3)
+		axis_layout.addWidget(self.blankLabel, 0, 4)
+		axis_layout.addWidget(self.yaxisLabel, 0, 5)
+		axis_layout.addWidget(self.ylowInput, 0, 6)
+		axis_layout.addWidget(self.toLabel, 0, 7)
+		axis_layout.addWidget(self.yupInput, 0, 8)
+		self.setLayout(axis_layout)
 
 
 
@@ -188,25 +189,25 @@ class PositionControls(QGroupBox):
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
 
-		controlsLayout = QGridLayout()
-		controlsLayout.addWidget(self.xMaxLabel, 0, 0)
-		controlsLayout.addWidget(self.xMinLabel, 1, 0)
-		controlsLayout.addWidget(self.yMaxLabel, 2, 0)
-		controlsLayout.addWidget(self.yMinLabel, 3, 0)
-		controlsLayout.addWidget(self.nxLabel, 4, 0)
-		controlsLayout.addWidget(self.nyLabel, 5, 0)
+		controls_layout = QGridLayout()
+		controls_layout.addWidget(self.xMaxLabel, 0, 0)
+		controls_layout.addWidget(self.xMinLabel, 1, 0)
+		controls_layout.addWidget(self.yMaxLabel, 2, 0)
+		controls_layout.addWidget(self.yMinLabel, 3, 0)
+		controls_layout.addWidget(self.nxLabel, 4, 0)
+		controls_layout.addWidget(self.nyLabel, 5, 0)
 
 
-		controlsLayout.addWidget(self.xMaxInput, 0, 1)
-		controlsLayout.addWidget(self.xMinInput, 1, 1)
-		controlsLayout.addWidget(self.yMaxInput, 2, 1)
-		controlsLayout.addWidget(self.yMinInput, 3, 1)
-		controlsLayout.addWidget(self.nxInput, 4, 1)
-		controlsLayout.addWidget(self.nyInput, 5, 1)
+		controls_layout.addWidget(self.xMaxInput, 0, 1)
+		controls_layout.addWidget(self.xMinInput, 1, 1)
+		controls_layout.addWidget(self.yMaxInput, 2, 1)
+		controls_layout.addWidget(self.yMinInput, 3, 1)
+		controls_layout.addWidget(self.nxInput, 4, 1)
+		controls_layout.addWidget(self.nyInput, 5, 1)
 
-		controlsLayout.addWidget(self.ConfirmButton, 6, 1)
+		controls_layout.addWidget(self.ConfirmButton, 6, 1)
 
-		self.setLayout(controlsLayout)
+		self.setLayout(controls_layout)
 
 	# def update_parameters(self):
 	#     self.parameters = {}
@@ -246,15 +247,15 @@ class AcquisitionControls(QGroupBox):
 		self.num_run.setValue(1)
 		self.num_shots.setValue(1)
 
-		ACLayout = QGridLayout()
-		ACLayout.addWidget(self.DataRun, 0, 0)
-		ACLayout.addWidget(self.TestShot, 0, 1)
-		ACLayout.addWidget(self.num_run_label, 1, 0)
-		ACLayout.addWidget(self.num_shots_label, 2, 0)
-		ACLayout.addWidget(self.num_run, 1, 1)
-		ACLayout.addWidget(self.num_shots, 2, 1)
+		ac_layout = QGridLayout()
+		ac_layout.addWidget(self.DataRun, 0, 0)
+		ac_layout.addWidget(self.TestShot, 0, 1)
+		ac_layout.addWidget(self.num_run_label, 1, 0)
+		ac_layout.addWidget(self.num_shots_label, 2, 0)
+		ac_layout.addWidget(self.num_run, 1, 1)
+		ac_layout.addWidget(self.num_shots, 2, 1)
 
-		self.setLayout(ACLayout)
+		self.setLayout(ac_layout)
 
 
 ######################################################################################################
@@ -302,28 +303,28 @@ class MotorMovement(QGroupBox):
 		self.velocityInput = QLineEdit(readOnly = True)
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
-		MMLayout = QGridLayout()
-		MMLayout.addWidget(self.xMoveLabel, 0, 0)
-		MMLayout.addWidget(self.yMoveLabel, 0, 1)
-		MMLayout.addWidget(self.xMoveInput, 1, 0)
-		MMLayout.addWidget(self.yMoveInput, 1, 1)
-		MMLayout.addWidget(self.MoveButton, 1, 2)
-		MMLayout.addWidget(self.xvLabel, 2, 0)
-		MMLayout.addWidget(self.yvLabel, 2, 1)
-		MMLayout.addWidget(self.xvInput, 3, 0)
-		MMLayout.addWidget(self.yvInput, 3, 1)
-		MMLayout.addWidget(self.SetVelocity, 3, 2)
-		MMLayout.addWidget(self.SetZero, 4, 0)
-		MMLayout.addWidget(self.StopNowButton, 4, 1)
-		MMLayout.addWidget(self.CurposLabel, 5, 0)
-		MMLayout.addWidget(self.CurposInput, 5, 1, 1, 2)
-		MMLayout.addWidget(self.velocityButton, 6, 0)
-		MMLayout.addWidget(self.velocityInput, 6, 1, 1, 2)
+		mm_layout = QGridLayout()
+		mm_layout.addWidget(self.xMoveLabel, 0, 0)
+		mm_layout.addWidget(self.yMoveLabel, 0, 1)
+		mm_layout.addWidget(self.xMoveInput, 1, 0)
+		mm_layout.addWidget(self.yMoveInput, 1, 1)
+		mm_layout.addWidget(self.MoveButton, 1, 2)
+		mm_layout.addWidget(self.xvLabel, 2, 0)
+		mm_layout.addWidget(self.yvLabel, 2, 1)
+		mm_layout.addWidget(self.xvInput, 3, 0)
+		mm_layout.addWidget(self.yvInput, 3, 1)
+		mm_layout.addWidget(self.SetVelocity, 3, 2)
+		mm_layout.addWidget(self.SetZero, 4, 0)
+		mm_layout.addWidget(self.StopNowButton, 4, 1)
+		mm_layout.addWidget(self.CurposLabel, 5, 0)
+		mm_layout.addWidget(self.CurposInput, 5, 1, 1, 2)
+		mm_layout.addWidget(self.velocityButton, 6, 0)
+		mm_layout.addWidget(self.velocityInput, 6, 1, 1, 2)
 
 
-		self.setLayout(MMLayout)
+		self.setLayout(mm_layout)
 
-		self.mc = Motor_Control_2D(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
+		self.mc = MotorControl2d(x_ip_addr = self.x_ip_addr, y_ip_addr = self.y_ip_addr)
 
 #----------------------------------------------------------------------
 
@@ -369,8 +370,8 @@ class MotorMovement(QGroupBox):
 		return self.mc.current_probe_position()
 
 	def update_current_speed(self):
-		self.speedx, self.speedy = self.ask_velocity()
-		self.velocityInput.setText("(" + str(self.speedx) + " ," + str(self.speedy) +")")
+		speedx, speedy = self.ask_velocity()
+		self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def set_input_usage(self, usage):
 		self.mc.set_input_usage(usage)
@@ -398,17 +399,17 @@ class ScopeChannel(QGroupBox):
 		self.c4Input = QLineEdit()
 
 
-		SCLayout = QGridLayout()
-		SCLayout.addWidget(self.titleLabel, 0, 0, 1, 2)
-		SCLayout.addWidget(self.c1Label, 1, 0)
-		SCLayout.addWidget(self.c2Label, 2, 0)
-		SCLayout.addWidget(self.c3Label, 3, 0)
-		SCLayout.addWidget(self.c4Label, 4, 0)
-		SCLayout.addWidget(self.c1Input, 1, 1)
-		SCLayout.addWidget(self.c2Input, 2, 1)
-		SCLayout.addWidget(self.c3Input, 3, 1)
-		SCLayout.addWidget(self.c4Input, 4, 1)
-		self.setLayout(SCLayout)
+		sc_layout = QGridLayout()
+		sc_layout.addWidget(self.titleLabel, 0, 0, 1, 2)
+		sc_layout.addWidget(self.c1Label, 1, 0)
+		sc_layout.addWidget(self.c2Label, 2, 0)
+		sc_layout.addWidget(self.c3Label, 3, 0)
+		sc_layout.addWidget(self.c4Label, 4, 0)
+		sc_layout.addWidget(self.c1Input, 1, 1)
+		sc_layout.addWidget(self.c2Input, 2, 1)
+		sc_layout.addWidget(self.c3Input, 3, 1)
+		sc_layout.addWidget(self.c4Input, 4, 1)
+		self.setLayout(sc_layout)
 
 
 update_pos = None
@@ -425,11 +426,11 @@ class SoftwareVersion(QGroupBox):
 		self.lastmodified = QLabel(self.mod_datetime)
 		self.version = QLabel("Version: "+version_number)
 
-		SVLayout = QGridLayout()
-		SVLayout.addWidget(self.vLabel, 0, 0)
-		SVLayout.addWidget(self.lastmodified, 1, 0)
-		SVLayout.addWidget(self.version, 2, 0)
-		self.setLayout(SVLayout)
+		sv_layout = QGridLayout()
+		sv_layout.addWidget(self.vLabel, 0, 0)
+		sv_layout.addWidget(self.lastmodified, 1, 0)
+		sv_layout.addWidget(self.version, 2, 0)
+		self.setLayout(sv_layout)
 
 #############################################################################################
 #############################################################################################
@@ -516,10 +517,10 @@ class DataRunThread(QRunnable):
 			# if we are not allowing possible overwrites as default, and the file already exists, use file open dialog
 			tk = tkinter.Tk()
 			tk.withdraw()		# prevent tk GUI from popping up
-			fnoptions={}
-			fnoptions['title'] = 'Save file as ...'
-			fnoptions['defaultextension'] = '.hdf5'
-			fnoptions['filetypes'] = [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]
+
+			fnoptions = {'title': 'Save file as ...', 'defaultextension': '.hdf5',
+						 'filetypes': [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]}
+
 			fn = filedialog.asksaveasfilename(**fnoptions)
 			if not fn: 		# if user pressed 'cancel', fn = None
 				print("\nUser cancelled save file input.")
@@ -545,8 +546,8 @@ class DataRunThread(QRunnable):
 
 		for tr in traces:
 			try:
-				NPos,NTimes = datasets[tr].shape
-				datasets[tr][pos_ndx,0:NTimes] = scope.acquire(tr)[0:NTimes]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
+				n_pos,n_times = datasets[tr].shape
+				datasets[tr][pos_ndx,0:n_times] = scope.acquire(tr)[0:n_times]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
 				#?# datasets[tr].flush()
 			except KeyError:
 				print(tr + ' is displayed on the scope but not recorded. To record this channel, please display the trace before starting the data run.')
@@ -620,7 +621,7 @@ class DataRunThread(QRunnable):
 
 		#============================
 
-		mc = Motor_Control_2D(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
+		mc = MotorControl2d(x_ip_addr = self.ip_addrs['x'], y_ip_addr = self.ip_addrs['y'])
 
 
 		######### HDF5 OUTPUT FILE SETUP #########
@@ -670,8 +671,8 @@ class DataRunThread(QRunnable):
 
 				scope_grp.attrs['ScopeType'] = scope.idn_string
 
-				NPos = len(positions)
-				NTimes = scope.max_samples()
+				n_pos = len(positions)
+				n_times = scope.max_samples()
 
 				datasets = {}
 				hdr_data = {}
@@ -690,7 +691,7 @@ class DataRunThread(QRunnable):
 				for tr in traces:
 					name = scope.expanded_name(tr)
 					# ds = scope_grp.create_dataset(name, (NPos,NTimes), chunks=(1,NTimes), fletcher32=True, compression='gzip', compression_opts=9)
-					ds = scope_grp.create_dataset(name, shape=(NPos,NTimes), fletcher32=True, compression='gzip', compression_opts=9)
+					ds = scope_grp.create_dataset(name, shape=(n_pos,n_times), fletcher32=True, compression='gzip', compression_opts=9)
 					datasets[tr] = ds
 
 				# For each trace we are storing, we will write one header per position (immediately after
@@ -698,10 +699,10 @@ class DataRunThread(QRunnable):
 				# For whatever stupid reason we need to write the header as a binary blob using an "HDF5 opaque" type - here void type 'V346'  (otherwise I could not manage to avoid invisible string processing and interpretation)
 				for tr in traces:
 					name = scope.expanded_name(tr)
-					hdr_data[tr] = header_grp.create_dataset(name, shape=(NPos,), dtype="V%i"%(WAVEDESC_SIZE), fletcher32=True, compression='gzip', compression_opts=9)  # V346 = void type, 346 bytes long
+					hdr_data[tr] = header_grp.create_dataset(name, shape=(n_pos,), dtype="V%i"%(WAVEDESC_SIZE), fletcher32=True, compression='gzip', compression_opts=9)  # V346 = void type, 346 bytes long
 
 				# create "time" dataset
-				time_ds = scope_grp.create_dataset('time', shape=(NTimes,), fletcher32=True, compression='gzip', compression_opts=9)
+				time_ds = scope_grp.create_dataset('time', shape=(n_times,), fletcher32=True, compression='gzip', compression_opts=9)
 
 				# at this point all datasets should be created, so we can
 				# switch to SWMR mode
@@ -761,7 +762,7 @@ class DataRunThread(QRunnable):
 
 						# at least get one time array recorded for swmr functions
 						if pos[0] == 1:
-							time_ds[0:NTimes] = scope.time_array()[0:NTimes]
+							time_ds[0:n_times] = scope.time_array()[0:n_times]
 							#time_ds.flush()
 
 					######### END MAIN ACQUISITION LOOP #########
@@ -770,7 +771,7 @@ class DataRunThread(QRunnable):
 					print('\n______Halted due to Ctrl-C______', '  at', time.ctime())
 
 				# copy the array of time values, corresponding to the last acquired trace, to the times_dataset
-				time_ds[0:NTimes] = scope.time_array()[0:NTimes]      # specify number of points, sometimes scope return extras
+				time_ds[0:n_times] = scope.time_array()[0:n_times]      # specify number of points, sometimes scope return extras
 				if type(time_ds) == 'stupid':
 					print(' this is only included to make the linter happy, otherwise it thinks time_ds is not used')
 
@@ -778,7 +779,7 @@ class DataRunThread(QRunnable):
 				# Also add the text descriptions.    Do these together to be able to be able to make a note in the description
 				for tr in traces:
 					if datasets[tr].len() == 0:
-						datasets[tr] = numpy.zeros(shape=(NPos,NTimes))
+						datasets[tr] = numpy.zeros(shape=(n_pos,n_times))
 						datasets[tr].attrs['description'] = 'NOT RECORDED: ' + self.get_channel_description(tr)           # callback arg to the current function
 						datasets[tr].attrs['recorded']    = False
 					else:
@@ -832,6 +833,7 @@ class Window(QWidget):
 	def __init__(self):
 		super(Window, self).__init__()
 
+		self.update = None
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
@@ -900,10 +902,10 @@ class Window(QWidget):
 
 	def update_current_position(self):
 		if not data_running:
-			self.xnow, self.ynow = self.mm.current_probe_position()
+			xnow, ynow = self.mm.current_probe_position()
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 
 		else:
 			pass
@@ -911,90 +913,82 @@ class Window(QWidget):
 
 	def update_current_position_during_data_run(self, xnow, ynow):
 		if data_running:
-			self.xnow = xnow
-			self.ynow = ynow
+			xnow = xnow
+			ynow = ynow
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
 			print("Why is this called when data_running == False ?")
 
 	def update_screen_dump(self):
-		self.pixmap = QPixmap("scope_screen_dump.png")
+		pixmap = QPixmap("scope_screen_dump.png")
 		#self.pixmapscaled = self.pixmap.scaledToHeight(800) #Rescale the picture to fit the screen. However this makes the picture from a HD scope blurry.
-		self.ScopeScreen.setPixmap(self.pixmap)
+		self.ScopeScreen.setPixmap(pixmap)
 
 	def mark_finished_positions(self, x, y):
 		if data_running:
-			self.xdone = x
-			self.ydone = y
+			x_done = x
+			y_done = y
 			self.canvas.visited_points.remove()
-			self.canvas.finished_positions(self.xdone, self.ydone)
+			self.canvas.update_finished_positions(x_done, y_done)
 		else:
 			print("Why is this called when data_running == False ?")
 
 
 	def update_current_speed(self):
-			self.speedx, self.speedy = self.mm.ask_velocity()
-			self.velocityInput.setText("(" + str(self.speedx) + " ," + str(self.speedy) +")")
+			speedx, speedy = self.mm.ask_velocity()
+			self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def update_parameters(self):
-		self.parameters = {}
+		parameters = {}
 		self.update = True
 		try:
-			self.parameters["xmax"] = float(self.pc.xMaxInput.text())
-			self.parameters["xmin"] = float(self.pc.xMinInput.text())
-			self.parameters["ymax"] = float(self.pc.yMaxInput.text())
-			self.parameters["ymin"] = float(self.pc.yMinInput.text())
-			self.parameters["nx"] = int(self.pc.nxInput.text())
-			self.parameters["ny"] = int(self.pc.nyInput.text())
-			return self.parameters
+			parameters["xmax"] = float(self.pc.xMaxInput.text())
+			parameters["xmin"] = float(self.pc.xMinInput.text())
+			parameters["ymax"] = float(self.pc.yMaxInput.text())
+			parameters["ymin"] = float(self.pc.yMinInput.text())
+			parameters["nx"] = int(self.pc.nxInput.text())
+			parameters["ny"] = int(self.pc.nyInput.text())
+			return parameters
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 			self.update = False
 
 	def update_geometry(self):
-		self.param = self.update_parameters()
+		param = self.update_parameters()
 
 		if self.update:
 			self.canvas.matrix.remove()
-			self.canvas.update_figure(self.param)
+			self.canvas.update_figure(param)
 		else:
 			pass
 
 	def update_channel_information(self):
-		self.channel_info = {}
-
-		self.channel_info["C1"] = self.sc.c1Input.text()
-		self.channel_info["C2"] = self.sc.c2Input.text()
-		self.channel_info["C3"] = self.sc.c3Input.text()
-		self.channel_info["C4"] = self.sc.c4Input.text()
-
-		return self.channel_info
+		channel_info = {"C1": self.sc.c1Input.text(), "C2": self.sc.c2Input.text(), "C3": self.sc.c3Input.text(),
+                        "C4": self.sc.c4Input.text()}
+		return channel_info
 
 	def start_data_run(self):
 		# start data_run threading
 		self.hdf5_filename = None
 
-		self.pos_param = self.update_parameters()
-		self.pos_param["num_shots"] = self.ac.num_shots.value()
-		self.pos_param["num_run"] = self.ac.num_run.value()
+		pos_param = self.update_parameters()
+		pos_param["num_shots"] = self.ac.num_shots.value()
+		pos_param["num_run"] = self.ac.num_run.value()
 
-		self.channel_description = self.update_channel_information()
+		channel_description = self.update_channel_information()
 
-		self.ip_addrs = {}
-		self.ip_addrs['x'] = self.x_ip
-		self.ip_addrs['y'] = self.y_ip
-		self.ip_addrs['scope'] = self.scope_ip
+		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
 
-		self.data_run = DataRunThread(self.hdf5_filename, self.pos_param, self.channel_description, self.ip_addrs)
+		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
 		self.freeze_all_controls()
-		self.data_run.signals.finished.connect(self.data_run_finished)
-		self.data_run.signals.cancel.connect(self.acquisition_canceled)
-		self.data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
-		self.data_run.signals.finished_position.connect(self.mark_finished_positions)
-		self.data_run.signals.new_screen_dump.connect(self.update_screen_dump)
-		self.threadpool.start(self.data_run)
+		data_run.signals.finished.connect(self.data_run_finished)
+		data_run.signals.cancel.connect(self.acquisition_canceled)
+		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
+		data_run.signals.finished_position.connect(self.mark_finished_positions)
+		data_run.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(data_run)
 
 	def acquisition_canceled(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
@@ -1043,12 +1037,11 @@ class Window(QWidget):
 
 
 	def start_test_shot(self):
-		self.ip_addrs = {}
-		self.ip_addrs['scope'] = self.scope_ip
-		self.test_shot = TestShotThread(self.ip_addrs)
-		self.test_shot.signals.finished.connect(self.test_shot_finished)
-		self.test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
-		self.threadpool.start(self.test_shot)
+		ip_addrs = {'scope': self.scope_ip}
+		test_shot = TestShotThread(ip_addrs)
+		test_shot.signals.finished.connect(self.test_shot_finished)
+		test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(test_shot)
 
 
 	def file_quit(self):

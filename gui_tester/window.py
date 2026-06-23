@@ -1,0 +1,251 @@
+#
+#
+# This graphic user interface allows user to
+# (1) set up data point positions, channel description and start data acquisition
+#     (by calling Data_Run_2D.py or Data_Run_3D.py)
+# (2) control the motor (by calling Motor_Control_2D.py or Motor_Control_3D.py)
+# (3) view graphic display of the current probe position and data point positions in the chamber
+#
+#
+# Author: Yuchen Qian
+# Oct 2017
+#
+
+import numpy
+import sys
+import os
+import os.path
+import time
+import datetime
+from widgets.MotorMovement_ui import MotorMovement
+from widgets.AcquisitionControls_ui import AcquisitionControls
+from widgets.canvas_ui import MyMplCanvas
+from widgets.AxisConrols_ui import AxisControls
+from widgets.ScopeControls_ui import ScopeChannel
+from widgets.SoftwareVersion_ui import SoftwareVersion
+from widgets.PositionControls_ui import PositionControls
+
+dir_path=os.path.dirname(os.path.realpath(__file__))
+version_number="03/01/2018 12:37pm"			# update this when a change has been made
+
+from PyQt5 import QtCore
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.patches as patches
+
+data_running = False
+#############################################################################################
+#############################################################################################
+
+
+
+class Window(QWidget):
+
+	def __init__(self):
+		super(Window, self).__init__()
+
+		self.pc = PositionControls()
+		self.canvas = MyMplCanvas()
+		self.ac = AcquisitionControls()
+		self.axc = AxisControls()
+		self.sv = SoftwareVersion()
+		self.sc = ScopeChannel()
+		self.x_ip = "192.168.0.70"
+		self.y_ip = "192.168.0.80"
+		self.scope_ip = "192.168.0.60"
+		self.port_ip = int(7776)
+		self.mm = MotorMovement(x_ip_addr = self.x_ip, y_ip_addr = self.y_ip, motor_port= self.port_ip)
+		self.mm.set_input_usage(3)
+		self.mm.set_steps_per_rev(20000, 20000)
+
+		self.axc.xupInput.valueChanged.connect(self.axis_change)
+		self.axc.yupInput.valueChanged.connect(self.axis_change)
+		self.axc.xlowInput.valueChanged.connect(self.axis_change)
+		self.axc.ylowInput.valueChanged.connect(self.axis_change)
+
+		self.pc.ConfirmButton.clicked.connect(self.update_geometry)
+
+		self.ac.DataRun.clicked.connect(self.start_data_run)
+		self.ac.TestShot.clicked.connect(self.start_test_shot)
+
+
+		self.ScopeScreen = QLabel(self)
+		self.update_screen_dump()
+
+
+		layout = QGridLayout()
+		layout.addWidget(self.canvas, 0, 0, 1, 2)
+		layout.addWidget(self.axc, 1, 0, 1, 2)			#axes control
+		layout.addWidget(self.mm, 2, 0, 2, 1)					#motor movement
+		layout.addWidget(self.pc, 2, 1, 2, 1)					#position control
+		layout.addWidget(self.ac, 2, 2)					#acquisition control
+		layout.addWidget(self.sc, 2, 3, 2, 1)					#scope channel comments
+		layout.addWidget(self.sv, 3, 2)
+		layout.addWidget(self.ScopeScreen, 0, 2 , 2, 2)
+		self.setLayout(layout)
+
+		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
+		self.resize(1600, 700)
+
+		self.threadpool = QThreadPool()
+
+		# Set timer to update current probe position and instant motor velocity
+		self.timer = QtCore.QTimer(self)
+		self.timer.timeout.connect(self.update_current_position)
+		self.timer.start(500)
+
+	# def update_timer(self):
+	# 	if data_running == False:
+	# 		self.timer = QtCore.QTimer(self)
+	# 		self.timer.timeout.connect(self.update_current_position)
+	# 		self.timer.start(500)
+	# 	else:
+	# 		pass
+
+	def axis_change(self):
+		xup = self.axc.xupInput.value()
+		yup = self.axc.yupInput.value()
+		xlow = self.axc.xlowInput.value()
+		ylow = self.axc.ylowInput.value()
+		self.canvas.update_axis(xup,yup,xlow,ylow)
+
+
+	def update_current_position(self):
+		if not data_running:
+			self.xnow, self.ynow = self.mm.current_probe_position()
+			self.canvas.point.remove()
+			self.canvas.update_probe(self.xnow, self.ynow)
+			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+
+		else:
+			pass
+
+
+	def update_current_position_during_data_run(self, xnow, ynow):
+		if data_running:
+			self.xnow = xnow
+			self.ynow = ynow
+			self.canvas.point.remove()
+			self.canvas.update_probe(self.xnow, self.ynow)
+			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+		else:
+			print("Why is this called when data_running == False ?")
+
+	def update_screen_dump(self):
+		self.pixmap = QPixmap("scope_screen_dump.png")
+		#self.pixmapscaled = self.pixmap.scaledToHeight(800) #Rescale the picture to fit the screen. However this makes the picture from a HD scope blurry.
+		self.ScopeScreen.setPixmap(self.pixmap)
+
+	def mark_finished_positions(self, x, y):
+		if data_running:
+			self.xdone = x
+			self.ydone = y
+			self.canvas.visited_points.remove()
+			self.canvas.finished_positions(self.xdone, self.ydone)
+		else:
+			print("Why is this called when data_running == False ?")
+
+
+	def update_current_speed(self):
+			self.speedx, self.speedy = self.mm.ask_velocity()
+			self.velocityInput.setText("(" + str(self.speedx) + " ," + str(self.speedy) +")")
+
+	def update_parameters(self):
+		self.parameters = {}
+		self.update = True
+		try:
+			self.parameters["xmax"] = float(self.pc.xMaxInput.text())
+			self.parameters["xmin"] = float(self.pc.xMinInput.text())
+			self.parameters["ymax"] = float(self.pc.yMaxInput.text())
+			self.parameters["ymin"] = float(self.pc.yMinInput.text())
+			self.parameters["nx"] = int(self.pc.nxInput.text())
+			self.parameters["ny"] = int(self.pc.nyInput.text())
+			return self.parameters
+		except ValueError:
+			QMessageBox.about(self, "Error", "Position should be valid numbers.")
+			self.update = False
+
+	def update_geometry(self):
+		self.param = self.update_parameters()
+
+		if self.update:
+			self.canvas.matrix.remove()
+			self.canvas.update_figure(self.param)
+		else:
+			pass
+
+	def update_channel_information(self):
+		self.channel_info = {}
+
+		self.channel_info["C1"] = self.sc.c1Input.text()
+		self.channel_info["C2"] = self.sc.c2Input.text()
+		self.channel_info["C3"] = self.sc.c3Input.text()
+		self.channel_info["C4"] = self.sc.c4Input.text()
+
+		return self.channel_info
+
+	def acquisition_canceled(self):
+		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
+		self.enable_all_controls()
+
+
+	def data_run_finished(self):
+		QMessageBox.about(self, "Acquisition Status", "Data acquisition complete.")
+		self.enable_all_controls()
+		self.canvas.visited_points.remove()
+		self.canvas.initialize_visited_points()
+		# self.canvas.finished_x = []
+		# self.canvas.finished_y = []
+
+	def test_shot_finished(self):
+		QMessageBox.about(self, "Take Test Shot", "Test shot is finished.")
+		self.enable_all_controls()
+		# global data_running
+		# data_running = False
+		# self.pc.setEnabled(True)
+		# self.ac.setEnabled(True)
+		# self.sc.setEnabled(True)
+		# self.mm.setEnabled(True)
+
+	def freeze_all_controls(self):
+		global data_running
+		data_running = True
+		self.pc.setEnabled(False)
+		self.ac.setEnabled(False)
+		self.sc.setEnabled(False)
+		self.mm.MoveButton.setEnabled(False)
+		self.mm.SetZero.setEnabled(False)
+		self.mm.SetVelocity.setEnabled(False)
+		self.mm.velocityButton.setEnabled(False)
+
+	def enable_all_controls(self):
+		global data_running
+		data_running = False
+		self.pc.setEnabled(True)
+		self.ac.setEnabled(True)
+		self.sc.setEnabled(True)
+		self.mm.MoveButton.setEnabled(True)
+		self.mm.SetZero.setEnabled(True)
+		self.mm.SetVelocity.setEnabled(True)
+		self.mm.velocityButton.setEnabled(True)
+
+
+	def file_quit(self):
+		self.close()
+
+	def closeEvent(self, ce):
+		self.file_quit()
+
+
+
+if __name__ == '__main__':
+
+	app = QApplication(sys.argv)
+	window = Window()
+	window.show()
+
+	sys.exit(app.exec_())

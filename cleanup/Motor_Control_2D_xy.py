@@ -1,22 +1,21 @@
-'''
+"""
 Motor_Control_2D controls two motors (x and y), using Single_Motor_Control
 In this case, the x motor moves in x direction and y motor moves in y direction.
 
 Modified by: Yuchen Qian
 Oct 2017
-'''
+"""
 
-import math
+
 from Single_Motor_Control import MotorControl
 import time
-import numpy
 
 
 #############################################################################################
 #############################################################################################
 
 
-class Motor_Control_2D:
+class MotorControl2d:
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None):
 
@@ -95,9 +94,9 @@ class Motor_Control_2D:
 
 
 	def ask_velocity(self):
-		self.speedx = self.x_mc.motor_velocity()
-		self.speedy = self.y_mc.motor_velocity()
-		return self.speedx, self.speedy
+		speedx = self.x_mc.motor_velocity()
+		speedy = self.y_mc.motor_velocity()
+		return speedx, speedy
 
 	def set_velocity(self, vx, vy):
 		self.x_mc.set_speed(vx)
