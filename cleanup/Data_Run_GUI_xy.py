@@ -976,14 +976,14 @@ class Window(QWidget):
 		pos_param["num_shots"] = self.ac.num_shots.value()
 		pos_param["num_run"] = self.ac.num_run.value()
 
-		self.channel_description = self.update_channel_information()
+		channel_description = self.update_channel_information()
 
-		self.ip_addrs = {}
-		self.ip_addrs['x'] = self.x_ip
-		self.ip_addrs['y'] = self.y_ip
-		self.ip_addrs['scope'] = self.scope_ip
+		ip_addrs = {}
+		ip_addrs['x'] = self.x_ip
+		ip_addrs['y'] = self.y_ip
+		ip_addrs['scope'] = self.scope_ip
 
-		data_run = DataRunThread(self.hdf5_filename, pos_param, self.channel_description, self.ip_addrs)
+		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
 		self.freeze_all_controls()
 		data_run.signals.finished.connect(self.data_run_finished)
 		data_run.signals.cancel.connect(self.acquisition_canceled)
@@ -1039,9 +1039,8 @@ class Window(QWidget):
 
 
 	def start_test_shot(self):
-		self.ip_addrs = {}
-		self.ip_addrs['scope'] = self.scope_ip
-		test_shot = TestShotThread(self.ip_addrs)
+		ip_addrs = {'scope': self.scope_ip}
+		test_shot = TestShotThread(ip_addrs)
 		test_shot.signals.finished.connect(self.test_shot_finished)
 		test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
 		self.threadpool.start(test_shot)
