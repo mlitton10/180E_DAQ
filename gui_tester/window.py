@@ -11,12 +11,8 @@
 # Oct 2017
 #
 
-import numpy
 import sys
-import os
 import os.path
-import time
-import datetime
 from widgets.MotorMovement_ui import MotorMovement
 from widgets.AcquisitionControls_ui import AcquisitionControls
 from widgets.canvas_ui import MyMplCanvas
@@ -32,10 +28,6 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.patches as patches
 
 data_running = False
 #############################################################################################
