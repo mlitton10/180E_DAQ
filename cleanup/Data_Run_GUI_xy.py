@@ -70,30 +70,30 @@ class MyMplCanvas(FigureCanvas):
 
 	def update_figure(self, param):
 
-		self.parameters = param
+		parameters = param
 
-		self.xmax = self.parameters['xmax']
-		self.xmin = self.parameters['xmin']
-		self.ymax = self.parameters['ymax']
-		self.ymin = self.parameters['ymin']
-		self.nx = self.parameters['nx']
-		self.ny = self.parameters['ny']
+		xmax = parameters['xmax']
+		xmin = parameters['xmin']
+		ymax = parameters['ymax']
+		ymin = parameters['ymin']
+		nx = parameters['nx']
+		ny = parameters['ny']
 
-		self.xpos = numpy.linspace(self.xmin,self.xmax,self.nx)
-		self.ypos = numpy.linspace(self.ymin,self.ymax,self.ny)
+		xpos = numpy.linspace(xmin, xmax, nx)
+		ypos = numpy.linspace(ymin, ymax, ny)
 
-		self.X = numpy.zeros(self.nx*self.ny)
-		self.Y = numpy.zeros(self.nx*self.ny)
+		X = numpy.zeros(nx * ny)
+		Y = numpy.zeros(nx * ny)
 
 		index = 0
-		for xx in self.xpos:
-			for yy in self.ypos:
-				self.X[index] = xx
-				self.Y[index] = yy
+		for xx in xpos:
+			for yy in ypos:
+				X[index] = xx
+				Y[index] = yy
 				index += 1
-		self.matrix = self.ax.scatter(self.X, self.Y, color = 'blue', marker = 'o')
+		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
 		self.draw()
-		print(self.parameters)
+		print(parameters)
 
 	def update_probe(self, xnow, ynow):
 		self.point = self.ax.scatter(xnow, ynow, color = 'red', marker = '*')
