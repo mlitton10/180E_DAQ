@@ -18,6 +18,8 @@ class ScopeChannel(QGroupBox):
 		self.c3 = UserSettingsRow("Channel 3:")
 		self.c4 = UserSettingsRow("Channel 4:")
 
+		self.build_layout()
+
 	def build_layout(self):
 		sc_layout = QGridLayout()
 		sc_layout.addWidget(self.titleLabel, 0, 0, 1, 2)
