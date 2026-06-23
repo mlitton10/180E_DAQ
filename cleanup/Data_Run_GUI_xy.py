@@ -927,8 +927,8 @@ class Window(QWidget):
 
 	def mark_finished_positions(self, x, y):
 		if data_running:
-			xdone = x
-			ydone = y
+			x_done = x
+			y_done = y
 			self.canvas.visited_points.remove()
 			self.canvas.update_finished_positions(xdone, ydone)
 		else:
