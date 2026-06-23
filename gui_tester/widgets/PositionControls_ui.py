@@ -34,12 +34,7 @@ class PositionControls(QGroupBox):
 		layout.setSpacing(0)
 		layout.setVerticalSpacing(0)
 
-		controls_layout.addWidget(self.xMaxInput, 0, 1)
-		controls_layout.addWidget(self.xMinInput, 1, 1)
-		controls_layout.addWidget(self.yMaxInput, 2, 1)
-		controls_layout.addWidget(self.yMinInput, 3, 1)
-		controls_layout.addWidget(self.nxInput, 4, 1)
-		controls_layout.addWidget(self.nyInput, 5, 1)
+		layout.setHorizontalSpacing(0)
 
 		controls_layout.addWidget(self.ConfirmButton, 6, 1)
 
