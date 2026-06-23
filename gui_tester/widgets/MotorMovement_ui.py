@@ -22,19 +22,13 @@ class MotorMovement(QGroupBox):
 		self.y_ip_addr = y_ip_addr
 		self.MOTOR_PORT = motor_port
 
-		main_layout = QGridLayout(self)
-
 		# Position inputs
 		self.x_position_box = UserSettingsRow("Move x motor to:")
 		self.y_position_box = UserSettingsRow("Move y motor to:")
 
-		position_box = make_form_table([self.x_position_box, self.y_position_box])
-
 		# Velocity inputs
 		self.x_velocity_box = UserSettingsRow("Set x velocity to:")
 		self.y_velocity_box = UserSettingsRow("Set y velocity to:")
-
-		velocity_box = make_form_table([self.x_velocity_box, self.y_velocity_box])
 
 		self.MoveButton = QPushButton("Move Motor")
 		self.StopNowButton = QPushButton("Stop Motor")
@@ -48,9 +42,6 @@ class MotorMovement(QGroupBox):
 
 		# Position display
 		self.current_position_display = UserSettingsRow("Current probe position (cm, cm):", read_only=False)
-		current_position_box = QWidget()
-		position_layout = QFormLayout(current_position_box)
-		position_layout.addRow(self.current_position_display)
 
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit()
