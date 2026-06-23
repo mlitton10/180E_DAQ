@@ -137,8 +137,7 @@ class Window(QWidget):
 
 
 	def update_current_speed(self):
-			speedx, speedy = self.mm.ask_velocity()
-			self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
+		self.mm.display_current_speed()
 
 	def update_parameters(self):
 		parameters = self.pc.collect_parameters()
