@@ -36,6 +36,8 @@ class PositionControls(QGroupBox):
 
 		layout.setHorizontalSpacing(0)
 
-		controls_layout.addWidget(self.ConfirmButton, 6, 1)
+		positions_box = make_form_table([self.xMax, self.xMin,
+									   self.yMax, self.yMin,
+									   self.nx, self.ny])
 
 		self.setLayout(controls_layout)
