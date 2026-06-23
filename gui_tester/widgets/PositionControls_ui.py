@@ -27,13 +27,9 @@ class PositionControls(QGroupBox):
 		self.build_layout()
 
 
-		controls_layout = QGridLayout()
-		controls_layout.addWidget(self.xMaxLabel, 0, 0)
-		controls_layout.addWidget(self.xMinLabel, 1, 0)
-		controls_layout.addWidget(self.yMaxLabel, 2, 0)
-		controls_layout.addWidget(self.yMinLabel, 3, 0)
-		controls_layout.addWidget(self.nxLabel, 4, 0)
-		controls_layout.addWidget(self.nyLabel, 5, 0)
+	def build_layout(self):
+		layout = QGridLayout(self)
+		layout.setContentsMargins(0,0,0,0)
 
 
 		controls_layout.addWidget(self.xMaxInput, 0, 1)
