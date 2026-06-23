@@ -13,14 +13,11 @@ class ScopeChannel(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.titleLabel = QLabel("Enter channel descriptions")
-		self.c1Label = QLabel("Channel 1:")
-		self.c2Label = QLabel("Channel 2:")
-		self.c3Label = QLabel("Channel 3:")
-		self.c4Label = QLabel("Channel 4:")
-		self.c1Input = QLineEdit()
-		self.c2Input = QLineEdit()
-		self.c3Input = QLineEdit()
-		self.c4Input = QLineEdit()
+		self.c1 = UserSettingsRow("Channel 1:")
+		self.c2 = UserSettingsRow("Channel 2:")
+		self.c3 = UserSettingsRow("Channel 3:")
+		self.c4 = UserSettingsRow("Channel 4:")
+
 
 
 		sc_layout = QGridLayout()
