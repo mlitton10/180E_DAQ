@@ -63,17 +63,19 @@ class MotorMovement(QGroupBox):
 		self.velocityInput.setReadOnly(True)
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
-		main_layout.addWidget(position_box, 0, 0, 1, 3)
-		main_layout.addWidget(self.MoveButton, 0, 0, 2, 2)
-		main_layout.addWidget(velocity_box, 1, 0, 1, 3)
+		main_layout.addWidget(position_box, 0, 0, 1, 1)
+		main_layout.addWidget(self.MoveButton, 0, 1)
+
+		main_layout.addWidget(velocity_box, 1, 0, 1, 1)
+		main_layout.addWidget(self.SetVelocity, 1, 1)
+
 		main_layout.addWidget(self.SetZero, 2, 0)
 		main_layout.addWidget(self.StopNowButton, 2, 1)
 
-		main_layout.addWidget(self.SetVelocity, 3, 2)
-		main_layout.addWidget(current_position_box, 4, 0, 1, 3)
+		main_layout.addWidget(current_position_box, 3, 0, 1, 1)
 
-		main_layout.addWidget(self.velocityButton, 5, 0)
-		main_layout.addWidget(self.velocityInput, 5, 1, 1, 2)
+		main_layout.addWidget(self.velocityButton, 4, 0)
+		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
 
 #----------------------------------------------------------------------
 
