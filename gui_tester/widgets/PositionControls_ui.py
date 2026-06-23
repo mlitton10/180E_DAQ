@@ -31,6 +31,8 @@ class PositionControls(QGroupBox):
 		layout = QGridLayout(self)
 		layout.setContentsMargins(0,0,0,0)
 
+		layout.setSpacing(0)
+		layout.setVerticalSpacing(0)
 
 		controls_layout.addWidget(self.xMaxInput, 0, 1)
 		controls_layout.addWidget(self.xMinInput, 1, 1)
