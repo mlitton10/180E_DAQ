@@ -955,23 +955,23 @@ class Window(QWidget):
 			self.update = False
 
 	def update_geometry(self):
-		self.param = self.update_parameters()
+		param = self.update_parameters()
 
 		if self.update:
 			self.canvas.matrix.remove()
-			self.canvas.update_figure(self.param)
+			self.canvas.update_figure(param)
 		else:
 			pass
 
 	def update_channel_information(self):
-		self.channel_info = {}
+		channel_info = {}
 
-		self.channel_info["C1"] = self.sc.c1Input.text()
-		self.channel_info["C2"] = self.sc.c2Input.text()
-		self.channel_info["C3"] = self.sc.c3Input.text()
-		self.channel_info["C4"] = self.sc.c4Input.text()
+		channel_info["C1"] = self.sc.c1Input.text()
+		channel_info["C2"] = self.sc.c2Input.text()
+		channel_info["C3"] = self.sc.c3Input.text()
+		channel_info["C4"] = self.sc.c4Input.text()
 
-		return self.channel_info
+		return channel_info
 
 	def start_data_run(self):
 		# start data_run threading
