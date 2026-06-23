@@ -117,7 +117,7 @@ class Window(QWidget):
 			ynow = ynow
 			self.canvas.point.remove()
 			self.canvas.update_probe(xnow, ynow)
-			self.mm.current_position_display.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
+			self.mm.current_position_display.update_text("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
 			print("Why is this called when data_running == False ?")
 
