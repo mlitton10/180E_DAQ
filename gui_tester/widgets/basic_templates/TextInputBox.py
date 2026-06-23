@@ -9,7 +9,7 @@ def make_form_table(rows):
     return widget
 
 
-class UserSettingsRow(QWidget):
+class UserTextRow(QWidget):
     def __init__(self, label_string, read_only=False):
         super().__init__()
 
