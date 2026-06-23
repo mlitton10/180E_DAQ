@@ -30,4 +30,3 @@ class ScopeChannel(QGroupBox):
 		sc_layout.addWidget(self.c3Input, 3, 1)
 		sc_layout.addWidget(self.c4Input, 4, 1)
 		self.setLayout(sc_layout)
-
