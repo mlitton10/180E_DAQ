@@ -37,7 +37,7 @@ class MotorMovement(QGroupBox):
 
 
 		self.MoveButton     = QPushButton("Move Motor", self)
-		self.StopNowButton  = QPushButton("BUG don't click", self)
+		self.StopNowButton  = QPushButton("Stop Motor", self)
 		self.SetZero        = QPushButton("Set Zero", self)
 		self.SetVelocity = QPushButton("Set Velocity", self)
 		self.MoveButton.clicked.connect(self.move_to_position)
