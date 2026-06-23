@@ -26,5 +26,3 @@ class ScopeChannel(QGroupBox):
 		channel_box = make_form_table([self.c1, self.c2, self.c3, self.c4])
 
 		sc_layout.addWidget(channel_box, 0, 0, 3, 1)
-
-		self.setLayout(sc_layout)
