@@ -57,6 +57,7 @@ class MotorMovement(QGroupBox):
 		mm_layout.addWidget(self.xMoveInput, 1, 0)
 		mm_layout.addWidget(self.yMoveInput, 1, 1)
 		mm_layout.addWidget(self.MoveButton, 1, 2)
+
 		mm_layout.addWidget(self.xvLabel, 2, 0)
 		mm_layout.addWidget(self.yvLabel, 2, 1)
 		mm_layout.addWidget(self.xvInput, 3, 0)
