@@ -1,14 +1,18 @@
-from PyQt5.QtWidgets import QGroupBox, QLabel, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout
 
 
-class TextInputBox(QGroupBox):
-
-    def __init__(self, label_string = None, read_only = False):
+class UserSettingsRow(QWidget):
+    def __init__(self, label_string, read_only=False):
         super().__init__()
 
-        self.label = QLabel(label_string)
-        self.input_line = QLineEdit(read_only)
+        layout = QFormLayout(self)
 
-        pass
+        self.label_edit = QLineEdit()
+        self.label_edit.setReadOnly(read_only)
+        layout.addRow(label_string, self.label_edit)
 
+    def update_text(self, update_string):
+        self.label_edit.setText(update_string)
 
+    def read_text(self):
+        return str(self.label_edit.text())

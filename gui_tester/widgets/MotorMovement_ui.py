@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -7,7 +8,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from basic_templates.TextInputBox import TextInputBox
+from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow
 
 class MotorMovement(QGroupBox):
 
@@ -21,70 +22,66 @@ class MotorMovement(QGroupBox):
 		self.y_ip_addr = y_ip_addr
 		self.MOTOR_PORT = motor_port
 
-		# (cm) Move probe to absolute position along the shaft counted by motor encoder
-		self.xMoveLabel = QLabel("Move x motor to:")
-		self.yMoveLabel = QLabel("Move y motor to:")
-		self.xMoveInput = QLineEdit()
-		self.yMoveInput = QLineEdit()
+		main_layout = QGridLayout(self)
 
-		# For 3D acquisition, need another feature to move the probe to absolute position.
-		# this should be done by calling "move_to_position" function in Motor_Control_3D, with corresponding geometry calculation
+		# Position inputs
+		self.x_position_box = UserSettingsRow("Move x motor to:")
+		self.y_position_box = UserSettingsRow("Move y motor to:")
 
-		# Set velocity.
-		self.xvLabel = QLabel("Set x velocity:")
-		self.yvLabel = QLabel("Set y velocity:")
-		self.xvInput = QLineEdit()
-		self.yvInput = QLineEdit()
+		position_box = QGroupBox("Move to position")
+		position_layout = QFormLayout(position_box)
+		position_layout.addRow(self.x_position_box)
+		position_layout.addRow(self.y_position_box)
 
+		# Velocity inputs
+		self.x_velocity_box = UserSettingsRow("Set x velocity to:")
+		self.y_velocity_box = UserSettingsRow("Set y velocity to:")
 
-		self.MoveButton     = QPushButton("Move Motor", self)
-		self.StopNowButton  = QPushButton("Stop Motor", self)
-		self.SetZero        = QPushButton("Set Zero", self)
-		self.SetVelocity = QPushButton("Set Velocity", self)
+		velocity_box = QGroupBox("Set velocity")
+		velocity_layout = QFormLayout(velocity_box)
+		velocity_layout.addRow(self.x_velocity_box)
+		velocity_layout.addRow(self.y_velocity_box)
+
+		self.MoveButton = QPushButton("Move Motor")
+		self.StopNowButton = QPushButton("Stop Motor")
+		self.SetZero = QPushButton("Set Zero")
+		self.SetVelocity = QPushButton("Set Velocity")
+
 		self.MoveButton.clicked.connect(self.move_to_position)
 		self.StopNowButton.clicked.connect(self.stop_now)
 		self.SetZero.clicked.connect(self.zero)
 		self.SetVelocity.clicked.connect(self.set_velocity)
 
-		self.CurposLabel = QLabel("Current probe position (cm, cm):")
-		self.CurposInput = QLineEdit(readOnly = True)
+		# Position display
+		self.current_position_display = UserSettingsRow("Current probe position (cm, cm):", read_only=False)
+		current_position_box = QGroupBox("Current position")
+		position_layout = QFormLayout(current_position_box)
+		position_layout.addRow(self.current_position_display)
 
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
-		self.velocityInput = QLineEdit(readOnly = True)
-
+		self.velocityInput = QLineEdit()
+		self.velocityInput.setReadOnly(True)
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
-		mm_layout = QGridLayout()
-		mm_layout.addWidget(self.xMoveLabel, 0, 0)
-		mm_layout.addWidget(self.yMoveLabel, 0, 1)
-		mm_layout.addWidget(self.xMoveInput, 1, 0)
-		mm_layout.addWidget(self.yMoveInput, 1, 1)
-		mm_layout.addWidget(self.MoveButton, 1, 2)
+		main_layout.addWidget(position_box, 0, 0, 1, 3)
+		main_layout.addWidget(self.MoveButton, 0, 0, 2, 2)
+		main_layout.addWidget(velocity_box, 1, 0, 1, 3)
+		main_layout.addWidget(self.SetZero, 2, 0)
+		main_layout.addWidget(self.StopNowButton, 2, 1)
 
-		mm_layout.addWidget(self.xvLabel, 2, 0)
-		mm_layout.addWidget(self.yvLabel, 2, 1)
-		mm_layout.addWidget(self.xvInput, 3, 0)
-		mm_layout.addWidget(self.yvInput, 3, 1)
-		mm_layout.addWidget(self.SetVelocity, 3, 2)
+		main_layout.addWidget(self.SetVelocity, 3, 2)
+		main_layout.addWidget(current_position_box, 4, 0, 1, 3)
 
-		mm_layout.addWidget(self.SetZero, 4, 0)
-		mm_layout.addWidget(self.StopNowButton, 4, 1)
-
-		mm_layout.addWidget(self.CurposLabel, 5, 0)
-		mm_layout.addWidget(self.CurposInput, 5, 1, 1, 2)
-		mm_layout.addWidget(self.velocityButton, 6, 0)
-		mm_layout.addWidget(self.velocityInput, 6, 1, 1, 2)
-
-
-		self.setLayout(mm_layout)
+		main_layout.addWidget(self.velocityButton, 5, 0)
+		main_layout.addWidget(self.velocityInput, 5, 1, 1, 2)
 
 #----------------------------------------------------------------------
 
 	def move_to_position(self):
 		# Directly move the motor to their absolute position
 		try:
-			x_pos = float(self.xMoveInput.text())
-			y_pos = float(self.yMoveInput.text())
+			x_pos = float(self.x_position_box.read_text())
+			y_pos = float(self.y_position_box.read_text())
 
 			print(x_pos, y_pos)
 			
@@ -133,3 +130,7 @@ class MotorMovement(QGroupBox):
 	def set_steps_per_rev(self, stepsx, stepsy):
 		print("Set speed: ", stepsx, ", ", stepsy)
 
+if __name__ == '__main__':
+	app = QApplication(sys.argv)
+	window = MotorMovement()
+	window.show()
