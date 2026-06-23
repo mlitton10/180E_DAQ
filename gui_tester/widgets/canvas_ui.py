@@ -50,9 +50,7 @@ class MyMplCanvas(FigureCanvas):
 		self.y_label = self.ax.set_ylabel("y-axis [cm]")
 		self.finished_x, self. finished_y = self.initialize_visited_points()
 
-	def update_figure(self, param):
-
-		parameters = param
+	def compute_point_grid(self, parameters):
 
 		x_max = parameters['xmax']
 		x_min = parameters['xmin']
@@ -73,6 +71,10 @@ class MyMplCanvas(FigureCanvas):
 				X[index] = xx
 				Y[index] = yy
 				index += 1
+
+		return X, Y
+
+	def update_figure(self, X, Y):
 		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
 		self.draw()
 
