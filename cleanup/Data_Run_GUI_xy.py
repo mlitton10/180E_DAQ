@@ -930,7 +930,7 @@ class Window(QWidget):
 			self.xdone = x
 			self.ydone = y
 			self.canvas.visited_points.remove()
-			self.canvas.finished_positions(self.xdone, self.ydone)
+			self.canvas.update_finished_positions(self.xdone, self.ydone)
 		else:
 			print("Why is this called when data_running == False ?")
 
