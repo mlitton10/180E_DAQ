@@ -57,3 +57,9 @@ class PositionControls(QGroupBox):
 		self.yMin.update_text("0")
 		self.nx.update_text("1")
 		self.ny.update_text("1")
+
+	def collect_parameters(self):
+		parameters = {'xmax': self.xMax.read_text(), 'xmin': self.xMin.read_text(),
+					  'ymax': self.yMax.read_text(), 'ymin': self.yMin.read_text(),
+					  'nx': self.nx.read_text(), 'ny': self.ny.read_text()}
+		return parameters
