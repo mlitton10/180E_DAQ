@@ -8,7 +8,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow
+from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow, make_form_table
 
 class MotorMovement(QGroupBox):
 
