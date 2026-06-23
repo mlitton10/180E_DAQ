@@ -76,7 +76,7 @@ class Window(QWidget):
 		layout.addWidget(self.mm, 2, 0, 2, 1)					#motor movement
 		layout.addWidget(self.pc, 2, 1, 2, 1)					#position control
 		layout.addWidget(self.ac, 2, 2)					#acquisition control
-		layout.addWidget(self.sc, 2, 3, 2, 1)					#scope channel comments
+		layout.addWidget(self.sc, 2, 3, 1, 1)					#scope channel comments
 		layout.addWidget(self.sv, 3, 2)
 		layout.addWidget(self.ScopeScreen, 0, 2 , 2, 2)
 		self.setLayout(layout)
