@@ -110,10 +110,10 @@ class MyMplCanvas(FigureCanvas):
 		self.draw()
 
 	def initialize_visited_points(self):
-		self.finished_x = []
-		self.finished_y = []
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
-
+		finished_x = []
+		finished_y = []
+		visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		return finished_x, finished_y
 
 
 class AxisControls(QGroupBox):
