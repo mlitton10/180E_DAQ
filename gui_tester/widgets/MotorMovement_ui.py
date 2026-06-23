@@ -46,7 +46,7 @@ class MotorMovement(QGroupBox):
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit()
 		self.velocityInput.setReadOnly(True)
-		self.velocityButton.clicked.connect(self.display_current_speed)
+		self.velocityButton.clicked.connect(self.display_current_speed)  # example of a signal?
 
 		self.build_layout()
 
