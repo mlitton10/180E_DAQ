@@ -517,10 +517,10 @@ class DataRunThread(QRunnable):
 			# if we are not allowing possible overwrites as default, and the file already exists, use file open dialog
 			tk = tkinter.Tk()
 			tk.withdraw()		# prevent tk GUI from popping up
-			fnoptions={}
-			fnoptions['title'] = 'Save file as ...'
-			fnoptions['defaultextension'] = '.hdf5'
-			fnoptions['filetypes'] = [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]
+
+			fnoptions = {'title': 'Save file as ...', 'defaultextension': '.hdf5',
+						 'filetypes': [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]}
+			
 			fn = filedialog.asksaveasfilename(**fnoptions)
 			if not fn: 		# if user pressed 'cancel', fn = None
 				print("\nUser cancelled save file input.")
