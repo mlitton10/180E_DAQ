@@ -978,10 +978,8 @@ class Window(QWidget):
 
 		channel_description = self.update_channel_information()
 
-		ip_addrs = {}
-		ip_addrs['x'] = self.x_ip
-		ip_addrs['y'] = self.y_ip
-		ip_addrs['scope'] = self.scope_ip
+		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
+
 
 		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
 		self.freeze_all_controls()
