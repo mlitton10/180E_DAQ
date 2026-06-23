@@ -28,19 +28,13 @@ class MotorMovement(QGroupBox):
 		self.x_position_box = UserSettingsRow("Move x motor to:")
 		self.y_position_box = UserSettingsRow("Move y motor to:")
 
-		position_box = QWidget()
-		position_layout = QFormLayout(position_box)
-		position_layout.addRow(self.x_position_box)
-		position_layout.addRow(self.y_position_box)
+		position_box = make_form_table([self.x_position_box, self.y_position_box])
 
 		# Velocity inputs
 		self.x_velocity_box = UserSettingsRow("Set x velocity to:")
 		self.y_velocity_box = UserSettingsRow("Set y velocity to:")
 
-		velocity_box = QWidget()
-		velocity_layout = QFormLayout(velocity_box)
-		velocity_layout.addRow(self.x_velocity_box)
-		velocity_layout.addRow(self.y_velocity_box)
+		velocity_box = make_form_table([self.x_velocity_box, self.y_velocity_box])
 
 		self.MoveButton = QPushButton("Move Motor")
 		self.StopNowButton = QPushButton("Stop Motor")
