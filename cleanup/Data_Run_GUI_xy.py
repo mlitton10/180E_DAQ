@@ -103,10 +103,10 @@ class MyMplCanvas(FigureCanvas):
 		self.ax.set_xlim(x2, x1)
 		self.ax.set_ylim(y2, y1)
 
-	def finished_positions(self, x, y):
+	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
 		self.draw()
 
 	def initialize_visited_points(self):
