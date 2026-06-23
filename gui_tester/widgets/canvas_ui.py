@@ -44,8 +44,23 @@ class MyMplCanvas(FigureCanvas):
 		self.ax.grid(which = 'both')
 		self.ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill = False, edgecolor = 'red'))
 
-		self.matrix = self.ax.scatter(0, 0, 0, color = 'blue', marker = 'o')
-		self.point = self.ax.scatter(0, 0, 0, color = 'red', marker = '*')
+		self.probe_position_plotting_params = {
+			'color': 'red',
+			'marker': '*'
+		}
+
+		self.queued_probe_position_plotting_params = {
+			'color': 'blue',
+			'marker': 'o'
+		}
+		
+		self.visited_probe_position_plotting_params = {
+			'color': 'green',
+			'marker': 'o'
+		}
+
+		self.matrix = self.ax.scatter(0, 0, 0, **self.queued_probe_position_plotting_params)
+		self.point = self.ax.scatter(0, 0, 0, **self.probe_position_plotting_params)
 		self.x_label = self.ax.set_xlabel("x-axis [cm]")
 		self.y_label = self.ax.set_ylabel("y-axis [cm]")
 		self.finished_x, self. finished_y = self.initialize_visited_points()
@@ -75,11 +90,11 @@ class MyMplCanvas(FigureCanvas):
 		return X, Y
 
 	def update_figure(self, X, Y):
-		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
+		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
 		self.draw()
 
 	def update_probe(self, x_now, y_now):
-		self.point = self.ax.scatter(x_now, y_now, color ='red', marker ='*')
+		self.point = self.ax.scatter(x_now, y_now, **self.probe_position_plotting_params)
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
@@ -89,11 +104,11 @@ class MyMplCanvas(FigureCanvas):
 	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
 		self.draw()
 
 	def initialize_visited_points(self):
 		finished_x = []
 		finished_y = []
-		self.ax.scatter(finished_x, finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(finished_x, finished_y, **self.visited_probe_position_plotting_params)
 		return finished_x, finished_y
