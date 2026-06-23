@@ -24,6 +24,8 @@ class PositionControls(QGroupBox):
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
+		self.build_layout()
+
 
 		controls_layout = QGridLayout()
 		controls_layout.addWidget(self.xMaxLabel, 0, 0)
