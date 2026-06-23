@@ -28,3 +28,10 @@ class ScopeChannel(QGroupBox):
 		channel_box = make_form_table([self.c1, self.c2, self.c3, self.c4])
 
 		sc_layout.addWidget(channel_box, 0, 0, 3, 1)
+
+	def get_channel_description(self):
+		channel_description = {"C1": self.c1.read_text(),
+							   "C2": self.c2.read_text(),
+							   "C3": self.c3.read_text(),
+							   "C4": self.c4.read_text()}
+		return channel_description
