@@ -54,8 +54,19 @@ class MotorMovement(QGroupBox):
 		main_layout = QGridLayout(self)
 
 		position_box = make_form_table([self.x_position_box, self.y_position_box])
+		position_box.layout().setContentsMargins(0, 0, 0, 0)
+		position_box.layout().setSpacing(0)
+		position_box.layout().setVerticalSpacing(0)
+
 		velocity_box = make_form_table([self.x_velocity_box, self.y_velocity_box])
+		velocity_box.layout().setContentsMargins(0, 0, 0, 0)
+		velocity_box.layout().setSpacing(0)
+		velocity_box.layout().setVerticalSpacing(0)
+
 		current_position_box = make_form_table([self.current_position_display])
+		current_position_box.layout().setContentsMargins(0, 0, 0, 0)
+		current_position_box.layout().setSpacing(0)
+		current_position_box.layout().setVerticalSpacing(0)
 
 		main_layout.addWidget(position_box, 0, 0, 1, 1)
 		main_layout.addWidget(self.MoveButton, 0, 1)
