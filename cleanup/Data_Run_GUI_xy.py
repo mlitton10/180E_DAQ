@@ -901,10 +901,10 @@ class Window(QWidget):
 
 	def update_current_position(self):
 		if not data_running:
-			self.xnow, self.ynow = self.mm.current_probe_position()
+			xnow, ynow = self.mm.current_probe_position()
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 
 		else:
 			pass
@@ -912,11 +912,11 @@ class Window(QWidget):
 
 	def update_current_position_during_data_run(self, xnow, ynow):
 		if data_running:
-			self.xnow = xnow
-			self.ynow = ynow
+			xnow = xnow
+			ynow = ynow
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
 			print("Why is this called when data_running == False ?")
 
