@@ -48,6 +48,7 @@ class Window(QWidget):
 	def __init__(self):
 		super(Window, self).__init__()
 
+		self.update = None
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
@@ -116,10 +117,10 @@ class Window(QWidget):
 
 	def update_current_position(self):
 		if not data_running:
-			self.xnow, self.ynow = self.mm.current_probe_position()
+			xnow, ynow = self.mm.current_probe_position()
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 
 		else:
 			pass
@@ -127,66 +128,82 @@ class Window(QWidget):
 
 	def update_current_position_during_data_run(self, xnow, ynow):
 		if data_running:
-			self.xnow = xnow
-			self.ynow = ynow
+			xnow = xnow
+			ynow = ynow
 			self.canvas.point.remove()
-			self.canvas.update_probe(self.xnow, self.ynow)
-			self.mm.CurposInput.setText("(" + str(round(self.xnow, 2)) + " ," + str(round(self.ynow, 2)) +")")
+			self.canvas.update_probe(xnow, ynow)
+			self.mm.CurposInput.setText("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
 			print("Why is this called when data_running == False ?")
 
 	def update_screen_dump(self):
-		self.pixmap = QPixmap("scope_screen_dump.png")
+		pixmap = QPixmap("scope_screen_dump.png")
 		#self.pixmapscaled = self.pixmap.scaledToHeight(800) #Rescale the picture to fit the screen. However this makes the picture from a HD scope blurry.
-		self.ScopeScreen.setPixmap(self.pixmap)
+		self.ScopeScreen.setPixmap(pixmap)
 
 	def mark_finished_positions(self, x, y):
 		if data_running:
-			self.xdone = x
-			self.ydone = y
+			x_done = x
+			y_done = y
 			self.canvas.visited_points.remove()
-			self.canvas.finished_positions(self.xdone, self.ydone)
+			self.canvas.update_finished_positions(x_done, y_done)
 		else:
 			print("Why is this called when data_running == False ?")
 
 
 	def update_current_speed(self):
-			self.speedx, self.speedy = self.mm.ask_velocity()
-			self.velocityInput.setText("(" + str(self.speedx) + " ," + str(self.speedy) +")")
+			speedx, speedy = self.mm.ask_velocity()
+			self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def update_parameters(self):
-		self.parameters = {}
+		parameters = {}
 		self.update = True
 		try:
-			self.parameters["xmax"] = float(self.pc.xMaxInput.text())
-			self.parameters["xmin"] = float(self.pc.xMinInput.text())
-			self.parameters["ymax"] = float(self.pc.yMaxInput.text())
-			self.parameters["ymin"] = float(self.pc.yMinInput.text())
-			self.parameters["nx"] = int(self.pc.nxInput.text())
-			self.parameters["ny"] = int(self.pc.nyInput.text())
-			return self.parameters
+			parameters["xmax"] = float(self.pc.xMaxInput.text())
+			parameters["xmin"] = float(self.pc.xMinInput.text())
+			parameters["ymax"] = float(self.pc.yMaxInput.text())
+			parameters["ymin"] = float(self.pc.yMinInput.text())
+			parameters["nx"] = int(self.pc.nxInput.text())
+			parameters["ny"] = int(self.pc.nyInput.text())
+			return parameters
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 			self.update = False
 
 	def update_geometry(self):
-		self.param = self.update_parameters()
+		param = self.update_parameters()
 
 		if self.update:
 			self.canvas.matrix.remove()
-			self.canvas.update_figure(self.param)
+			self.canvas.update_figure(param)
 		else:
 			pass
 
 	def update_channel_information(self):
-		self.channel_info = {}
+		channel_info = {"C1": self.sc.c1Input.text(), "C2": self.sc.c2Input.text(), "C3": self.sc.c3Input.text(),
+                        "C4": self.sc.c4Input.text()}
+		return channel_info
 
-		self.channel_info["C1"] = self.sc.c1Input.text()
-		self.channel_info["C2"] = self.sc.c2Input.text()
-		self.channel_info["C3"] = self.sc.c3Input.text()
-		self.channel_info["C4"] = self.sc.c4Input.text()
+	def start_data_run(self):
+		# start data_run threading
+		self.hdf5_filename = None
 
-		return self.channel_info
+		pos_param = self.update_parameters()
+		pos_param["num_shots"] = self.ac.num_shots.value()
+		pos_param["num_run"] = self.ac.num_run.value()
+
+		channel_description = self.update_channel_information()
+
+		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
+
+		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
+		self.freeze_all_controls()
+		data_run.signals.finished.connect(self.data_run_finished)
+		data_run.signals.cancel.connect(self.acquisition_canceled)
+		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
+		data_run.signals.finished_position.connect(self.mark_finished_positions)
+		data_run.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(data_run)
 
 	def acquisition_canceled(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
@@ -232,6 +249,14 @@ class Window(QWidget):
 		self.mm.SetZero.setEnabled(True)
 		self.mm.SetVelocity.setEnabled(True)
 		self.mm.velocityButton.setEnabled(True)
+
+
+	def start_test_shot(self):
+		ip_addrs = {'scope': self.scope_ip}
+		test_shot = TestShotThread(ip_addrs)
+		test_shot.signals.finished.connect(self.test_shot_finished)
+		test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(test_shot)
 
 
 	def file_quit(self):
