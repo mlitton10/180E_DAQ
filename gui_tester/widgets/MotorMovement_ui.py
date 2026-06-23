@@ -70,7 +70,6 @@ class MotorMovement(QGroupBox):
 
 		main_layout.addWidget(self.velocityButton, 4, 0)
 		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
-
 #----------------------------------------------------------------------
 
 	def move_to_position(self):
