@@ -41,6 +41,9 @@ class PositionControls(QGroupBox):
 		positions_box = make_form_table([self.xMax, self.xMin,
 									   self.yMax, self.yMin,
 									   self.nx, self.ny])
+		positions_box.setContentsMargins(0,0,0,0)
+		positions_box.layout().setSpacing(0)
+		positions_box.layout().setVerticalSpacing(0)
 
 		layout.addWidget(positions_box, 0, 0, 5, 1)
 
