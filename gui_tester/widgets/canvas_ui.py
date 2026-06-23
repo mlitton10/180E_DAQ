@@ -47,53 +47,53 @@ class MyMplCanvas(FigureCanvas):
 
 		self.matrix = self.ax.scatter(0, 0, 0, color = 'blue', marker = 'o')
 		self.point = self.ax.scatter(0, 0, 0, color = 'red', marker = '*')
-		self.xlabel = self.ax.set_xlabel("x-axis [cm]")
-		self.ylabel = self.ax.set_ylabel("y-axis [cm]")
-		self.initialize_visited_points()
+		self.x_label = self.ax.set_xlabel("x-axis [cm]")
+		self.y_label = self.ax.set_ylabel("y-axis [cm]")
+		self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def update_figure(self, param):
 
-		self.parameters = param
+		parameters = param
 
-		self.xmax = self.parameters['xmax']
-		self.xmin = self.parameters['xmin']
-		self.ymax = self.parameters['ymax']
-		self.ymin = self.parameters['ymin']
-		self.nx = self.parameters['nx']
-		self.ny = self.parameters['ny']
+		x_max = parameters['xmax']
+		x_min = parameters['xmin']
+		y_max = parameters['ymax']
+		y_min = parameters['ymin']
+		nx = parameters['nx']
+		ny = parameters['ny']
 
-		self.xpos = numpy.linspace(self.xmin,self.xmax,self.nx)
-		self.ypos = numpy.linspace(self.ymin,self.ymax,self.ny)
+		x_pos = numpy.linspace(x_min, x_max, nx)
+		y_pos = numpy.linspace(y_min, y_max, ny)
 
-		self.X = numpy.zeros(self.nx*self.ny)
-		self.Y = numpy.zeros(self.nx*self.ny)
+		X = numpy.zeros(nx * ny)
+		Y = numpy.zeros(nx * ny)
 
 		index = 0
-		for xx in self.xpos:
-			for yy in self.ypos:
-				self.X[index] = xx
-				self.Y[index] = yy
+		for xx in x_pos:
+			for yy in y_pos:
+				X[index] = xx
+				Y[index] = yy
 				index += 1
-		self.matrix = self.ax.scatter(self.X, self.Y, color = 'blue', marker = 'o')
+		self.matrix = self.ax.scatter(X, Y, color = 'blue', marker = 'o')
 		self.draw()
-		print(self.parameters)
+		print(parameters)
 
-	def update_probe(self, xnow, ynow):
-		self.point = self.ax.scatter(xnow, ynow, color = 'red', marker = '*')
+	def update_probe(self, x_now, y_now):
+		self.point = self.ax.scatter(x_now, y_now, color ='red', marker ='*')
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
 		self.ax.set_xlim(x2, x1)
 		self.ax.set_ylim(y2, y1)
 
-	def finished_positions(self, x, y):
+	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
 		self.draw()
 
 	def initialize_visited_points(self):
-		self.finished_x = []
-		self.finished_y = []
-		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
-
+		finished_x = []
+		finished_y = []
+		self.ax.scatter(self.finished_x, self.finished_y, color = 'green', marker = 'o')
+		return finished_x, finished_y

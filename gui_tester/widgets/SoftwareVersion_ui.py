@@ -20,10 +20,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.patches as patches
-
 class SoftwareVersion(QGroupBox):
 	def __init__(self):
 		super().__init__()
