@@ -124,6 +124,7 @@ class LecroyScope:
             queries about invalid names; this is useful to confirm that communication is established, when it
             happens).
         """
+        self.hdr = None
         self.verbose = verbose
         self.rm_status = self.rm_open(ipv4_addr)   # use resource manager to open 'VICP::'+ipv4_addr+'::INSTR'; assign self.scope to this "instrument"
         if not self.rm_status:
