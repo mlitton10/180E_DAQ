@@ -94,9 +94,9 @@ class MotorControl2d:
 
 
 	def ask_velocity(self):
-		self.speedx = self.x_mc.motor_velocity()
-		self.speedy = self.y_mc.motor_velocity()
-		return self.speedx, self.speedy
+		speedx = self.x_mc.motor_velocity()
+		speedy = self.y_mc.motor_velocity()
+		return speedx, speedy
 
 	def set_velocity(self, vx, vy):
 		self.x_mc.set_speed(vx)
