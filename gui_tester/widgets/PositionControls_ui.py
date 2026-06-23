@@ -40,4 +40,4 @@ class PositionControls(QGroupBox):
 									   self.yMax, self.yMin,
 									   self.nx, self.ny])
 
-		self.setLayout(controls_layout)
+		layout.addWidget(positions_box, 0, 0, 5, 1)
