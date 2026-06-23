@@ -921,9 +921,9 @@ class Window(QWidget):
 			print("Why is this called when data_running == False ?")
 
 	def update_screen_dump(self):
-		self.pixmap = QPixmap("scope_screen_dump.png")
+		pixmap = QPixmap("scope_screen_dump.png")
 		#self.pixmapscaled = self.pixmap.scaledToHeight(800) #Rescale the picture to fit the screen. However this makes the picture from a HD scope blurry.
-		self.ScopeScreen.setPixmap(self.pixmap)
+		self.ScopeScreen.setPixmap(pixmap)
 
 	def mark_finished_positions(self, x, y):
 		if data_running:
@@ -936,20 +936,20 @@ class Window(QWidget):
 
 
 	def update_current_speed(self):
-			self.speedx, self.speedy = self.mm.ask_velocity()
-			self.velocityInput.setText("(" + str(self.speedx) + " ," + str(self.speedy) +")")
+			speedx, speedy = self.mm.ask_velocity()
+			self.velocityInput.setText("(" + str(speedx) + " ," + str(speedy) +")")
 
 	def update_parameters(self):
-		self.parameters = {}
+		parameters = {}
 		self.update = True
 		try:
-			self.parameters["xmax"] = float(self.pc.xMaxInput.text())
-			self.parameters["xmin"] = float(self.pc.xMinInput.text())
-			self.parameters["ymax"] = float(self.pc.yMaxInput.text())
-			self.parameters["ymin"] = float(self.pc.yMinInput.text())
-			self.parameters["nx"] = int(self.pc.nxInput.text())
-			self.parameters["ny"] = int(self.pc.nyInput.text())
-			return self.parameters
+			parameters["xmax"] = float(self.pc.xMaxInput.text())
+			parameters["xmin"] = float(self.pc.xMinInput.text())
+			parameters["ymax"] = float(self.pc.yMaxInput.text())
+			parameters["ymin"] = float(self.pc.yMinInput.text())
+			parameters["nx"] = int(self.pc.nxInput.text())
+			parameters["ny"] = int(self.pc.nyInput.text())
+			return parameters
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 			self.update = False
@@ -977,9 +977,9 @@ class Window(QWidget):
 		# start data_run threading
 		self.hdf5_filename = None
 
-		self.pos_param = self.update_parameters()
-		self.pos_param["num_shots"] = self.ac.num_shots.value()
-		self.pos_param["num_run"] = self.ac.num_run.value()
+		pos_param = self.update_parameters()
+		pos_param["num_shots"] = self.ac.num_shots.value()
+		pos_param["num_run"] = self.ac.num_run.value()
 
 		self.channel_description = self.update_channel_information()
 
@@ -988,14 +988,14 @@ class Window(QWidget):
 		self.ip_addrs['y'] = self.y_ip
 		self.ip_addrs['scope'] = self.scope_ip
 
-		self.data_run = DataRunThread(self.hdf5_filename, self.pos_param, self.channel_description, self.ip_addrs)
+		data_run = DataRunThread(self.hdf5_filename, pos_param, self.channel_description, self.ip_addrs)
 		self.freeze_all_controls()
-		self.data_run.signals.finished.connect(self.data_run_finished)
-		self.data_run.signals.cancel.connect(self.acquisition_canceled)
-		self.data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
-		self.data_run.signals.finished_position.connect(self.mark_finished_positions)
-		self.data_run.signals.new_screen_dump.connect(self.update_screen_dump)
-		self.threadpool.start(self.data_run)
+		data_run.signals.finished.connect(self.data_run_finished)
+		data_run.signals.cancel.connect(self.acquisition_canceled)
+		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
+		data_run.signals.finished_position.connect(self.mark_finished_positions)
+		data_run.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(data_run)
 
 	def acquisition_canceled(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
@@ -1046,10 +1046,10 @@ class Window(QWidget):
 	def start_test_shot(self):
 		self.ip_addrs = {}
 		self.ip_addrs['scope'] = self.scope_ip
-		self.test_shot = TestShotThread(self.ip_addrs)
-		self.test_shot.signals.finished.connect(self.test_shot_finished)
-		self.test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
-		self.threadpool.start(self.test_shot)
+		test_shot = TestShotThread(self.ip_addrs)
+		test_shot.signals.finished.connect(self.test_shot_finished)
+		test_shot.signals.new_screen_dump.connect(self.update_screen_dump)
+		self.threadpool.start(test_shot)
 
 
 	def file_quit(self):
