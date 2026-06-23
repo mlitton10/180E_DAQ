@@ -520,7 +520,7 @@ class DataRunThread(QRunnable):
 
 			fnoptions = {'title': 'Save file as ...', 'defaultextension': '.hdf5',
 						 'filetypes': [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]}
-			
+
 			fn = filedialog.asksaveasfilename(**fnoptions)
 			if not fn: 		# if user pressed 'cancel', fn = None
 				print("\nUser cancelled save file input.")
