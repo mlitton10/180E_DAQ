@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGroupBox, QLabel, QLineEdit
 
 
-class TextLine(QGroupBox):
+class TextInputBox(QGroupBox):
 
     def __init__(self, label_string = None, read_only = False):
         super().__init__()
