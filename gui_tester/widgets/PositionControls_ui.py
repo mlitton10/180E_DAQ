@@ -1,5 +1,5 @@
 import os.path
-from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow, make_form_table
+from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -15,12 +15,12 @@ class PositionControls(QGroupBox):
 		super().__init__()
 		self.setTitle("Set up DAQ position")
 
-		self.xMax = UserSettingsRow("Max x:")
-		self.xMin = UserSettingsRow("Min x:")
-		self.yMax = UserSettingsRow("Max y:")
-		self.yMin = UserSettingsRow("Min y:")
-		self.nx = UserSettingsRow("Nx:")
-		self.ny = UserSettingsRow("Ny:")
+		self.xMax = UserTextRow("Max x:")
+		self.xMin = UserTextRow("Min x:")
+		self.yMax = UserTextRow("Max y:")
+		self.yMin = UserTextRow("Min y:")
+		self.nx = UserTextRow("Nx:")
+		self.ny = UserTextRow("Ny:")
 
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)

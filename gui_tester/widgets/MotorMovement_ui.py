@@ -8,7 +8,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow, make_form_table
+from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
 class MotorMovement(QGroupBox):
 
@@ -23,12 +23,12 @@ class MotorMovement(QGroupBox):
 		self.MOTOR_PORT = motor_port
 
 		# Position inputs
-		self.x_position_box = UserSettingsRow("Move x motor to:")
-		self.y_position_box = UserSettingsRow("Move y motor to:")
+		self.x_position_box = UserTextRow("Move x motor to:")
+		self.y_position_box = UserTextRow("Move y motor to:")
 
 		# Velocity inputs
-		self.x_velocity_box = UserSettingsRow("Set x velocity to:")
-		self.y_velocity_box = UserSettingsRow("Set y velocity to:")
+		self.x_velocity_box = UserTextRow("Set x velocity to:")
+		self.y_velocity_box = UserTextRow("Set y velocity to:")
 
 		self.MoveButton = QPushButton("Move Motor")
 		self.StopNowButton = QPushButton("Stop Motor")
@@ -41,7 +41,7 @@ class MotorMovement(QGroupBox):
 		self.SetVelocity.clicked.connect(self.set_velocity)
 
 		# Position display
-		self.current_position_display = UserSettingsRow("Current probe position (cm, cm):", read_only=False)
+		self.current_position_display = UserTextRow("Current probe position (cm, cm):", read_only=False)
 
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit()

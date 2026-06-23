@@ -1,6 +1,6 @@
 import os.path
 
-from gui_tester.widgets.basic_templates.TextInputBox import UserSettingsRow, make_form_table
+from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -15,10 +15,10 @@ class ScopeChannel(QGroupBox):
 	def __init__(self):
 		super().__init__()
 		self.setTitle("Enter channel descriptions")
-		self.c1 = UserSettingsRow("Channel 1:")
-		self.c2 = UserSettingsRow("Channel 2:")
-		self.c3 = UserSettingsRow("Channel 3:")
-		self.c4 = UserSettingsRow("Channel 4:")
+		self.c1 = UserTextRow("Channel 1:")
+		self.c2 = UserTextRow("Channel 2:")
+		self.c3 = UserTextRow("Channel 3:")
+		self.c4 = UserTextRow("Channel 4:")
 
 		self.build_layout()
 
