@@ -833,6 +833,7 @@ class Window(QWidget):
 	def __init__(self):
 		super(Window, self).__init__()
 
+		self.update = None
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
