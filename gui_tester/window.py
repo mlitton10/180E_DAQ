@@ -149,7 +149,7 @@ class Window(QWidget):
 		X, Y = self.canvas.compute_point_grid(param)
 		if self.update:
 			self.canvas.matrix.remove()
-			self.canvas.update_figure(param)
+			self.canvas.update_figure(X, Y)
 		else:
 			pass
 
