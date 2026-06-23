@@ -47,8 +47,10 @@ class MotorMovement(QGroupBox):
 
 		self.CurposLabel = QLabel("Current probe position (cm, cm):")
 		self.CurposInput = QLineEdit(readOnly = True)
+
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit(readOnly = True)
+
 		self.velocityButton.clicked.connect(self.update_current_speed)
 
 		mm_layout = QGridLayout()
@@ -66,6 +68,7 @@ class MotorMovement(QGroupBox):
 
 		mm_layout.addWidget(self.SetZero, 4, 0)
 		mm_layout.addWidget(self.StopNowButton, 4, 1)
+
 		mm_layout.addWidget(self.CurposLabel, 5, 0)
 		mm_layout.addWidget(self.CurposInput, 5, 1, 1, 2)
 		mm_layout.addWidget(self.velocityButton, 6, 0)
