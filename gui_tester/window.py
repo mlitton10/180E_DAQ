@@ -59,20 +59,8 @@ class Window(QWidget):
 		self.ScopeScreen = QLabel(self)
 		self.update_screen_dump()
 
+		self.build_layout()
 
-		layout = QGridLayout()
-		layout.addWidget(self.canvas, 0, 0, 1, 2)
-		layout.addWidget(self.axc, 1, 0, 1, 2)			#axes control
-		layout.addWidget(self.mm, 2, 0, 2, 1)					#motor movement
-		layout.addWidget(self.pc, 2, 1, 2, 1)					#position control
-		layout.addWidget(self.ac, 2, 2)					#acquisition control
-		layout.addWidget(self.sc, 2, 3, 1, 1)					#scope channel comments
-		layout.addWidget(self.sv, 3, 2)
-		layout.addWidget(self.ScopeScreen, 0, 2 , 2, 2)
-		self.setLayout(layout)
-
-		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
-		self.resize(1600, 700)
 
 		self.threadpool = QThreadPool()
 
