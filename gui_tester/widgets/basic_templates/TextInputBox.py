@@ -51,7 +51,7 @@ class UserDoubleSpinBoxRow(QWidget):
 
         layout = QFormLayout(self)
 
-        self.label_edit = QLineEdit()
+        self.label_edit = QDoubleSpinBox()
         self.label_edit.setReadOnly(read_only)
         layout.addRow(label_string, self.label_edit)
 
