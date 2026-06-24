@@ -102,7 +102,7 @@ class Window(QWidget):
 		self.resize(1600, 700)
 
 	def axis_change(self):
-		axis_values = self.axc.get_axis_values()
+		axis_values = self.axc.read_axis()
 		self.canvas.update_axis(*axis_values)
 
 	def update_current_position(self):
