@@ -12,25 +12,13 @@ from PyQt5.QtCore import *
 class AxisControls(QGroupBox):
 	def __init__(self):
 		super().__init__()
-		self.xupInput = QSpinBox()
-		self.yupInput = QSpinBox()
-		self.xlowInput = QSpinBox()
-		self.ylowInput = QSpinBox()
+
+		self.range_settings = {'min_range':-60, 'max_range':60}
 
 		self.xupInput.setRange(-60, 60)
 		self.yupInput.setRange(-60, 60)
 		self.xlowInput.setRange(-60, 60)
 		self.ylowInput.setRange(-60, 60)
-
-		self.xupInput.setValue(35)
-		self.yupInput.setValue(35)
-		self.xlowInput.setValue(-35)
-		self.ylowInput.setValue(-35)
-
-		self.xaxisLabel = QLabel("x axis range:")
-		self.yaxisLabel = QLabel("y axis range:")
-		self.toLabel = QLabel("to")
-		self.blankLabel = QLabel("  ")
 
 		self.x_high = UserSpinBoxRow("x-axis range:")
 		self.x_low = UserSpinBoxRow("to: ")
@@ -39,6 +27,7 @@ class AxisControls(QGroupBox):
 		self.y_low = UserSpinBoxRow("to: ")
 
 		self.build_layout()
+		self.initialize_values()
 		pass
 
 	def build_layout(self):
@@ -48,3 +37,15 @@ class AxisControls(QGroupBox):
 		layout.addWidget(self.y_high, 0, 2)
 		layout.addWidget(self.y_low, 0, 3)
 		pass
+
+	def initialize_values(self):
+		self.x_high.set_range(**self.range_settings)
+		self.x_low.set_range(**self.range_settings)
+		self.y_high.set_range(**self.range_settings)
+		self.y_low.set_range(**self.range_settings)
+
+		self.x_high.set_value(35)
+		self.x_low.set_value(-35)
+
+		self.y_high.set_value(35)
+		self.y_low.set_value(-35)
