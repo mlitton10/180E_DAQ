@@ -26,15 +26,7 @@ class AcquisitionControls(QGroupBox):
 		self.num_run.setValue(1)
 		self.num_shots.setValue(1)
 
-		ac_layout = QGridLayout()
-		ac_layout.addWidget(self.DataRun, 0, 0)
-		ac_layout.addWidget(self.TestShot, 0, 1)
-		ac_layout.addWidget(self.num_run_label, 1, 0)
-		ac_layout.addWidget(self.num_shots_label, 2, 0)
-		ac_layout.addWidget(self.num_run, 1, 1)
-		ac_layout.addWidget(self.num_shots, 2, 1)
-
-		self.setLayout(ac_layout)
+		self.build_layout()
 
 	def build_layout(self):
 		layout = QGridLayout(self)
