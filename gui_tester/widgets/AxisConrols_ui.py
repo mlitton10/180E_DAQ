@@ -17,11 +17,6 @@ class AxisControls(QGroupBox):
 
 		self.range_settings = {'min_range':-60, 'max_range':60}
 
-		self.x_high.setRange(-60, 60)
-		self.x_low.setRange(-60, 60)
-		self.y_high.setRange(-60, 60)
-		self.y_low.setRange(-60, 60)
-
 		self.x_high = UserSpinBoxRow("x-axis range:")
 		self.x_low = UserSpinBoxRow("to: ")
 
