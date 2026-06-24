@@ -95,6 +95,20 @@ class MyMplCanvas(FigureCanvas):
 
 		return ax, matrix, point
 
+	def clear_probe_position(self):
+		self.point.remove()
+
+	def clear_queued_probe_position(self):
+		self.matrix.remove()
+
+	def clear_visited_probe_position(self):
+		self.visited_points.remove()
+
+	def clear_all(self):
+		self.clear_probe_position()
+		self.clear_visited_probe_position()
+		self.clear_queued_probe_position()
+
 	def update_figure(self, X, Y):
 		self.matrix.remove()
 		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
