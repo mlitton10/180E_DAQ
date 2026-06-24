@@ -35,6 +35,9 @@ class UserSpinBoxRow(QWidget):
         self.set_range()
         layout.addRow(label_string, self.label_edit)
 
+    def set_range(self, max_range=100):
+        self.label_edit.setRange(1, max_range)
+
     def update_text(self, update_string):
         self.label_edit.setText(update_string)
 
