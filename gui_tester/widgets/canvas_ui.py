@@ -69,31 +69,6 @@ class MyMplCanvas(FigureCanvas):
 
 		return ax, matrix, point
 
-
-	def compute_point_grid(self, parameters):
-
-		x_max = parameters['xmax']
-		x_min = parameters['xmin']
-		y_max = parameters['ymax']
-		y_min = parameters['ymin']
-		nx = parameters['nx']
-		ny = parameters['ny']
-
-		x_pos = numpy.linspace(x_min, x_max, nx)
-		y_pos = numpy.linspace(y_min, y_max, ny)
-
-		X = numpy.zeros(nx * ny)
-		Y = numpy.zeros(nx * ny)
-
-		index = 0
-		for xx in x_pos:
-			for yy in y_pos:
-				X[index] = xx
-				Y[index] = yy
-				index += 1
-
-		return X, Y
-
 	def update_figure(self, X, Y):
 		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
 		self.draw()
