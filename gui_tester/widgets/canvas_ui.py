@@ -110,12 +110,12 @@ class MyMplCanvas(FigureCanvas):
 		self.clear_queued_probe_position()
 
 	def update_figure(self, X, Y):
-		self.matrix.remove()
+		self.clear_queued_probe_position()
 		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
 		self.draw()
 
 	def update_probe(self, x_now, y_now):
-		self.point.remove()
+		self.clear_probe_position()
 		self.point = self.ax.scatter(x_now, y_now, **self.probe_position_plotting_params)
 		self.draw()
 
@@ -126,7 +126,7 @@ class MyMplCanvas(FigureCanvas):
 	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
-		self.visited_points.remove()
+		self.clear_visited_probe_position()
 		self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
 		self.draw()
 

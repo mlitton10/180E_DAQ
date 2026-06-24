@@ -128,7 +128,6 @@ class Window(QWidget):
 		if data_running:
 			x_done = x
 			y_done = y
-			self.canvas.visited_points.remove()
 			self.canvas.update_finished_positions(x_done, y_done)
 		else:
 			print("Why is this called when data_running == False ?")
@@ -183,7 +182,7 @@ class Window(QWidget):
 	def data_run_finished(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition complete.")
 		self.enable_all_controls()
-		self.canvas.visited_points.remove()
+		self.canvas.clear_visited_probe_position()
 		self.canvas.initialize_visited_points()
 		# self.canvas.finished_x = []
 		# self.canvas.finished_y = []
