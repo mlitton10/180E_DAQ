@@ -60,7 +60,7 @@ class UserDoubleSpinBoxRow(QWidget):
         self.spin_box.setValue(5.0)
         
 
-def set_range(self, min_range=-100, max_range=100):
+    def set_range(self, min_range=-100, max_range=100):
         self.spin_box.setRange(1, max_range)
 
     def set_value(self, value):
