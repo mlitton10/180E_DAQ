@@ -77,10 +77,10 @@ class Window(QWidget):
 		return x_ip, y_ip, scope_ip, port_ip
 
 	def build_signals(self):
-		self.axc.xupInput.valueChanged.connect(self.axis_change)
-		self.axc.yupInput.valueChanged.connect(self.axis_change)
-		self.axc.xlowInput.valueChanged.connect(self.axis_change)
-		self.axc.ylowInput.valueChanged.connect(self.axis_change)
+		self.axc.x_high.spin_box.valueChanged.connect(self.axis_change)
+		self.axc.y_high.spin_box.valueChanged.connect(self.axis_change)
+		self.axc.x_low.spin_box.valueChanged.connect(self.axis_change)
+		self.axc.y_low.spin_box.valueChanged.connect(self.axis_change)
 
 		self.pc.ConfirmButton.clicked.connect(self.update_geometry)
 
