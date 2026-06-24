@@ -31,8 +31,8 @@ class UserSpinBoxRow(QWidget):
 
         layout = QFormLayout(self)
 
-        self.label_edit = QLineEdit()
-        self.label_edit.setReadOnly(read_only)
+        self.label_edit = QSpinBox()
+        self.set_range()
         layout.addRow(label_string, self.label_edit)
 
     def update_text(self, update_string):
