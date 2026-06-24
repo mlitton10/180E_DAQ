@@ -47,10 +47,9 @@ class Window(QWidget):
 		self.axc = AxisControls()
 		self.sv = SoftwareVersion()
 		self.sc = ScopeChannel()
-		self.x_ip = "192.168.0.70"
-		self.y_ip = "192.168.0.80"
-		self.scope_ip = "192.168.0.60"
-		self.port_ip = int(7776)
+
+		self.x_ip, self.y_ip, self.scope_ip, self.port_ip = self.set_ip_address()
+
 		self.mm = MotorMovement(x_ip_addr = self.x_ip, y_ip_addr = self.y_ip, motor_port= self.port_ip)
 		self.mm.set_input_usage(3)
 		self.mm.set_steps_per_rev(20000, 20000)
@@ -91,6 +90,13 @@ class Window(QWidget):
 		self.timer.timeout.connect(self.update_current_position)
 		self.timer.start(500)
 
+
+	def set_ip_address(self):
+		x_ip = "192.168.0.70"
+		y_ip = "192.168.0.80"
+		scope_ip = "192.168.0.60"
+		port_ip = int(7776)
+		return x_ip, y_ip, scope_ip, port_ip
 
 	def axis_change(self):
 		xup = self.axc.xupInput.value()
