@@ -32,6 +32,12 @@ class AxisControls(QGroupBox):
 		self.toLabel = QLabel("to")
 		self.blankLabel = QLabel("  ")
 
+		self.x_high = UserSpinBoxRow("x-axis range:")
+		self.x_low = UserSpinBoxRow("to: ")
+
+		self.y_high = UserSpinBoxRow("x-axis range:")
+		self.y_low = UserSpinBoxRow("to: ")
+
 		axis_layout = QGridLayout()
 		axis_layout.addWidget(self.xaxisLabel, 0, 0)
 		axis_layout.addWidget(self.xlowInput, 0, 1)
