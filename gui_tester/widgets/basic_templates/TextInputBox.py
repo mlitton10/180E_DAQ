@@ -16,15 +16,15 @@ class UserTextRow(QWidget):
 
         layout = QFormLayout(self)
 
-        self.label_edit = QLineEdit()
-        self.label_edit.setReadOnly(read_only)
-        layout.addRow(label_string, self.label_edit)
+        self.text_box = QLineEdit()
+        self.text_box.setReadOnly(read_only)
+        layout.addRow(label_string, self.text_box)
 
     def update_text(self, update_string):
-        self.label_edit.setText(update_string)
+        self.text_box.setText(update_string)
 
     def read_text(self):
-        return str(self.label_edit.text())
+        return str(self.text_box.text())
 
 class UserSpinBoxRow(QWidget):
     def __init__(self, label_string, read_only=False):
@@ -32,21 +32,21 @@ class UserSpinBoxRow(QWidget):
 
         layout = QFormLayout(self)
 
-        self.label_edit = QSpinBox()
+        self.spin_box = QSpinBox()
         self.set_range()
-        layout.addRow(label_string, self.label_edit)
+        layout.addRow(label_string, self.spin_box)
 
     def set_range(self, min_range=1, max_range=100):
-        self.label_edit.setRange(min_range, max_range)
+        self.spin_box.setRange(min_range, max_range)
 
     def set_value(self, value):
-        self.label_edit.setValue(value)
+        self.spin_box.setValue(value)
 
     def read_value(self):
-        return self.label_edit.value()
+        return self.spin_box.value()
 
 class UserDoubleSpinBoxRow(QWidget):
-    def __init__(self, label_string, read_only=False):
+    def __init__(self, label_string):
         super().__init__()
 
         layout = QFormLayout(self)
