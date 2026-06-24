@@ -14,6 +14,10 @@ class AcquisitionControls(QGroupBox):
 		super().__init__()
 		self.DataRun = QPushButton("Start Data Acquisition", self)
 		self.TestShot = QPushButton("Take Single Test Shot", self)
+
+		self.num_run = UserSpinBoxRow("Number of total runs:")
+		self.num_shots = UserSpinBoxRow("Shots per position:")
+
 		self.num_run = QSpinBox()
 		self.num_shots = QSpinBox()
 		self.num_run_label = QLabel("Number of total runs:")
