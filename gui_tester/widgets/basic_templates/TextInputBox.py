@@ -54,10 +54,6 @@ class UserDoubleSpinBoxRow(QWidget):
         self.spin_box = QDoubleSpinBox()
         layout.addRow(label_string, self.spin_box)
 
-        self.spin_box.setRange(0.0, 10.0)  # Set min and max limits
-        self.spin_box.setSingleStep(0.1)  # Set increment step size
-        self.spin_box.setDecimals(2)  # Number of decimal places
-        self.spin_box.setValue(5.0)
 
     def set_range(self, min_range=-100, max_range=100):
         self.spin_box.setRange(1, max_range)
