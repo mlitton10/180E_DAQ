@@ -56,7 +56,13 @@ class UserDoubleSpinBoxRow(QWidget):
 
 
     def set_range(self, min_range=-100, max_range=100):
-        self.spin_box.setRange(1, max_range)
+        self.spin_box.setRange(min_range, max_range)
+
+    def set_step_size(self, step_size=0.01):
+        self.spin_box.setSingleStep(step_size)
+
+    def set_decimals(self, decimals=2):
+        self.spin_box.setDecimals(decimals)
 
     def set_value(self, value):
         self.spin_box.setValue(value)
