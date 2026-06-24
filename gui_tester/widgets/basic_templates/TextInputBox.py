@@ -54,8 +54,8 @@ class UserDoubleSpinBoxRow(QWidget):
         self.label_edit = QDoubleSpinBox()
         layout.addRow(label_string, self.label_edit)
 
-    def update_text(self, update_string):
-        self.label_edit.setText(update_string)
+    def set_range(self, max_range=100):
+        self.label_edit.setRange(1, max_range)
 
     def read_text(self):
         return str(self.label_edit.text())
