@@ -110,7 +110,6 @@ class Window(QWidget):
 			xnow, ynow = self.mm.current_probe_position()
 			self.canvas.update_probe(xnow, ynow)
 			self.mm.display_current_position()
-
 		else:
 			pass
 
