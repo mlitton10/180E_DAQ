@@ -20,11 +20,7 @@ class AcquisitionControls(QGroupBox):
 		self.num_run = UserSpinBoxRow("Number of total runs:")
 		self.num_shots = UserSpinBoxRow("Shots per position:")
 
-
-		self.num_run.setRange(1, 100)
-		self.num_shots.setRange(1, 200)
-		self.num_run.setValue(1)
-		self.num_shots.setValue(1)
+		self.initialize_values()
 
 		self.build_layout()
 
@@ -45,3 +41,9 @@ class AcquisitionControls(QGroupBox):
 		layout.addWidget(self.DataRun, 0, 0)
 		layout.addWidget(self.TestShot, 0, 1)
 		layout.addWidget(shots_box, 1, 0, 2, 2)
+
+	def initialize_values(self):
+		self.num_shots.set_range(max_range=200)
+
+		self.num_run.set_value(1)
+		self.num_shots.set_value(1)
