@@ -100,6 +100,7 @@ class MyMplCanvas(FigureCanvas):
 		self.draw()
 
 	def update_probe(self, x_now, y_now):
+		self.point.remove()
 		self.point = self.ax.scatter(x_now, y_now, **self.probe_position_plotting_params)
 		self.draw()
 
