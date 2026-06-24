@@ -52,8 +52,14 @@ class UserDoubleSpinBoxRow(QWidget):
         layout = QFormLayout(self)
 
         self.spin_box = QDoubleSpinBox()
+        self.initialize_spin_box_parameters()
         layout.addRow(label_string, self.spin_box)
 
+    def initialize_spin_box_parameters(self):
+        self.set_range()
+        self.set_value(0)
+        self.set_step_size()
+        self.set_decimals()
 
     def set_range(self, min_range=-100, max_range=100):
         self.spin_box.setRange(min_range, max_range)
