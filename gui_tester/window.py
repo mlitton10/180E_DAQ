@@ -98,6 +98,18 @@ class Window(QWidget):
 		port_ip = int(7776)
 		return x_ip, y_ip, scope_ip, port_ip
 
+	def build_signals(self):
+		self.axc.xupInput.valueChanged.connect(self.axis_change)
+		self.axc.yupInput.valueChanged.connect(self.axis_change)
+		self.axc.xlowInput.valueChanged.connect(self.axis_change)
+		self.axc.ylowInput.valueChanged.connect(self.axis_change)
+
+		self.pc.ConfirmButton.clicked.connect(self.update_geometry)
+
+		self.ac.DataRun.clicked.connect(self.start_data_run)
+		self.ac.TestShot.clicked.connect(self.start_test_shot)
+
+		
 	def axis_change(self):
 		xup = self.axc.xupInput.value()
 		yup = self.axc.yupInput.value()
