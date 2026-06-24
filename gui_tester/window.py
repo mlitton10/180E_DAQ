@@ -113,7 +113,6 @@ class Window(QWidget):
 		else:
 			pass
 
-
 	def update_current_position_during_data_run(self, xnow, ynow):
 		if data_running:
 			xnow = xnow
