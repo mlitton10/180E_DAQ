@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout
+from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox
+
 
 def make_form_table(rows):
     widget = QWidget()
