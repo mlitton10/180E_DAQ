@@ -20,7 +20,7 @@ class AxisControls(QGroupBox):
 		self.x_high = UserSpinBoxRow("x-axis range:")
 		self.x_low = UserSpinBoxRow("to: ")
 
-		self.y_high = UserSpinBoxRow("x-axis range:")
+		self.y_high = UserSpinBoxRow("y-axis range:")
 		self.y_low = UserSpinBoxRow("to: ")
 
 		self.build_layout()
