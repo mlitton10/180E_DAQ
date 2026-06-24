@@ -18,10 +18,6 @@ class AcquisitionControls(QGroupBox):
 		self.num_run = UserSpinBoxRow("Number of total runs:")
 		self.num_shots = UserSpinBoxRow("Shots per position:")
 
-		self.num_run = QSpinBox()
-		self.num_shots = QSpinBox()
-		self.num_run_label = QLabel("Number of total runs:")
-		self.num_shots_label = QLabel("Shots per position:")
 
 		self.num_run.setRange(1, 100)
 		self.num_shots.setRange(1, 200)
