@@ -87,6 +87,19 @@ class Window(QWidget):
 		self.ac.DataRun.clicked.connect(self.start_data_run)
 		self.ac.TestShot.clicked.connect(self.start_test_shot)
 
+	def build_layout(self):
+		layout = QGridLayout(self)
+		layout.addWidget(self.canvas, 0, 0, 1, 2)
+		layout.addWidget(self.axc, 1, 0, 1, 2)  # axes control
+		layout.addWidget(self.mm, 2, 0, 2, 1)  # motor movement
+		layout.addWidget(self.pc, 2, 1, 2, 1)  # position control
+		layout.addWidget(self.ac, 2, 2)  # acquisition control
+		layout.addWidget(self.sc, 2, 3, 1, 1)  # scope channel comments
+		layout.addWidget(self.sv, 3, 2)
+		layout.addWidget(self.ScopeScreen, 0, 2, 2, 2)
+
+		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
+		self.resize(1600, 700)
 
 	def axis_change(self):
 		xup = self.axc.xupInput.value()
@@ -94,7 +107,6 @@ class Window(QWidget):
 		xlow = self.axc.xlowInput.value()
 		ylow = self.axc.ylowInput.value()
 		self.canvas.update_axis(xup,yup,xlow,ylow)
-
 
 	def update_current_position(self):
 		if not data_running:
