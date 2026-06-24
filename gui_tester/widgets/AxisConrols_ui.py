@@ -46,3 +46,10 @@ class AxisControls(QGroupBox):
 
 		self.y_high.set_value(35)
 		self.y_low.set_value(-35)
+
+	def read_axis(self):
+		x_high = self.x_high.read_value()
+		y_high = self.y_high.read_value()
+		x_low = self.x_low.read_value()
+		y_low = self.y_low.read_value()
+		return [x_high,y_high,x_low,y_low]
