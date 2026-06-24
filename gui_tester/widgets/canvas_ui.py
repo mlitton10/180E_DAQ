@@ -82,7 +82,7 @@ class MyMplCanvas(FigureCanvas):
 		self.setParent(parent)
 
 		self.ax, self.matrix, self.point = self.initialize_canvas(ax)
-		self.finished_x, self. finished_y = self.initialize_visited_points()
+		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def initialize_canvas(self, ax):
 		ax.grid(which='both')
