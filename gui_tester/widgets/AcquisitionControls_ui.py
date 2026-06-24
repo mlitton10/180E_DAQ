@@ -36,6 +36,12 @@ class AcquisitionControls(QGroupBox):
 
 		self.setLayout(ac_layout)
 
+	def build_layout(self):
+		layout = QGridLayout(self)
+		layout.setContentsMargins(0, 0, 0, 0)
+
+		layout.setSpacing(0)
+		layout.setVerticalSpacing(0)
 
 		layout.setHorizontalSpacing(0)
 
