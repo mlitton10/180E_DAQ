@@ -38,15 +38,13 @@ class AxisControls(QGroupBox):
 		self.y_high = UserSpinBoxRow("x-axis range:")
 		self.y_low = UserSpinBoxRow("to: ")
 
-		axis_layout = QGridLayout()
-		axis_layout.addWidget(self.xaxisLabel, 0, 0)
-		axis_layout.addWidget(self.xlowInput, 0, 1)
-		axis_layout.addWidget(self.toLabel, 0, 2)
-		axis_layout.addWidget(self.xupInput, 0, 3)
-		axis_layout.addWidget(self.blankLabel, 0, 4)
-		axis_layout.addWidget(self.yaxisLabel, 0, 5)
-		axis_layout.addWidget(self.ylowInput, 0, 6)
-		axis_layout.addWidget(self.toLabel, 0, 7)
-		axis_layout.addWidget(self.yupInput, 0, 8)
-		self.setLayout(axis_layout)
+		self.build_layout()
+		pass
 
+	def build_layout(self):
+		layout = QGridLayout(self)
+		layout.addWidget(self.x_high, 0, 0)
+		layout.addWidget(self.x_low, 0, 1)
+		layout.addWidget(self.y_high, 0, 2)
+		layout.addWidget(self.y_low, 0, 3)
+		pass
