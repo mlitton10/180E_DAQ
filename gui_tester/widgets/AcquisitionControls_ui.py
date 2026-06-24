@@ -36,3 +36,14 @@ class AcquisitionControls(QGroupBox):
 
 		self.setLayout(ac_layout)
 
+
+		layout.setHorizontalSpacing(0)
+
+		shots_box = make_form_table([self.num_shots, self.num_run])
+
+		shots_box.layout().setContentsMargins(0, 0, 0, 0)
+		shots_box.layout().setSpacing(0)
+		shots_box.layout().setVerticalSpacing(0)
+		layout.addWidget(self.DataRun, 0, 0)
+		layout.addWidget(self.TestShot, 0, 1)
+		layout.addWidget(shots_box, 1, 0, 2, 2)
