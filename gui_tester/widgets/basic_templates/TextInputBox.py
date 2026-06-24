@@ -39,8 +39,8 @@ class UserSpinBoxRow(QWidget):
     def set_range(self, max_range=100):
         self.label_edit.setRange(1, max_range)
 
-    def update_text(self, update_string):
-        self.label_edit.setText(update_string)
+    def set_value(self, value):
+        self.label_edit.setValue(value)
 
     def read_text(self):
         return str(self.label_edit.text())
