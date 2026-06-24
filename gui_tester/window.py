@@ -15,7 +15,7 @@ import sys
 import os.path
 from widgets.MotorMovement_ui import MotorMovement
 from widgets.AcquisitionControls_ui import AcquisitionControls
-from widgets.canvas_ui import MyMplCanvas
+from widgets.canvas_ui import MyMplCanvas, compute_point_grid
 from widgets.AxisConrols_ui import AxisControls
 from widgets.ScopeControls_ui import ScopeChannel
 from widgets.SoftwareVersion_ui import SoftwareVersion
