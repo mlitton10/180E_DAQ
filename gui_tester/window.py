@@ -61,7 +61,6 @@ class Window(QWidget):
 
 		self.build_layout()
 
-
 		self.threadpool = QThreadPool()
 
 		# Set timer to update current probe position and instant motor velocity
