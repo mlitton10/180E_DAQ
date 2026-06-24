@@ -144,7 +144,7 @@ class Window(QWidget):
 
 	def update_geometry(self):
 		param = self.update_parameters()
-		X, Y = self.canvas.compute_point_grid(param)
+		X, Y = compute_point_grid(param)
 		if self.update:
 			self.canvas.matrix.remove()
 			self.canvas.update_figure(X, Y)
