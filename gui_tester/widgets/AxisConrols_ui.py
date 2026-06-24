@@ -1,5 +1,7 @@
 import os.path
 
+from gui_tester.widgets.basic_templates.TextInputBox import UserSpinBoxRow
+
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
