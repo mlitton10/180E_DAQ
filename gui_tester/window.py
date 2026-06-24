@@ -102,11 +102,8 @@ class Window(QWidget):
 		self.resize(1600, 700)
 
 	def axis_change(self):
-		xup = self.axc.x_high.value()
-		yup = self.axc.y_high.value()
-		xlow = self.axc.x_low.value()
-		ylow = self.axc.y_low.value()
-		self.canvas.update_axis(xup,yup,xlow,ylow)
+		axis_values = self.axc.get_axis_values()
+		self.canvas.update_axis(*axis_values)
 
 	def update_current_position(self):
 		if not data_running:
