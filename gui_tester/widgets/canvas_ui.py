@@ -112,6 +112,7 @@ class MyMplCanvas(FigureCanvas):
 	def update_finished_positions(self, x, y):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
+		self.visited_points.remove()
 		self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
 		self.draw()
 
