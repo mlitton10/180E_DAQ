@@ -42,7 +42,7 @@ class UserSpinBoxRow(QWidget):
     def set_value(self, value):
         self.label_edit.setValue(value)
 
-    def read_text(self):
+    def read_value(self):
         return self.label_edit.value()
 
 class UserDoubleSpinBoxRow(QWidget):
