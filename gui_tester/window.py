@@ -68,7 +68,6 @@ class Window(QWidget):
 		self.timer.timeout.connect(self.update_current_position)
 		self.timer.start(500)
 
-
 	def set_ip_address(self):
 		x_ip = "192.168.0.70"
 		y_ip = "192.168.0.80"
@@ -135,7 +134,6 @@ class Window(QWidget):
 		else:
 			print("Why is this called when data_running == False ?")
 
-
 	def display_current_speed(self):
 		self.mm.display_current_speed()
 
@@ -181,24 +179,15 @@ class Window(QWidget):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
 		self.enable_all_controls()
 
-
 	def data_run_finished(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition complete.")
 		self.enable_all_controls()
 		self.canvas.clear_visited_probe_position()
 		self.canvas.initialize_visited_points()
-		# self.canvas.finished_x = []
-		# self.canvas.finished_y = []
 
 	def test_shot_finished(self):
 		QMessageBox.about(self, "Take Test Shot", "Test shot is finished.")
 		self.enable_all_controls()
-		# global data_running
-		# data_running = False
-		# self.pc.setEnabled(True)
-		# self.ac.setEnabled(True)
-		# self.sc.setEnabled(True)
-		# self.mm.setEnabled(True)
 
 	def freeze_all_controls(self):
 		global data_running

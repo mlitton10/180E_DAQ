@@ -22,7 +22,6 @@ class PositionControls(QGroupBox):
 		self.nx = UserTextRow("Nx:")
 		self.ny = UserTextRow("Ny:")
 
-
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
 		self.build_layout()
