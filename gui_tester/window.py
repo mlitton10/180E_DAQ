@@ -103,7 +103,6 @@ class Window(QWidget):
 	def update_current_position(self):
 		if not data_running:
 			xnow, ynow = self.mm.current_probe_position()
-			self.canvas.point.remove()
 			self.canvas.update_probe(xnow, ynow)
 			self.mm.display_current_position()
 
@@ -115,7 +114,6 @@ class Window(QWidget):
 		if data_running:
 			xnow = xnow
 			ynow = ynow
-			self.canvas.point.remove()
 			self.canvas.update_probe(xnow, ynow)
 			self.mm.current_position_display.update_text("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
