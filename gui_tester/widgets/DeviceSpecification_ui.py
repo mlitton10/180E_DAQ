@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QHBoxLayout, QGroupBox, QGridLayout
 from basic_templates.TextInputBox import DropdownRow
 
-class FileDropdownRow(QWidget):
+class DeviceSpecification(QWidget):
     fileSelected = pyqtSignal(str)
 
     def __init__(self, label_text: str, file_paths: list[str], parent=None):
