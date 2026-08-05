@@ -47,6 +47,7 @@ class Window(QWidget):
 		self.axc = AxisControls()
 		self.sv = SoftwareVersion()
 		self.sc = ScopeChannel()
+		self.ds = DeviceSpecification(machine_config_paths)
 
 		self.x_ip, self.y_ip, self.scope_ip, self.port_ip = self.set_ip_address()
 
