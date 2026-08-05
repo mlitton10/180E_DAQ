@@ -5,9 +5,9 @@ from basic_templates.TextInputBox import DropdownRow
 class DeviceSpecification(QWidget):
     fileSelected = pyqtSignal(str)
 
-    def __init__(self, label_text: str, file_paths: list[str], parent=None):
+    def __init__(self, file_paths: list[str], parent=None):
         super().__init__(parent)
-        self.file_drop_down = DropdownRow(label_text, file_paths, parent)
+        self.file_drop_down = DropdownRow("Select Device: ", file_paths, parent)
         self.build_layout()
         self.file_drop_down.optionSelected.connect(self.fileSelected)
 
