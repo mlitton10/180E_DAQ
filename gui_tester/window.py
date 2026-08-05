@@ -37,7 +37,7 @@ data_running = False
 
 class Window(QWidget):
 
-	def __init__(self):
+	def __init__(self, machine_config_paths):
 		super(Window, self).__init__()
 
 		self.update = None
