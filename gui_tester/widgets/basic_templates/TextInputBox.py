@@ -1,4 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox, QDoubleSpinBox
+import os
+
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox, QDoubleSpinBox, QLabel, QComboBox, QHBoxLayout
 
 
 def make_form_table(rows):
@@ -75,3 +78,30 @@ class UserDoubleSpinBoxRow(QWidget):
 
     def read_value(self):
         return self.spin_box.value()
+
+
+
+class DropdownRow(QWidget):
+    optionSelected = pyqtSignal(str)
+
+    def __init__(self, label_text: str, options: list[str], parent=None):
+        super().__init__(parent)
+
+        self.options = options
+
+        self.label = QLabel(label_text)
+        self.combo = QComboBox()
+        self.combo.addItems(options)
+
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.label)
+        layout.addWidget(self.combo)
+
+        self.combo.currentIndexChanged.connect(self._emit_selected_option)
+
+    def _emit_selected_option(self, index: int):
+        if 0 <= index < len(self.options):
+            self.optionSelected.emit(self.options[index])
+
+    def current_option(self) -> str:
+        return self.options[self.combo.currentIndex()]
