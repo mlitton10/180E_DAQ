@@ -231,6 +231,19 @@ class Window(QWidget):
 		self.file_quit()
 
 
+def main():
+	app = QApplication(sys.argv)
+
+	machine_configuration_dir = "../data/machine_configuration/"
+	machine_config_paths = list_data_files(machine_configuration_dir)
+	app = QApplication(sys.argv)
+	window = Window(machine_config_paths)
+
+	window.resize(800, 600)
+	window.show()
+
+	sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
 
