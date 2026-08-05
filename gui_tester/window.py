@@ -13,6 +13,9 @@
 
 import sys
 import os.path
+
+from gui_tester.widgets.DeviceSpecification_ui import DeviceSpecification
+from gui_tester.utils.file_util import list_data_files
 from widgets.MotorMovement_ui import MotorMovement
 from widgets.AcquisitionControls_ui import AcquisitionControls
 from widgets.canvas_ui import MyMplCanvas, compute_point_grid
