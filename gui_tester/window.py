@@ -92,6 +92,8 @@ class Window(QWidget):
 		self.ac.DataRun.clicked.connect(self.start_data_run)
 		self.ac.TestShot.clicked.connect(self.start_test_shot)
 
+		self.ds.fileSelected.connect(self.load_file_async)
+
 	def build_layout(self):
 		layout = QGridLayout(self)
 		layout.addWidget(self.canvas, 0, 0, 1, 2)
