@@ -1,15 +1,3 @@
-#
-#
-# This graphic user interface allows user to
-# (1) set up data point positions, channel description and start data acquisition
-#     (by calling Data_Run_2D.py or Data_Run_3D.py)
-# (2) control the motor (by calling Motor_Control_2D.py or Motor_Control_3D.py)
-# (3) view graphic display of the current probe position and data point positions in the chamber
-#
-#
-# Author: Yuchen Qian
-# Oct 2017
-#
 
 import sys
 import os.path
