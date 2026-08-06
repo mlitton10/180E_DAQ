@@ -16,6 +16,7 @@ import os.path
 
 from gui_tester.widgets.DeviceSpecification_ui import DeviceSpecification
 from gui_tester.utils.file_util import list_data_files
+from gui_tester.workers.LoadMachineConfig import LoadMachineWorker
 from widgets.MotorMovement_ui import MotorMovement
 from widgets.AcquisitionControls_ui import AcquisitionControls
 from widgets.canvas_ui import MyMplCanvas, compute_point_grid
@@ -33,10 +34,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 data_running = False
-#############################################################################################
-#############################################################################################
-
-
 
 class Window(QWidget):
 
@@ -64,6 +61,11 @@ class Window(QWidget):
 		self.update_screen_dump()
 
 		self.build_layout()
+
+		self.thread = None
+		self.worker = None
+
+		self.load_file_async(self.ds.current_file())
 
 		self.threadpool = QThreadPool()
 
@@ -103,6 +105,49 @@ class Window(QWidget):
 
 		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
 		self.resize(1600, 700)
+
+
+	def load_file_async(self, filepath: str):
+		# If a load is already running, ignore new requests for simplicity.
+		if self.thread is not None and self.thread.isRunning():
+			return
+
+		self.ds.setEnabled(False)
+#		self.status_label.setText(f"Loading {os.path.basename(filepath)}...")
+
+		self.thread = QThread(self)
+		self.worker = LoadMachineWorker(filepath)
+		self.worker.moveToThread(self.thread)
+
+		self.thread.started.connect(self.worker.run)
+		self.worker.finished.connect(self.on_load_finished)
+		self.worker.failed.connect(self.on_load_failed)
+
+		self.worker.finished.connect(self.thread.quit)
+		self.worker.failed.connect(self.thread.quit)
+
+		self.worker.finished.connect(self.worker.deleteLater)
+		self.worker.failed.connect(self.worker.deleteLater)
+
+		self.thread.finished.connect(self.thread.deleteLater)
+		self.thread.finished.connect(self.on_thread_finished)
+
+		self.thread.start()
+
+	def on_load_finished(self, filepath: str, length: float, radius: float):
+		self.canvas.update_machine_radial_outline(radius)
+#		self.status_label.setText(f"Loaded {os.path.basename(filepath)}")
+
+	def on_load_failed(self, message: str):
+#		self.status_label.setText("Load failed")
+		QMessageBox.critical(self, "Load Error", message)
+
+
+	def on_thread_finished(self):
+		self.ds.setEnabled(True)
+		self.thread = None
+		self.worker = None
+
 
 	def axis_change(self):
 		axis_values = self.axc.read_axis()
@@ -234,11 +279,11 @@ class Window(QWidget):
 def main():
 	app = QApplication(sys.argv)
 
-	machine_configuration_dir = "../data/machine_configuration/"
+	machine_configuration_dir = "./data/machine_configurations/"
 	machine_config_paths = list_data_files(machine_configuration_dir)
 	window = Window(machine_config_paths)
 
-	window.resize(800, 600)
+	#window.resize(800, 600)
 	window.show()
 
 	sys.exit(app.exec_())
@@ -246,8 +291,4 @@ def main():
 
 if __name__ == '__main__':
 
-	app = QApplication(sys.argv)
-	window = Window()
-	window.show()
-
-	sys.exit(app.exec_())
+	main()
