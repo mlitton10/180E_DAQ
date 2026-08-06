@@ -1,6 +1,8 @@
 import numpy
 import os.path
 
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
@@ -65,34 +67,52 @@ class MyMplCanvas(FigureCanvas):
 		FigureCanvas.updateGeometry(self)
 		self.probe_position_plotting_params = {
 			'color': 'red',
-			'marker': '*'
+			'marker': '*',
+			's': 80
 		}
 
 		self.queued_probe_position_plotting_params = {
 			'color': 'blue',
-			'marker': 'o'
+			'marker': 'o',
+			's': 80
 		}
 
 		self.visited_probe_position_plotting_params = {
 			'color': 'green',
-			'marker': 'o'
+			'marker': 'o',
+			's': 80
 		}
 
 		self.setParent(parent)
 
-		self.ax, self.matrix, self.point = self.initialize_canvas(ax)
+		self.ax, self.matrix, self.point, self.machine = self.initialize_canvas(ax)
 		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
+		self.clear_queued_probe_position()
 
 	def initialize_canvas(self, ax):
 		ax.grid(which='both')
 		ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill=False, edgecolor='red'))
 
-		matrix = ax.scatter(0, 0, 0, **self.queued_probe_position_plotting_params)
-		point = ax.scatter(0, 0, 0, **self.probe_position_plotting_params)
+		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params)
+		point = ax.scatter(0, 0, **self.probe_position_plotting_params)
 		ax.set_xlabel("x-axis [cm]")
 		ax.set_ylabel("y-axis [cm]")
 
-		return ax, matrix, point
+		machine_radius = 0
+		circle = plt.Circle(
+			(0.0, 0.0),
+			radius=machine_radius,
+			facecolor='grey',  # Inner color
+			edgecolor='k',  # Border color
+			linewidth=1,  # Border thickness
+			linestyle='-',  # Optional: border style (e.g., '--', ':', '-')
+			alpha=0.5,
+		)
+		machine = ax.add_patch(circle)
+
+		ax.set_aspect('equal')
+
+		return ax, matrix, point, machine
 
 	def clear_probe_position(self):
 		self.point.remove()
@@ -134,3 +154,23 @@ class MyMplCanvas(FigureCanvas):
 		finished_y = []
 		visited_points = self.ax.scatter(finished_x, finished_y, **self.visited_probe_position_plotting_params)
 		return visited_points, finished_x, finished_y
+
+	def clear_machine_drawing(self):
+		self.machine.remove()
+
+	def update_machine_radial_outline(self, radius):
+
+		self.clear_machine_drawing()
+		machine_patch = plt.Circle(
+			(0.0, 0.0),
+			radius=radius,
+			facecolor='grey',  # Inner color
+			edgecolor='k',  # Border color
+			linewidth=1,  # Border thickness
+			linestyle='-',  # Optional: border style (e.g., '--', ':', '-')
+			alpha=0.5,
+		)
+
+		self.machine = self.ax.add_patch(machine_patch)
+		self.update_axis(-1.1 * radius, -1.1*radius, 1.1*radius, 1.1*radius)
+		self.draw()
