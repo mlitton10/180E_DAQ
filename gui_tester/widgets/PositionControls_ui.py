@@ -4,11 +4,6 @@ from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_fo
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
-from PyQt5 import QtCore
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-
 
 class PositionControls(QGroupBox):
 	def __init__(self):
