@@ -56,8 +56,7 @@ class MyMplCanvas(FigureCanvas):
 	def __init__(self, parent=None, width=6, height=3, dpi=100):
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
-		ax.set_xlim(-35, 35)
-		ax.set_ylim(-35, 35)
+		ax.grid(True, which='minor')
 		FigureCanvas.__init__(self, fig)
 
 		FigureCanvas.setSizePolicy(self,
