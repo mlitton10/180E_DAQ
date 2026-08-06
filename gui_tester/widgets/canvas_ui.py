@@ -87,13 +87,11 @@ class MyMplCanvas(FigureCanvas):
 
 		self.ax, self.matrix, self.point, self.machine = self.initialize_canvas(ax)
 		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
-		self.clear_queued_probe_position()
 
 	def initialize_canvas(self, ax):
 		ax.grid(which='both')
-		ax.add_patch(patches.Rectangle((-38, -50), 76, 100, fill=False, edgecolor='red'))
 
-		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params)
+		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params,alpha=0)
 		point = ax.scatter(0, 0, **self.probe_position_plotting_params)
 		ax.set_xlabel("x-axis [cm]")
 		ax.set_ylabel("y-axis [cm]")
