@@ -4,6 +4,7 @@ import os.path
 
 from gui_tester.widgets.DeviceSpecification_ui import DeviceSpecification
 from gui_tester.utils.file_util import list_data_files
+from gui_tester.widgets.MagnetControl import MagnetWidget
 from gui_tester.workers.LoadMachineConfig import LoadMachineWorker
 from widgets.MotorMovement_ui import MotorMovement
 from widgets.AcquisitionControls_ui import AcquisitionControls
@@ -23,10 +24,10 @@ from PyQt5.QtCore import *
 
 data_running = False
 
-class Window(QWidget):
+class ExperimentControl(QWidget):
 
 	def __init__(self, machine_config_paths):
-		super(Window, self).__init__()
+		super(ExperimentControl, self).__init__()
 
 		self.update = None
 		self.pc = PositionControls()
@@ -253,12 +254,24 @@ class Window(QWidget):
 		self.file_quit()
 
 
+class MainWindow(QMainWindow):
+	def __init__(self, machine_config_paths):
+		super(MainWindow, self).__init__()
+
+		self.setWindowTitle("DAQ and Controls")
+
+		tabs = QTabWidget()
+		tabs.addTab(ExperimentControl(machine_config_paths), "ExperimentControl")
+		tabs.addTab(MagnetWidget(), "Magnets")
+
+		self.setCentralWidget(tabs)
+
 def main():
 	app = QApplication(sys.argv)
 
 	machine_configuration_dir = "./data/machine_configurations/"
 	machine_config_paths = list_data_files(machine_configuration_dir)
-	window = Window(machine_config_paths)
+	window = MainWindow(machine_config_paths)
 
 	#window.resize(800, 600)
 	window.show()
