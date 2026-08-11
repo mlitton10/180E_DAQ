@@ -25,7 +25,6 @@ def main():
 	machine_config_paths = list_data_files(machine_configuration_dir)
 	window = MainWindow(machine_config_paths)
 
-	#window.resize(800, 600)
 	window.show()
 
 	sys.exit(app.exec_())
