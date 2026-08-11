@@ -50,12 +50,9 @@ class CurrentRequest(QGroupBox):
         self.setLayout(layout)
 
     def initialize_boxes(self):
-        self.xMax.update_text("0")
-        self.xMin.update_text("0")
-        self.yMax.update_text("0")
-        self.yMin.update_text("0")
-        self.nx.update_text("1")
-        self.ny.update_text("1")
+        self.psuCurrentOne.update_text("0")
+        self.psuCurrentTwo.update_text("0")
+        self.psuCurrentThree.update_text("0")
 
     def collect_parameters(self):
         parameters = {'I_1': float(self.psuCurrentOne.read_text()), 'I_2': float(self.psuCurrentTwo.read_text()),
