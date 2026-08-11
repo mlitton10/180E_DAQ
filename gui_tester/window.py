@@ -75,7 +75,7 @@ class Window(QWidget):
 		self.axc.x_low.spin_box.valueChanged.connect(self.axis_change)
 		self.axc.y_low.spin_box.valueChanged.connect(self.axis_change)
 
-		self.pc.ConfirmButton.clicked.connect(self.update_geometry)
+		self.pc.confirm.connect(self.update_geometry)
 
 		self.ac.DataRun.clicked.connect(self.start_data_run)
 		self.ac.TestShot.clicked.connect(self.start_test_shot)
