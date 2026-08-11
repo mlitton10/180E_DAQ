@@ -32,7 +32,6 @@ class Window(QWidget):
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
-		self.axc = AxisControls()
 		self.sv = SoftwareVersion()
 		self.sc = ScopeChannel()
 		self.ds = DeviceSpecification(machine_config_paths)
@@ -70,10 +69,6 @@ class Window(QWidget):
 		return x_ip, y_ip, scope_ip, port_ip
 
 	def build_signals(self):
-		self.axc.x_high.spin_box.valueChanged.connect(self.axis_change)
-		self.axc.y_high.spin_box.valueChanged.connect(self.axis_change)
-		self.axc.x_low.spin_box.valueChanged.connect(self.axis_change)
-		self.axc.y_low.spin_box.valueChanged.connect(self.axis_change)
 
 		self.pc.confirm.connect(self.update_geometry)
 
@@ -85,7 +80,6 @@ class Window(QWidget):
 	def build_layout(self):
 		layout = QGridLayout(self)
 		layout.addWidget(self.canvas, 0, 0, 1, 2)
-		layout.addWidget(self.axc, 1, 0, 1, 2)  # axes control
 		layout.addWidget(self.mm, 2, 0, 2, 1)  # motor movement
 		layout.addWidget(self.pc, 2, 1, 2, 1)  # position control
 		layout.addWidget(self.ac, 2, 2)  # acquisition control
