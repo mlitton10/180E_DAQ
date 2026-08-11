@@ -20,3 +20,4 @@ class MagnetWidget(QWidget):
         fieldLine = FieldLine()
         fieldStrength = FieldStrength()
         currentDisplay = CurrentDisplay()
+

@@ -20,11 +20,6 @@ class CurrentDisplay(QGroupBox):
 
         self.build_layout()
         self.initialize_boxes()
-        self.connect_signals()
-
-    def connect_signals(self):
-        self.ConfirmButton.clicked.connect(self.confirm)
-        pass
 
     def build_layout(self):
         layout = QGridLayout(self)
