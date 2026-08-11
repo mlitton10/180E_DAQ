@@ -30,7 +30,7 @@ class CurrentRequest(QGroupBox):
 
     def connect_signals(self):
         self.ConfirmButton.clicked.connect(self.confirm)
-        self.CheckBox.checkStateChanged.connect(self.plotOnly)
+        self.CheckBox.toggled.connect(self.plotOnly)
         pass
 
     def build_layout(self):
