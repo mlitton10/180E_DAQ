@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
 )
 from gui_tester.widgets.magnet_control_widgets.CurrentRequest import CurrentRequest
 from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
+from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
 
 
 class MagnetWidget(QWidget):
@@ -16,3 +17,4 @@ class MagnetWidget(QWidget):
 
         currentRequest = CurrentRequest()
         fieldLine = FieldLine()
+        fieldStrength = FieldStrength()
