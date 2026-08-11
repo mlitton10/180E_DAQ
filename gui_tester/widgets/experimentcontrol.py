@@ -1,13 +1,13 @@
 import os.path
 
-from gui_tester.widgets.DeviceSpecification_ui import DeviceSpecification
+from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
 from gui_tester.workers.LoadMachineConfig import LoadMachineWorker
-from gui_tester.widgets.MotorMovement_ui import MotorMovement
-from gui_tester.widgets.AcquisitionControls_ui import AcquisitionControls
-from gui_tester.widgets.canvas_ui import MyMplCanvas, compute_point_grid
-from gui_tester.widgets.ScopeControls_ui import ScopeChannel
-from gui_tester.widgets.SoftwareVersion_ui import SoftwareVersion
-from gui_tester.widgets.PositionControls_ui import PositionControls
+from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
+from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import AcquisitionControls
+from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid
+from gui_tester.widgets.experiment_page_widgets.ScopeControls_ui import ScopeChannel
+from gui_tester.widgets.experiment_page_widgets.SoftwareVersion_ui import SoftwareVersion
+from gui_tester.widgets.experiment_page_widgets.PositionControls_ui import PositionControls
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made

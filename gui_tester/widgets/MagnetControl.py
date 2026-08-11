@@ -1,12 +1,11 @@
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QTabWidget,
     QWidget,
     QVBoxLayout,
     QLabel,
 )
-import sys
+
+
+
 
 
 class MagnetWidget(QWidget):
