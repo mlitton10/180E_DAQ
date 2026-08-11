@@ -8,6 +8,7 @@ version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
 
 class PositionControls(QGroupBox):
+	confirm = pyqtSignal()
 	def __init__(self):
 		super().__init__()
 		self.setTitle("Set up DAQ position")
