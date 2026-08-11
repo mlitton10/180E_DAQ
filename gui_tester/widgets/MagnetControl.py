@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
     QLabel, QGridLayout,
 )
 from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
-from gui_tester.widgets.magnet_control_widgets.CurrentRequest import CurrentRequest
+from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
 from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
 from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
 
@@ -13,7 +13,7 @@ class MagnetWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.currentRequest = CurrentRequest()
+        self.currentRequest = CurrentControlWidget()
         self.fieldLine = FieldLine()
         self.fieldStrength = FieldStrength()
         self.currentDisplay = CurrentDisplay()
