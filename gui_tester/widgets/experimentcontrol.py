@@ -1,18 +1,13 @@
-
-import sys
 import os.path
 
 from gui_tester.widgets.DeviceSpecification_ui import DeviceSpecification
-from gui_tester.utils.file_util import list_data_files
-from gui_tester.widgets.MagnetControl import MagnetWidget
 from gui_tester.workers.LoadMachineConfig import LoadMachineWorker
-from widgets.MotorMovement_ui import MotorMovement
-from widgets.AcquisitionControls_ui import AcquisitionControls
-from widgets.canvas_ui import MyMplCanvas, compute_point_grid
-from widgets.AxisConrols_ui import AxisControls
-from widgets.ScopeControls_ui import ScopeChannel
-from widgets.SoftwareVersion_ui import SoftwareVersion
-from widgets.PositionControls_ui import PositionControls
+from gui_tester.widgets.MotorMovement_ui import MotorMovement
+from gui_tester.widgets.AcquisitionControls_ui import AcquisitionControls
+from gui_tester.widgets.canvas_ui import MyMplCanvas, compute_point_grid
+from gui_tester.widgets.ScopeControls_ui import ScopeChannel
+from gui_tester.widgets.SoftwareVersion_ui import SoftwareVersion
+from gui_tester.widgets.PositionControls_ui import PositionControls
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -253,32 +248,3 @@ class ExperimentControl(QWidget):
 	def closeEvent(self, ce):
 		self.file_quit()
 
-
-class MainWindow(QMainWindow):
-	def __init__(self, machine_config_paths):
-		super(MainWindow, self).__init__()
-
-		self.setWindowTitle("DAQ and Controls")
-
-		tabs = QTabWidget()
-		tabs.addTab(ExperimentControl(machine_config_paths), "ExperimentControl")
-		tabs.addTab(MagnetWidget(), "Magnets")
-
-		self.setCentralWidget(tabs)
-
-def main():
-	app = QApplication(sys.argv)
-
-	machine_configuration_dir = "./data/machine_configurations/"
-	machine_config_paths = list_data_files(machine_configuration_dir)
-	window = MainWindow(machine_config_paths)
-
-	#window.resize(800, 600)
-	window.show()
-
-	sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-
-	main()
