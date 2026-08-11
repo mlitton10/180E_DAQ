@@ -1,5 +1,6 @@
 import os.path
 
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QPushButton, QGridLayout
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
