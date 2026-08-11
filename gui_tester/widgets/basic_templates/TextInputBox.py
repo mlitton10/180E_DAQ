@@ -1,7 +1,8 @@
 import os
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox, QDoubleSpinBox, QLabel, QComboBox, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox, QDoubleSpinBox, QLabel, QComboBox, QHBoxLayout, \
+    QVBoxLayout
 
 
 def make_form_table(rows):
