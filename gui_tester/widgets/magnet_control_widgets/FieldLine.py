@@ -33,30 +33,14 @@ class FieldLine(FigureCanvas):
 	def __init__(self, parent=None, width=6, height=3, dpi=100):
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
-		ax.grid(True, which='minor')
+
 		FigureCanvas.__init__(self, fig)
 
 		FigureCanvas.setSizePolicy(self,
 								   QSizePolicy.Expanding,
 								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
-		self.probe_position_plotting_params = {
-			'color': 'red',
-			'marker': '*',
-			's': 80
-		}
 
-		self.queued_probe_position_plotting_params = {
-			'color': 'blue',
-			'marker': 'o',
-			's': 80
-		}
-
-		self.visited_probe_position_plotting_params = {
-			'color': 'green',
-			'marker': 'o',
-			's': 80
-		}
 
 		self.setParent(parent)
 
@@ -64,6 +48,8 @@ class FieldLine(FigureCanvas):
 		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
 
 	def initialize_canvas(self, ax):
+		ax.grid(True, which='minor')
+		ax.set_title("Field Lines")
 		ax.grid(which='both')
 
 		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params,alpha=0)
