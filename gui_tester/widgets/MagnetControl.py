@@ -3,9 +3,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QLabel,
 )
-
-
-
+from gui_tester.widgets.magnet_control_widgets.CurrentRequest import CurrentRequest
 
 
 class MagnetWidget(QWidget):
@@ -14,3 +12,5 @@ class MagnetWidget(QWidget):
 
         layout = QVBoxLayout(self)
         layout.addWidget(QLabel("Magnet Controls go here"))
+
+        currentRequest = CurrentRequest()
