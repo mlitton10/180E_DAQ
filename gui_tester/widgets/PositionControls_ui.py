@@ -24,6 +24,9 @@ class PositionControls(QGroupBox):
 		self.build_layout()
 		self.initialize_boxes()
 
+	def connect_signals(self):
+		self.ConfirmButton.clicked.connect(self.confirm)
+		pass
 
 	def build_layout(self):
 		layout = QGridLayout(self)
