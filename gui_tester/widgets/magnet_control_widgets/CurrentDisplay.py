@@ -38,7 +38,6 @@ class CurrentDisplay(QGroupBox):
         layout.addWidget(self.psuCurrentOne, 0, 0)
         layout.addWidget(self.psuCurrentTwo, 0, 1)
         layout.addWidget(self.psuCurrentThree, 0, 2)
-        layout.addWidget(self.ConfirmButton, 0,1,3,1)
         self.setLayout(layout)
 
     def initialize_boxes(self):
