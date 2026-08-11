@@ -13,6 +13,23 @@ def make_form_table(rows):
     return widget
 
 
+class UserTextColumn(QWidget):
+    def __init__(self, label_string, read_only=False):
+        super().__init__()
+
+        layout = QVBoxLayout(self)
+        self.label = QLabel(label_string)
+        self.text_box = QLineEdit()
+        self.text_box.setReadOnly(read_only)
+        layout.addWidget(self.label)
+        layout.addWidget(self.text_box)
+
+    def update_text(self, update_string):
+        self.text_box.setText(update_string)
+
+    def read_text(self):
+        return str(self.text_box.text())
+
 class UserTextRow(QWidget):
     def __init__(self, label_string, read_only=False):
         super().__init__()
