@@ -9,7 +9,11 @@ class DeviceSpecification(QWidget):
         super().__init__(parent)
         self.file_drop_down = DropdownRow("Select Device: ", file_paths, parent)
         self.build_layout()
+
+
+    def connect_signals(self):
         self.file_drop_down.optionSelected.connect(self.fileSelected)
+
 
     def build_layout(self):
         main_layout = QGridLayout(self)
