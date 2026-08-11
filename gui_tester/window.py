@@ -127,16 +127,10 @@ class Window(QWidget):
 #		self.status_label.setText("Load failed")
 		QMessageBox.critical(self, "Load Error", message)
 
-
 	def on_thread_finished(self):
 		self.ds.setEnabled(True)
 		self.thread = None
 		self.worker = None
-
-
-	def axis_change(self):
-		axis_values = self.axc.read_axis()
-		self.canvas.update_axis(*axis_values)
 
 	def update_current_position(self):
 		if not data_running:
@@ -148,8 +142,6 @@ class Window(QWidget):
 
 	def update_current_position_during_data_run(self, xnow, ynow):
 		if data_running:
-			xnow = xnow
-			ynow = ynow
 			self.canvas.update_probe(xnow, ynow)
 			self.mm.current_position_display.update_text("(" + str(round(xnow, 2)) + " ," + str(round(ynow, 2)) +")")
 		else:
