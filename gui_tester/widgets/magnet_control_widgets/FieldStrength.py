@@ -75,7 +75,7 @@ class FieldLine(FigureCanvas):
 
 	def update_plot(self, field_data):
 		self.clear_plot()
-		field = field_data['total_field']['Bz']
+		field = field_data['total_field']['Bz'] * T_to_G
 		z_space = field_data['coordinates'][0]
 		line = self.ax.plot(z_space, field[:, 0] * 1e4, label=r'$r={}$'.format(0), color='k')
 
