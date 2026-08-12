@@ -30,7 +30,7 @@ class CurrentControlWidget(QGroupBox):
         current_3 = self.current_input_3.read_value()
         plot_only = self.plot_only.isChecked()
 
-        self.currentRequested.emit([current_1, current_2, current_3], plot_only)
+        self.currentRequested.emit(current_1, current_2, current_3, plot_only)
 
     def build_layout(self):
         layout = QGridLayout(self)
