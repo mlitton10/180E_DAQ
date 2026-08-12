@@ -26,8 +26,8 @@ def calculate_magnetic_field(currents):
     for n,I in enumerate(currents):
         total_field_br += I * fields[n]['total']['Br']
         total_field_bz += I * fields[n]['total']['Bz']
-
-    return total_field_br, total_field_bz
+    total_field = {'Br': total_field_br, 'Bz': total_field_bz}
+    return total_field, [z_space, r_space]
 
 def rungeKuttaBound(dydx, x0, y0, x_bound_low, x_bound_high, y_bound, h):
     y = y0
