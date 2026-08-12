@@ -68,7 +68,7 @@ class MagnetWidget(QWidget):
         self.worker = FieldCalculationWorker()
         self.worker.moveToThread(self.thread)
 
-        self.thread.started.connect(self.worker.set_current_and_field)
+        self.thread.started.connect(self.worker.compute_fields_and_set_currents)
         self.worker.finished.connect(self.on_load_finished)
         self.worker.failed.connect(self.on_load_failed)
 
