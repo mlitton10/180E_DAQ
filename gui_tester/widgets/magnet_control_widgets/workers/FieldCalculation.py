@@ -118,6 +118,11 @@ class FieldCalculationWorker(QObject):
         try:
             total_field, coords = calculate_magnetic_field(current)
             field_line_solver = FieldLines(total_field, coords, 10)
-            self.finished.emit(result)
+            cathode_z_displacement = -158 * 1e-3
+            cathode_radius = 0.078
+            solutions = field_line_solver.solveFieldLines()
+            solution_cathode = field_line_solver.solveFieldLines(stepsize=-0.01, initial_conditions=[
+                (3.45 + cathode_z_displacement - 0.3, 0.075)])
+            self.finished.emit([total_field, solutions, solution_cathode])
         except Exception as exc:
             self.failed.emit(str(exc))
