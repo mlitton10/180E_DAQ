@@ -56,7 +56,7 @@ class MagnetWidget(QWidget):
         self.current_control.currentRequested.connect(self.load_file_async)
         pass
 
-    def load_file_async(self, currents, plot_only: str):
+    def compute_field_async(self, currents, plot_only: bool):
         # If a load is already running, ignore new requests for simplicity.
         if self.thread is not None and self.thread.isRunning():
             return
