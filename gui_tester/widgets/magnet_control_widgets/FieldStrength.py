@@ -58,7 +58,7 @@ class FieldLine(FigureCanvas):
 		ax.grid(which='both')
 
 		ax.set_xlabel("z [m]")
-		ax.set_ylabel("B_z [G]")
+		ax.set_ylabel(r"$B_z$ [G]")
 
 
 		ax.set_xlim(-0.6, 3.5)
