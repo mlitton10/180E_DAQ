@@ -65,7 +65,7 @@ class MagnetWidget(QWidget):
 #		self.status_label.setText(f"Loading {os.path.basename(filepath)}...")
 
         self.thread = QThread(self)
-        self.worker = FieldCalculationWorker()
+        self.worker = FieldCalculationWorker(currents, plot_only)
         self.worker.moveToThread(self.thread)
 
         self.thread.started.connect(self.worker.compute_fields_and_set_currents)
