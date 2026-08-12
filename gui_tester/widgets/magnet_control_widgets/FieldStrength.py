@@ -27,7 +27,9 @@ rc_dict = {"figure.autolayout": True, "font.family": 'serif', 'font.size': 18.0,
 
 plt.rcParams.update(rc_dict)
 
-class FieldLine(FigureCanvas):
+T_to_G = 1e4
+
+class FieldStrength(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
 	def __init__(self, geometry, parent=None, width=6, height=3, dpi=100):
