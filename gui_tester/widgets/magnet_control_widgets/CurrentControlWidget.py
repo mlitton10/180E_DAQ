@@ -1,6 +1,6 @@
 import os.path
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QGroupBox, QPushButton, QGridLayout, QCheckBox, QFormLayout, QDoubleSpinBox
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table, UserTextColumn, \
     UserDoubleSpinBoxRow
@@ -53,14 +53,11 @@ class CurrentControlWidget(QGroupBox):
         self.set_button.clicked.connect(self._request_current)
 
     def initialize_boxes(self):
-      #  self.current_input_1.update_text("0")
-        self.current_input_1.setRange(0.0, 100.0)
-        self.current_input_1.setSuffix(" A")
+        self.current_input_1.set_range(0.0, 100.0)
+        self.current_input_1.spin_box.setSuffix(" A")
 
-       # self.current_input_2.update_text("0")
-        self.current_input_2.setRange(0.0, 100.0)
-        self.current_input_2.setSuffix(" A")
+        self.current_input_2.set_range(0.0, 100.0)
+        self.current_input_2.spin_box.setSuffix(" A")
 
-      #  self.psuCurrentThree.update_text("0")
-        self.current_input_3.setRange(0.0, 100.0)
-        self.current_input_3.setSuffix(" A")
+        self.current_input_3.set_range(0.0, 100.0)
+        self.current_input_3.spin_box.setSuffix(" A")
