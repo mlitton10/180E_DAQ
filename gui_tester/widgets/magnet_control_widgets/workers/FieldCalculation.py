@@ -119,9 +119,9 @@ class FieldCalculationWorker(QObject):
     @pyqtSlot()
     def compute_fields_and_set_currents(self):
         try:
-            if not plot_only:
-                pass
-            total_field, coords = calculate_magnetic_field(currents)
+            if not self.plot_only:
+                print('Running FieldCalculation...')
+            total_field, coords = calculate_magnetic_field(self.currents)
             field_line_solver = FieldLines(total_field, coords, 10)
             cathode_z_displacement = -158 * 1e-3
             cathode_radius = 0.078
