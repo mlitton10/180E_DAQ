@@ -50,7 +50,7 @@ class FieldLine(FigureCanvas):
 		self.setParent(parent)
 
 		self.ax = self.initialize_canvas(ax)
-		self.field_lines = self.initialize_field_lines()
+		self.plot = self.initialize_plot()
 
 	def initialize_canvas(self, ax):
 		ax.grid(True, which='minor')
