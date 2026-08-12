@@ -2,9 +2,8 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, QDesktopWidget
 from gui_tester.utils.file_util import list_data_files
-from gui_tester.widgets.MagnetControl import MagnetWidget
+from gui_tester.widgets.MagnetControl import MagnetWidget, MagnetGeometry
 from gui_tester.widgets.experimentcontrol import ExperimentControl
-from gui_tester.widgets.magnet_control_widgets.workers.MagnetGeometry import MagnetGeometry
 
 
 class MainWindow(QMainWindow):
