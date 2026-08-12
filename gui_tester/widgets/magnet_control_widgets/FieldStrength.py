@@ -70,7 +70,7 @@ class FieldLine(FigureCanvas):
 		return [line]
 
 	def clear_plot(self):
-		for line in self.field_lines:
+		for line in self.plot:
 			line.remove()
 
 	def update_plot(self, field_data):
