@@ -1,7 +1,8 @@
+from PyQt5.QtCore import QThread, QThreadPool
 from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QLabel, QGridLayout,
+    QLabel, QGridLayout, QMessageBox,
 )
 from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
 from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
@@ -9,6 +10,8 @@ from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
 from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
 
 import pickle
+
+from gui_tester.widgets.magnet_control_widgets.workers.FieldCalculation import FieldCalculationWorker
 
 
 class MagnetGeometry:
@@ -30,19 +33,65 @@ class MagnetWidget(QWidget):
     def __init__(self, geometry):
         super().__init__()
 
-        self.currentRequest = CurrentControlWidget()
+        self.current_control = CurrentControlWidget()
         self.fieldLine = FieldLine(geometry)
         self.fieldStrength = FieldStrength()
         self.currentDisplay = CurrentDisplay()
 
         self.build_layout()
 
+        self.thread = None
+        self.worker = None
+
+        self.threadpool = QThreadPool()
+
     def build_layout(self):
         layout = QGridLayout(self)
         layout.addWidget(self.fieldLine, 0, 0, 1, 2)
         layout.addWidget(self.fieldStrength, 1, 0, 2, 1)
         layout.addWidget(self.currentDisplay, 1, 1)
-        layout.addWidget(self.currentRequest, 2, 1)
+        layout.addWidget(self.current_control, 2, 1)
 
     def connect_signals(self):
+        self.current_control.currentRequested.connect(self.load_file_async)
         pass
+
+    def load_file_async(self, currents, plot_only: str):
+        # If a load is already running, ignore new requests for simplicity.
+        if self.thread is not None and self.thread.isRunning():
+            return
+
+        self.current_control.setEnabled(False)
+#		self.status_label.setText(f"Loading {os.path.basename(filepath)}...")
+
+        self.thread = QThread(self)
+        self.worker = FieldCalculationWorker()
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.set_current_and_field)
+        self.worker.finished.connect(self.on_load_finished)
+        self.worker.failed.connect(self.on_load_failed)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.failed.connect(self.thread.quit)
+
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.failed.connect(self.worker.deleteLater)
+
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(self.on_thread_finished)
+
+        self.thread.start()
+
+    def on_load_finished(self, results):
+        self.fieldLine.update_field_lines(results)
+#		self.status_label.setText(f"Loaded {os.path.basename(filepath)}")
+
+    def on_load_failed(self, message: str):
+#		self.status_label.setText("Load failed")
+        QMessageBox.critical(self, "Load Error", message)
+
+    def on_thread_finished(self):
+        self.ds.setEnabled(True)
+        self.thread = None
+        self.worker = None
