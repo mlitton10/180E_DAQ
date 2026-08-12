@@ -77,7 +77,7 @@ class FieldLine(FigureCanvas):
 		self.clear_plot()
 		field = field_data['total_field']['Bz'] * T_to_G
 		z_space = field_data['coordinates'][0]
-		line = self.ax.plot(z_space, field[:, 0] * 1e4, label=r'$r={}$'.format(0), color='k')
-
-
+		line = self.ax.plot(z_space, field[:, 0], label=r'$r={}$'.format(0), color='k')[0]
+		self.plot = [line]
+		self.ax.set_ylim(0, 1.1 * np.nanmax(field[:,0]))
 		self.draw()
