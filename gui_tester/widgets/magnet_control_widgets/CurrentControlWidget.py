@@ -25,9 +25,9 @@ class CurrentControlWidget(QGroupBox):
         self.build_layout()
 
     def _request_current(self):
-        current_1 = self.current_input.value()
-        current_2 = self.current_input.value()
-        current_3 = self.current_input.value()
+        current_1 = self.current_input_1.read_value()
+        current_2 = self.current_input_2.read_value()
+        current_3 = self.current_input_3.read_value()
         plot_only = self.plot_only.isChecked()
 
         self.currentRequested.emit([current_1, current_2, current_3], plot_only)
