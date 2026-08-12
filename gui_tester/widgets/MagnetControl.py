@@ -25,6 +25,7 @@ class MagnetGeometry:
 
         return loaded_data
 
+
 class MagnetWidget(QWidget):
     def __init__(self, geometry):
         super().__init__()
@@ -36,14 +37,12 @@ class MagnetWidget(QWidget):
 
         self.build_layout()
 
-
     def build_layout(self):
         layout = QGridLayout(self)
-        layout.addWidget(self.fieldLine, 0,0,1,2)
-        layout.addWidget(self.fieldStrength, 1,0,2,1)
-        layout.addWidget(self.currentDisplay, 1,1)
-        layout.addWidget(self.currentRequest, 2,1)
+        layout.addWidget(self.fieldLine, 0, 0, 1, 2)
+        layout.addWidget(self.fieldStrength, 1, 0, 2, 1)
+        layout.addWidget(self.currentDisplay, 1, 1)
+        layout.addWidget(self.currentRequest, 2, 1)
 
     def connect_signals(self):
         pass
-
