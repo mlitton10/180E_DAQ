@@ -24,6 +24,7 @@ class CurrentControlWidget(QGroupBox):
         self.connect_signals()
         self.build_layout()
 
+    @pyqtSlot()
     def _request_current(self):
         current_1 = self.current_input_1.read_value()
         current_2 = self.current_input_2.read_value()
