@@ -1,6 +1,7 @@
 import numpy
 import os.path
 
+import numpy as np
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -26,6 +27,15 @@ rc_dict = {"figure.autolayout": True, "font.family": 'serif', 'font.size': 18.0,
 
 plt.rcParams.update(rc_dict)
 
+def plot_magnets(section_geometry, ax):
+	for magnet, setting in section_geometry.items():
+		rect = patches.Rectangle(
+			(setting['position'][0] - setting['width'] / 2, setting['position'][1] - setting['depth'] / 2),
+			setting['width'], setting['depth'], linewidth=1, edgecolor='r', facecolor='r')
+
+		# Add the patch to the Axes
+		ax.add_patch(rect)
+	return ax
 
 class FieldLine(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
@@ -61,34 +71,33 @@ class FieldLine(FigureCanvas):
 
 		self.setParent(parent)
 
-		self.ax, self.matrix, self.point, self.machine = self.initialize_canvas(ax)
-		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
+		self.ax = self.initialize_canvas(ax)
 
 	def initialize_canvas(self, ax):
 		ax.grid(True, which='minor')
 		ax.set_title("Field Lines")
 		ax.grid(which='both')
 
-		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params,alpha=0)
-		point = ax.scatter(0, 0, **self.probe_position_plotting_params)
-		ax.set_xlabel("x-axis [cm]")
-		ax.set_ylabel("y-axis [cm]")
+		ax.set_xlabel("z [m]")
+		ax.set_ylabel("r [m]")
 
-		machine_radius = 0
-		circle = plt.Circle(
-			(0.0, 0.0),
-			radius=machine_radius,
-			facecolor='grey',  # Inner color
-			edgecolor='k',  # Border color
-			linewidth=1,  # Border thickness
-			linestyle='-',  # Optional: border style (e.g., '--', ':', '-')
-			alpha=0.5,
-		)
-		machine = ax.add_patch(circle)
+		ax = plot_magnets(self.geometry.section_1_geometry, ax)
+		ax = plot_magnets(self.geometry.section_2_geometry, ax)
+		ax = plot_magnets(self.geometry.section_3_geometry, ax)
 
-		ax.set_aspect('equal')
+		z_wall = [0, 3.455 - 0.3]
+		z_range = np.linspace(0, 3.455 - 0.3, 10, endpoint=True)
+		r_range = np.linspace(0, 0.2, 10, endpoint=True)
 
-		return ax, matrix, point, machine
+		ax.plot([z_wall[0]] * 10, r_range, color='k', ls='-', lw=1.5)
+		ax.plot([z_wall[1]] * 10, r_range, color='k', ls='-', lw=1.5)
+		ax.plot(z_range, [0.2] * 10, color='k', ls='-', lw=1.5)
+		rect = patches.Rectangle((3.45 + -158*1e-3 - 0.3, 0),
+								 0.04,0.078, linewidth=1, edgecolor='magenta', facecolor='magenta')
+		ax.add_patch(rect)
+		ax.set_xlim(-0.6, 3.5)
+		ax.set_ylim(0,.4)
+		return ax
 
 	def clear_probe_position(self):
 		self.point.remove()
