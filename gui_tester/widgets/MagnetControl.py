@@ -39,6 +39,7 @@ class MagnetWidget(QWidget):
         self.currentDisplay = CurrentDisplay()
 
         self.build_layout()
+        self.connect_signals()
 
         self.thread = None
         self.worker = None
