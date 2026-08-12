@@ -1,4 +1,3 @@
-import numpy
 import os.path
 
 import numpy as np
@@ -32,8 +31,7 @@ T_to_G = 1e4
 class FieldStrength(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
-	def __init__(self, geometry, parent=None, width=6, height=3, dpi=100):
-		self.geometry = geometry
+	def __init__(self, parent=None, width=6, height=3, dpi=100):
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
 
