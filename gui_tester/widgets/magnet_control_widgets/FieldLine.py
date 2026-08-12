@@ -30,7 +30,8 @@ plt.rcParams.update(rc_dict)
 class FieldLine(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
-	def __init__(self, parent=None, width=6, height=3, dpi=100):
+	def __init__(self, geometry, parent=None, width=6, height=3, dpi=100):
+		self.geometry = geometry
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
 
@@ -40,7 +41,23 @@ class FieldLine(FigureCanvas):
 								   QSizePolicy.Expanding,
 								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
+		self.probe_position_plotting_params = {
+			'color': 'red',
+			'marker': '*',
+			's': 80
+		}
 
+		self.queued_probe_position_plotting_params = {
+			'color': 'blue',
+			'marker': 'o',
+			's': 80
+		}
+
+		self.visited_probe_position_plotting_params = {
+			'color': 'green',
+			'marker': 'o',
+			's': 80
+		}
 
 		self.setParent(parent)
 
