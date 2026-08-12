@@ -14,4 +14,3 @@ class MagnetGeometry:
             loaded_data = pickle.load(file)
 
         return loaded_data
-        
