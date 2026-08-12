@@ -51,22 +51,16 @@ class FieldLine(FigureCanvas):
 								   QSizePolicy.Expanding,
 								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
-		self.probe_position_plotting_params = {
+		self.field_line_plot_params = {
+			'color': 'k',
+			'ls': '-',
+			'lw': 2
+		}
+
+		self.cathode_field_line_plot_params = {
 			'color': 'red',
-			'marker': '*',
-			's': 80
-		}
-
-		self.queued_probe_position_plotting_params = {
-			'color': 'blue',
-			'marker': 'o',
-			's': 80
-		}
-
-		self.visited_probe_position_plotting_params = {
-			'color': 'green',
-			'marker': 'o',
-			's': 80
+			'ls': '-',
+			'lw': 2
 		}
 
 		self.setParent(parent)
@@ -114,11 +108,11 @@ class FieldLine(FigureCanvas):
 		solution_cathode = field_data['solution_cathode']
 
 		for solution in solutions:
-			line = self.ax.plot(solution[0], solution[1])
-			self.lines.append(line)
+			line = self.ax.plot(solution[0], solution[1], **self.field_line_plot_params)[0]
+			self.field_lines.append(line)
 		for solution in solution_cathode:
-			line = self.ax.plot(solution[0], solution[1])
-			self.lines.append(line)
+			line = self.ax.plot(solution[0], solution[1], **self.cathode_field_line_plot_params)[0]
+			self.field_lines.append(line)
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
