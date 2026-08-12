@@ -53,7 +53,7 @@ class MagnetWidget(QWidget):
         layout.addWidget(self.current_control, 2, 1)
 
     def connect_signals(self):
-        self.current_control.currentRequested.connect(self.load_file_async)
+        self.current_control.currentRequested.connect(self.compute_field_async)
         pass
 
     def compute_field_async(self, currents, plot_only: bool):
