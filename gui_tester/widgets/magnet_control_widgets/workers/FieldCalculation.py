@@ -15,6 +15,10 @@ def calculate_magnetic_field(currents):
         # Load the data from the file
         section_3_fields = pickle.load(file)
 
+    with open('../data/coordinate_system.pkl', 'rb') as file:
+        # Load the data from the file
+        [z_space, r_space] = pickle.load(file)
+
     fields = [section_1_fields, section_2_fields, section_3_fields]
     total_field_br = np.zeros(section_1_fields['total']['Br'].shape)
     total_field_bz = np.zeros(section_1_fields['total']['Bz'].shape)
