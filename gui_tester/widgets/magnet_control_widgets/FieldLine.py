@@ -72,6 +72,7 @@ class FieldLine(FigureCanvas):
 		self.setParent(parent)
 
 		self.ax = self.initialize_canvas(ax)
+		self.field_lines = self.initialize_field_lines()
 
 	def initialize_canvas(self, ax):
 		ax.grid(True, which='minor')
@@ -99,28 +100,25 @@ class FieldLine(FigureCanvas):
 		ax.set_ylim(0,.4)
 		return ax
 
-	def clear_probe_position(self):
-		self.point.remove()
+	def initialize_field_lines(self):
+		line = self.ax.plot([],[])
+		return [line]
 
-	def clear_queued_probe_position(self):
-		self.matrix.remove()
+	def clear_field_lines(self):
+		for line in self.field_lines:
+			line.remove()
 
-	def clear_visited_probe_position(self):
-		self.visited_points.remove()
+	def update_field_lines(self, field_data):
+		self.clear_field_lines()
+		solutions = field_data['solutions']
+		solution_cathode = field_data['solution_cathode']
 
-	def clear_all(self):
-		self.clear_probe_position()
-		self.clear_visited_probe_position()
-		self.clear_queued_probe_position()
-
-	def update_figure(self, X, Y):
-		self.clear_queued_probe_position()
-		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
-		self.draw()
-
-	def update_probe(self, x_now, y_now):
-		self.clear_probe_position()
-		self.point = self.ax.scatter(x_now, y_now, **self.probe_position_plotting_params)
+		for solution in solutions:
+			line = self.ax.plot(solution[0], solution[1])
+			self.lines.append(line)
+		for solution in solution_cathode:
+			line = self.ax.plot(solution[0], solution[1])
+			self.lines.append(line)
 		self.draw()
 
 	def update_axis(self, x1, y1, x2, y2):
