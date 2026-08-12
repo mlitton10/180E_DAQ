@@ -44,3 +44,6 @@ class MagnetWidget(QWidget):
         layout.addWidget(self.currentDisplay, 1,1)
         layout.addWidget(self.currentRequest, 2,1)
 
+    def connect_signals(self):
+        pass
+
