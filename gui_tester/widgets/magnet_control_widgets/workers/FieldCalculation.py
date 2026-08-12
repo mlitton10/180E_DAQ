@@ -116,7 +116,8 @@ class FieldCalculationWorker(QObject):
     @pyqtSlot(float, float, float)
     def calculate(self, current):
         try:
-            total_field_br, total_field_bz = calculate_magnetic_field(current)
+            total_field, coords = calculate_magnetic_field(current)
+            field_line_solver = FieldLines(total_field, coords, 10)
             self.finished.emit(result)
         except Exception as exc:
             self.failed.emit(str(exc))
