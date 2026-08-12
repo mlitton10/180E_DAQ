@@ -113,16 +113,20 @@ class FieldCalculationWorker(QObject):
     finished = pyqtSignal(object)
     failed = pyqtSignal(str)
 
-    @pyqtSlot(float, float, float)
-    def calculate(self, current):
+    @pyqtSlot(list, bool)
+    def set_current_and_field(self, currents, plot_only):
         try:
-            total_field, coords = calculate_magnetic_field(current)
+            if not plot_only:
+                pass
+            total_field, coords = calculate_magnetic_field(currents)
             field_line_solver = FieldLines(total_field, coords, 10)
             cathode_z_displacement = -158 * 1e-3
             cathode_radius = 0.078
             solutions = field_line_solver.solveFieldLines()
             solution_cathode = field_line_solver.solveFieldLines(stepsize=-0.01, initial_conditions=[
                 (3.45 + cathode_z_displacement - 0.3, 0.075)])
-            self.finished.emit([total_field, solutions, solution_cathode])
+            self.finished.emit({'total_field':total_field,
+                                'solutions': solutions,
+                                'solution_cathode': solution_cathode})
         except Exception as exc:
             self.failed.emit(str(exc))
