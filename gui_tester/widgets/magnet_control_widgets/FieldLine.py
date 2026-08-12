@@ -106,7 +106,7 @@ class FieldLine(FigureCanvas):
 		self.clear_field_lines()
 		solutions = field_data['solutions']
 		solution_cathode = field_data['solution_cathode']
-
+		self.field_lines = []
 		for solution in solutions:
 			line = self.ax.plot(solution[0], solution[1], **self.field_line_plot_params)[0]
 			self.field_lines.append(line)
