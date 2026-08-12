@@ -7,9 +7,7 @@ from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_fo
 
 
 class CurrentControlWidget(QGroupBox):
-    confirm = pyqtSignal()
-    plotOnly = pyqtSignal()
-    currentRequested = pyqtSignal(float, float, float, bool)
+    currentRequested = pyqtSignal(list, bool)
     def __init__(self):
         super().__init__()
 
