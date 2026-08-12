@@ -116,8 +116,8 @@ class FieldCalculationWorker(QObject):
         self.currents = currents
         self.plot_only = plot_only
 
-    @pyqtSlot(list, bool)
-    def set_current_and_field(self, currents, plot_only):
+    @pyqtSlot()
+    def compute_fields_and_set_currents(self):
         try:
             if not plot_only:
                 pass
