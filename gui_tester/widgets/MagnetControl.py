@@ -9,12 +9,13 @@ from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
 from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
 
 
+
 class MagnetWidget(QWidget):
-    def __init__(self):
+    def __init__(self, geometry):
         super().__init__()
 
         self.currentRequest = CurrentControlWidget()
-        self.fieldLine = FieldLine()
+        self.fieldLine = FieldLine(geometry)
         self.fieldStrength = FieldStrength()
         self.currentDisplay = CurrentDisplay()
 
