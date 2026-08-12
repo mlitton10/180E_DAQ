@@ -111,6 +111,10 @@ class FieldLines:
 class FieldCalculationWorker(QObject):
     finished = pyqtSignal(object)
     failed = pyqtSignal(str)
+    def __init__(self, currents, plot_only=False):
+        super().__init__()
+        self.currents = currents
+        self.plot_only = plot_only
 
     @pyqtSlot(list, bool)
     def set_current_and_field(self, currents, plot_only):
