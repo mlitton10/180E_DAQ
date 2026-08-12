@@ -45,8 +45,8 @@ class CurrentControlWidget(QGroupBox):
         layout.addWidget(self.current_input_1, 0, 0)
         layout.addWidget(self.current_input_2, 0, 1)
         layout.addWidget(self.current_input_3, 0, 2)
-        layout.addWidget(self.ConfirmButton, 1,1,2,1)
-        layout.addWidget(self.CheckBox, 3,1,1,1)
+        layout.addWidget(self.set_button, 1,1,2,1)
+        layout.addWidget(self.plot_only, 3,1,1,1)
         self.setLayout(layout)
 
     def connect_signals(self):
