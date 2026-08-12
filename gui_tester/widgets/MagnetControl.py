@@ -92,6 +92,6 @@ class MagnetWidget(QWidget):
         QMessageBox.critical(self, "Load Error", message)
 
     def on_thread_finished(self):
-        self.ds.setEnabled(True)
+        self.current_control.setEnabled(True)
         self.thread = None
         self.worker = None
