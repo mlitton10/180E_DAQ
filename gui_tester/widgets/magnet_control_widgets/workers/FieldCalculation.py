@@ -130,6 +130,7 @@ class FieldCalculationWorker(QObject):
                 (3.45 + cathode_z_displacement - 0.3, 0.075)])
             self.finished.emit({'total_field':total_field,
                                 'solutions': solutions,
-                                'solution_cathode': solution_cathode})
+                                'solution_cathode': solution_cathode,
+                                'coordinates': coords})
         except Exception as exc:
             self.failed.emit(str(exc))

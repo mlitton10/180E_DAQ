@@ -1,6 +1,7 @@
 import numpy
 import os.path
 
+import numpy as np
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -26,124 +27,57 @@ rc_dict = {"figure.autolayout": True, "font.family": 'serif', 'font.size': 18.0,
 
 plt.rcParams.update(rc_dict)
 
-
-class FieldStrength(FigureCanvas):
+class FieldLine(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
-	def __init__(self, parent=None, width=6, height=3, dpi=100):
+	def __init__(self, geometry, parent=None, width=6, height=3, dpi=100):
+		self.geometry = geometry
 		fig = Figure(figsize=(width, height), dpi=dpi)
 		ax = fig.add_subplot(111)
-		ax.grid(True, which='minor')
+
 		FigureCanvas.__init__(self, fig)
 
 		FigureCanvas.setSizePolicy(self,
 								   QSizePolicy.Expanding,
 								   QSizePolicy.Expanding)
 		FigureCanvas.updateGeometry(self)
-		self.probe_position_plotting_params = {
-			'color': 'red',
-			'marker': '*',
-			's': 80
-		}
-
-		self.queued_probe_position_plotting_params = {
-			'color': 'blue',
-			'marker': 'o',
-			's': 80
-		}
-
-		self.visited_probe_position_plotting_params = {
-			'color': 'green',
-			'marker': 'o',
-			's': 80
+		self.line_plot_params = {
+			'color': 'k',
+			'ls': '-',
+			'lw': 2
 		}
 
 		self.setParent(parent)
 
-		self.ax, self.matrix, self.point, self.machine = self.initialize_canvas(ax)
-		self.visited_points, self.finished_x, self. finished_y = self.initialize_visited_points()
+		self.ax = self.initialize_canvas(ax)
+		self.field_lines = self.initialize_field_lines()
 
 	def initialize_canvas(self, ax):
+		ax.grid(True, which='minor')
+		ax.set_title("On Axis Field Strength")
 		ax.grid(which='both')
 
-		matrix = ax.scatter(0, 0, **self.queued_probe_position_plotting_params,alpha=0)
-		point = ax.scatter(0, 0, **self.probe_position_plotting_params)
-		ax.set_xlabel("x-axis [cm]")
-		ax.set_ylabel("y-axis [cm]")
+		ax.set_xlabel("z [m]")
+		ax.set_ylabel("B_z [G]")
 
-		machine_radius = 0
-		circle = plt.Circle(
-			(0.0, 0.0),
-			radius=machine_radius,
-			facecolor='grey',  # Inner color
-			edgecolor='k',  # Border color
-			linewidth=1,  # Border thickness
-			linestyle='-',  # Optional: border style (e.g., '--', ':', '-')
-			alpha=0.5,
-		)
-		machine = ax.add_patch(circle)
 
-		ax.set_aspect('equal')
+		ax.set_xlim(-0.6, 3.5)
+		ax.set_ylim(0,)
+		return ax
 
-		return ax, matrix, point, machine
+	def initialize_plot(self):
+		line = self.ax.plot([],[])[0]
+		return [line]
 
-	def clear_probe_position(self):
-		self.point.remove()
+	def clear_plot(self):
+		for line in self.field_lines:
+			line.remove()
 
-	def clear_queued_probe_position(self):
-		self.matrix.remove()
+	def update_plot(self, field_data):
+		self.clear_plot()
+		field = field_data['total_field']['Bz']
+		z_space = field_data['coordinates'][0]
+		line = self.ax.plot(z_space, field[:, 0] * 1e4, label=r'$r={}$'.format(0), color='k')
 
-	def clear_visited_probe_position(self):
-		self.visited_points.remove()
 
-	def clear_all(self):
-		self.clear_probe_position()
-		self.clear_visited_probe_position()
-		self.clear_queued_probe_position()
-
-	def update_figure(self, X, Y):
-		self.clear_queued_probe_position()
-		self.matrix = self.ax.scatter(X, Y, **self.queued_probe_position_plotting_params)
-		self.draw()
-
-	def update_probe(self, x_now, y_now):
-		self.clear_probe_position()
-		self.point = self.ax.scatter(x_now, y_now, **self.probe_position_plotting_params)
-		self.draw()
-
-	def update_axis(self, x1, y1, x2, y2):
-		self.ax.set_xlim(x2, x1)
-		self.ax.set_ylim(y2, y1)
-
-	def update_finished_positions(self, x, y):
-		self.finished_x.append(x)
-		self.finished_y.append(y)
-		self.clear_visited_probe_position()
-		self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
-		self.draw()
-
-	def initialize_visited_points(self):
-		finished_x = []
-		finished_y = []
-		visited_points = self.ax.scatter(finished_x, finished_y, **self.visited_probe_position_plotting_params)
-		return visited_points, finished_x, finished_y
-
-	def clear_machine_drawing(self):
-		self.machine.remove()
-
-	def update_machine_radial_outline(self, radius):
-
-		self.clear_machine_drawing()
-		machine_patch = plt.Circle(
-			(0.0, 0.0),
-			radius=radius,
-			facecolor='grey',  # Inner color
-			edgecolor='k',  # Border color
-			linewidth=1,  # Border thickness
-			linestyle='-',  # Optional: border style (e.g., '--', ':', '-')
-			alpha=0.5,
-		)
-
-		self.machine = self.ax.add_patch(machine_patch)
-		self.update_axis(-1.1 * radius, -1.1*radius, 1.1*radius, 1.1*radius)
 		self.draw()
