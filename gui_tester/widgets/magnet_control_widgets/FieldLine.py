@@ -101,7 +101,7 @@ class FieldLine(FigureCanvas):
 		return ax
 
 	def initialize_field_lines(self):
-		line = self.ax.plot([],[])
+		line = self.ax.plot([],[])[0]
 		return [line]
 
 	def clear_field_lines(self):
