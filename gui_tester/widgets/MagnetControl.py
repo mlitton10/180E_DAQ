@@ -86,6 +86,7 @@ class MagnetWidget(QWidget):
 
     def on_load_finished(self, results):
         self.fieldLine.update_field_lines(results)
+        self.fieldStrength.update_plot(results)
 #		self.status_label.setText(f"Loaded {os.path.basename(filepath)}")
 
     def on_load_failed(self, message: str):
