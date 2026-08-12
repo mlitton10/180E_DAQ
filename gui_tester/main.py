@@ -23,7 +23,7 @@ def main():
 	app = QApplication(sys.argv)
 
 	machine_configuration_dir = "./data/machine_configurations/"
-	magnet_geometry_dir = "./magnet_control_widgets/data/"
+	magnet_geometry_dir = "./data/magnet_information/"
 	machine_config_paths = list_data_files(machine_configuration_dir)
 	window = MainWindow(machine_config_paths, magnet_geometry_dir)
 
