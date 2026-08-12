@@ -5,17 +5,16 @@ import pickle
 
 
 def calculate_magnetic_field(currents):
-    with open('../data/section_1_fields.pkl', 'rb') as file:
+    with open('./data/magnet_information/section_1_fields.pkl', 'rb') as file:
         # Load the data from the file
         section_1_fields = pickle.load(file)
-    with open('../data/section_2_fields.pkl', 'rb') as file:
+    with open('./data/magnet_information/section_2_fields.pkl', 'rb') as file:
         # Load the data from the file
         section_2_fields = pickle.load(file)
-    with open('../data/section_3_fields.pkl', 'rb') as file:
+    with open('./data/magnet_information/section_3_fields.pkl', 'rb') as file:
         # Load the data from the file
         section_3_fields = pickle.load(file)
-
-    with open('../data/coordinate_system.pkl', 'rb') as file:
+    with open('./data/magnet_information/coordinate_system.pkl', 'rb') as file:
         # Load the data from the file
         [z_space, r_space] = pickle.load(file)
 
