@@ -1,18 +1,21 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-controlPin = 35
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(controlPin, GPIO.OUT)
 
-pi_pwm = GPIO.PWM(controlPin, 1000)
-pi_pwm.start(0)
 
-sleep(5)
+class PWMPin:
+    def __init__(self, pin_number, frequency):
+        self.controlPin = pin_number
+        self.frequency = frequency
 
-pi_pwm.ChangeDutyCycle(50)
+        self.pwm = GPIO.PWM(self.controlPin, self.frequency)
 
-while True:
-    sleep(1)
-    continue
+    def _initialize_pin(self):
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(controlPin, GPIO.OUT)
+        self.pwm.start(0)
+        pass
+
+    def set_duty_cycle(self, duty_cycle):
+        self.pwm.ChangeDutyCycle(duty_cycle)
