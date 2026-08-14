@@ -19,3 +19,14 @@ class PWMPin:
 
     def set_duty_cycle(self, duty_cycle):
         self.pwm.ChangeDutyCycle(duty_cycle)
+
+
+class PSUController:
+    def __init__(self, pin_numbers, frequency):
+        self.psu_1 = PWMPin(pin_numbers[0], frequency)
+        self.psu_2 = PWMPin(pin_numbers[1], frequency)
+        self.psu_3 = PWMPin(pin_numbers[2], frequency)
+
+
+
+
