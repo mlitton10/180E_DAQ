@@ -13,7 +13,7 @@ class PWMPin:
     def _initialize_pin(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(controlPin, GPIO.OUT)
+        GPIO.setup(self.controlPin, GPIO.OUT)
         self.pwm.start(0)
         pass
 
