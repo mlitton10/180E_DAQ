@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QThread, QThreadPool
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import QThread, QThreadPool
+from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QLabel, QGridLayout, QMessageBox,

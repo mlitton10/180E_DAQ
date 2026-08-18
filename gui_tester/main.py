@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, QDesktopWidget
+import qdarktheme
+from PyQt6.QtWidgets import QMainWindow, QTabWidget, QApplication
 from gui_tester.utils.file_util import list_data_files
 from gui_tester.widgets.MagnetControl import MagnetWidget, MagnetGeometry
 from gui_tester.widgets.experimentcontrol import ExperimentControl
@@ -19,6 +20,7 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(tabs)
 
 def main():
+	#qdarktheme.setup_theme()
 	app = QApplication(sys.argv)
 
 	machine_configuration_dir = "./data/machine_configurations/"
@@ -28,7 +30,7 @@ def main():
 
 	window.show()
 
-	sys.exit(app.exec_())
+	sys.exit(app.exec())
 
 
 if __name__ == '__main__':

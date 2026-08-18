@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -26,8 +26,8 @@ class FieldStrength(FigureCanvas):
 		FigureCanvas.__init__(self, fig)
 
 		FigureCanvas.setSizePolicy(self,
-								   QSizePolicy.Expanding,
-								   QSizePolicy.Expanding)
+								   QSizePolicy.Policy.Expanding,
+								   QSizePolicy.Policy.Expanding)
 		FigureCanvas.updateGeometry(self)
 		self.line_plot_params = {
 			'color': 'k',

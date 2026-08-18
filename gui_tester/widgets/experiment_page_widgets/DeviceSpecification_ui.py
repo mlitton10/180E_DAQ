@@ -1,5 +1,5 @@
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QHBoxLayout, QGroupBox, QGridLayout
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QHBoxLayout, QGroupBox, QGridLayout
 from gui_tester.widgets.basic_templates.TextInputBox import DropdownRow
 
 class DeviceSpecification(QWidget):

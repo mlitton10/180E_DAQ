@@ -1,7 +1,7 @@
 import os.path
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QGridLayout
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QGroupBox, QPushButton, QGridLayout
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
 dir_path=os.path.dirname(os.path.realpath(__file__))

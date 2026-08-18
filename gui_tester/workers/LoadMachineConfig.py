@@ -1,7 +1,7 @@
 import csv
 import time
 
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 
 class LoadMachineWorker(QObject):

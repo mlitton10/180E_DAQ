@@ -6,10 +6,10 @@ from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
-from PyQt5 import QtCore
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt6 import QtCore
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -62,8 +62,8 @@ class MyMplCanvas(FigureCanvas):
 		FigureCanvas.__init__(self, fig)
 
 		FigureCanvas.setSizePolicy(self,
-								   QSizePolicy.Expanding,
-								   QSizePolicy.Expanding)
+								   QSizePolicy.Policy.Expanding,
+								   QSizePolicy.Policy.Expanding)
 		FigureCanvas.updateGeometry(self)
 		self.probe_position_plotting_params = {
 			'color': 'red',
