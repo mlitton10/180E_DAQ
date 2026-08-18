@@ -1,6 +1,6 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
+from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 import numpy as np
-from scipy.interpolate import interp2d
+from scipy.interpolate import RegularGridInterpolator
 import pickle
 
 
@@ -36,15 +36,19 @@ def rungeKuttaBound(dydx, x0, y0, x_bound_low, x_bound_high, y_bound, h):
 
     while x_bound_low <= x0 <= x_bound_high and 0 <= y <= y_bound:
         "Apply Runge Kutta Formulas to find next value of y"
-        k1 = h * dydx(x0, y)[0]
-        k2 = h * dydx(x0 + 0.5 * h, y + 0.5 * k1)[0]
-        k3 = h * dydx(x0 + 0.5 * h, y + 0.5 * k2)[0]
-        k4 = h * dydx(x0 + h, y + k3)[0]
+        step = min(h, x_bound_high - x0) if h > 0 else max(h, x_bound_low - x0)
+        if step == 0:
+            break
+
+        k1 = step * dydx(x0, y)
+        k2 = step * dydx(x0 + 0.5 * step, y + 0.5 * k1)
+        k3 = step * dydx(x0 + 0.5 * step, y + 0.5 * k2)
+        k4 = step * dydx(x0 + step, y + k3)
 
         # Update next value of y
         y = y + (1.0 / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
         # Update next value of x
-        x0 = x0 + h
+        x0 = x0 + step
 
         y_list.append(y)
         x_list.append(x0)
@@ -61,8 +65,8 @@ class FieldLines:
         self.r_wall = r_wall
 
         field_ratio = self.Br / self.Bz
-
-        self.ratio_interpolation = interp2d(*coordinate_system, field_ratio.T)
+        self.ratio_interpolation = RegularGridInterpolator(coordinate_system, field_ratio,
+                                                           method='linear', bounds_error=False, fill_value=None)
         self.n_field_lines = n_field_lines
 
         self.spatial_bounds = self._find_spatial_bounds()
@@ -77,6 +81,9 @@ class FieldLines:
 
         return [z_bounds, r_bounds]
 
+    def ratio_at(self, z_value, r_value):
+        return float(self.ratio_interpolation((z_value, r_value)))
+
     def _pick_initial_points(self):
         z_initial = self.spatial_bounds[0][0]
         r_initial = np.linspace(0, self.r_wall, self.n_field_lines)
@@ -89,20 +96,20 @@ class FieldLines:
         if initial_conditions is None:
             for ic in self.initial_conditions:
                 if stepsize is None:
-                    z_sol, r_sol = rungeKuttaBound(self.ratio_interpolation, ic[0], ic[1], self.spatial_bounds[0][0],
+                    z_sol, r_sol = rungeKuttaBound(self.ratio_at, ic[0], ic[1], self.spatial_bounds[0][0],
                                                   self.spatial_bounds[0][1], self.spatial_bounds[1][1], self.stepsize)
                 else:
-                    z_sol, r_sol = rungeKuttaBound(self.ratio_interpolation, ic[0], ic[1], self.spatial_bounds[0][0],
+                    z_sol, r_sol = rungeKuttaBound(self.ratio_at, ic[0], ic[1], self.spatial_bounds[0][0],
                                                    self.spatial_bounds[0][1], self.spatial_bounds[1][1], stepsize)
                 solutions_set.append((z_sol, r_sol))
 
         else:
             for ic in initial_conditions:
                 if stepsize is None:
-                    z_sol, r_sol = rungeKuttaBound(self.ratio_interpolation, ic[0], ic[1], self.spatial_bounds[0][0],
+                    z_sol, r_sol = rungeKuttaBound(self.ratio_at, ic[0], ic[1], self.spatial_bounds[0][0],
                                                   self.spatial_bounds[0][1], self.spatial_bounds[1][1], self.stepsize)
                 else:
-                    z_sol, r_sol = rungeKuttaBound(self.ratio_interpolation, ic[0], ic[1], self.spatial_bounds[0][0],
+                    z_sol, r_sol = rungeKuttaBound(self.ratio_at, ic[0], ic[1], self.spatial_bounds[0][0],
                                                    self.spatial_bounds[0][1], self.spatial_bounds[1][1], stepsize)
                 solutions_set.append((z_sol, r_sol))
         return solutions_set
