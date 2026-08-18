@@ -20,7 +20,12 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(tabs)
 
 def main():
-	#qdarktheme.setup_theme()
+	style_path = os.path.join(
+		"resources",
+		"styles",
+		"dark.qss"
+	)
+
 	app = QApplication(sys.argv)
 
 	machine_configuration_dir = "./data/machine_configurations/"
