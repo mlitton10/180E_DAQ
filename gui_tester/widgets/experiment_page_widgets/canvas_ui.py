@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 
-rc_dict = {"figure.autolayout": True, "font.family": 'serif', 'font.size': 18.1,
+rc_dict = {"figure.autolayout": True, "font.family": 'serif', 'font.size': 18.0,
 		   'lines.linewidth': 2.5, 'axes.titlepad':8.0,
           'xtick.minor.visible':True,'ytick.minor.visible':True, 'axes.linewidth':2.0, 'xtick.major.width':2.0,
 		   'xtick.direction': 'in',
