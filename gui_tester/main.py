@@ -27,6 +27,10 @@ def main():
 	)
 
 	app = QApplication(sys.argv)
+	app.setStyle(QStyleFactory.create("Fusion"))
+
+	with open(style_path) as f:
+		app.setStyleSheet(f.read())
 
 	machine_configuration_dir = "./data/machine_configurations/"
 	magnet_geometry_dir = "./data/magnet_information/"
