@@ -1,3 +1,4 @@
+import os
 import sys
 
 from PyQt6.QtWidgets import QMainWindow, QTabWidget, QApplication, QStyleFactory
