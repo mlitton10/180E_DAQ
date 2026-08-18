@@ -2,11 +2,19 @@ import argparse
 
 import RPi.GPIO as GPIO
 from time import sleep
+import json
+import socket
+import threading
+import time
 
 FREQ = 1000.0
 I1_MAX = 10
 I2_MAX = 10
 I3_MAX = 100
+
+HOST = "0.0.0.0"
+PORT = 5000
+
 
 def arg_parser() -> list[float]:
     parser = argparse.ArgumentParser()
@@ -38,20 +46,23 @@ class PWMPin:
 
 
 class PSUController(PWMPin):
-    def __init__(self, pin_number, current: float, max_current: float) -> None:
+    def __init__(self, pin_number, max_current: float) -> None:
         super().__init__(pin_number, FREQ)
 
-        self.current = current
+        self.max_current = max_current
 
-    def convert_current_to_duty_cycle(self, duty_cycle: float) -> float:
+    def _convert_current_to_duty_cycle(self, current: float) -> float:
+        return 100 * current/self.max_current
 
-
-        pass
+    def set_current(self, current):
+        duty_cycle = self._convert_current_to_duty_cycle(current)
+        self.set_duty_cycle(duty_cycle)
 
 
 class Controller:
     def __init__(self):
         self.lock = threading.Lock()
+
 
         self.outputs = [0.0, 0.0, 0.0]
         self.running = True
