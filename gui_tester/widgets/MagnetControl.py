@@ -46,6 +46,10 @@ class MagnetWidget(QWidget):
         self.thread = None
         self.worker = None
 
+        self.pi_thread = QThread()
+        self.pi_worker = RaspberryPiController(host=magnet_ip, port=5000)
+        self._initialize_pi_client()
+
         self.threadpool = QThreadPool()
 
     def build_layout(self):
