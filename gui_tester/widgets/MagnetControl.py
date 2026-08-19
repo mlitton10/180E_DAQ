@@ -56,7 +56,7 @@ class MagnetWidget(QWidget):
         layout.addWidget(self.current_control, 2, 1)
 
     def connect_signals(self):
-        self.current_control.currentRequested.connect(self.update_current_async)
+        self.current_control.currentRequested.connect(self.update_plot_async)
         pass
 
     def run_worker_async(self, worker: Worker):
@@ -80,7 +80,7 @@ class MagnetWidget(QWidget):
 
         self.thread.start()
 
-    def update_current_async(self, currents, plot_only: bool):
+    def update_plot_async(self, currents, plot_only: bool):
         # If a load is already running, ignore new requests for simplicity.
         if self.thread is not None and self.thread.isRunning():
             return
