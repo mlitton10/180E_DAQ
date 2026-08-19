@@ -3,6 +3,8 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 import pickle
 
+from gui_tester.widgets.basic_templates.generic_worker import Worker
+
 
 def calculate_magnetic_field(currents):
     with open('./data/magnet_information/section_1_fields.pkl', 'rb') as file:
@@ -115,29 +117,22 @@ class FieldLines:
         return solutions_set
 
 
-class FieldCalculationWorker(QObject):
-    finished = pyqtSignal(object)
-    failed = pyqtSignal(str)
+class FieldCalculationWorker(Worker):
     def __init__(self, currents, plot_only=False):
         super().__init__()
         self.currents = currents
         self.plot_only = plot_only
 
-    @pyqtSlot()
-    def compute_fields_and_set_currents(self):
-        try:
-            if not self.plot_only:
-                print('Running FieldCalculation...')
-            total_field, coords = calculate_magnetic_field(self.currents)
-            field_line_solver = FieldLines(total_field, coords, 10)
-            cathode_z_displacement = -158 * 1e-3
-            cathode_radius = 0.078
-            solutions = field_line_solver.solveFieldLines()
-            solution_cathode = field_line_solver.solveFieldLines(stepsize=-0.01, initial_conditions=[
-                (3.45 + cathode_z_displacement - 0.3, 0.075)])
-            self.finished.emit({'total_field':total_field,
-                                'solutions': solutions,
-                                'solution_cathode': solution_cathode,
-                                'coordinates': coords})
-        except Exception as exc:
-            self.failed.emit(str(exc))
+    def do_work(self):
+        if not self.plot_only:
+            print('Running FieldCalculation...')
+        total_field, coords = calculate_magnetic_field(self.currents)
+        field_line_solver = FieldLines(total_field, coords, 10)
+        cathode_z_displacement = -158 * 1e-3
+        solutions = field_line_solver.solveFieldLines()
+        solution_cathode = field_line_solver.solveFieldLines(stepsize=-0.01, initial_conditions=[
+            (3.45 + cathode_z_displacement - 0.3, 0.075)])
+        return {'total_field':total_field,
+                'solutions': solutions,
+                'solution_cathode': solution_cathode,
+                'coordinates': coords}
