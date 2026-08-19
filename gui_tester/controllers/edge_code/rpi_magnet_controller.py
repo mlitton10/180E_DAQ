@@ -28,6 +28,10 @@ def arg_parser() -> list[float]:
 
 class PWMPin:
     def __init__(self, pin_number: int, frequency: float) -> None:
+        """
+        Hardware layer class. Controls the actual GPIO Pin and sets the PWM using the expected low level hardware parameters.
+
+        """
         self.controlPin = pin_number
         self.frequency = frequency
 
@@ -46,6 +50,10 @@ class PWMPin:
 
 
 class PSUController(PWMPin):
+    """
+    This bridges the gap between RPI hardware and the PSU we are actually trying to control. It adds a layer on top of the
+    GPIO controller that translates the desired currents to a GPIO setpoint that will achieve them.
+    """
     def __init__(self, pin_number, max_current: float) -> None:
         super().__init__(pin_number, FREQ)
 
