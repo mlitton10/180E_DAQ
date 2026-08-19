@@ -14,6 +14,7 @@ from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrengt
 import pickle
 
 from gui_tester.widgets.magnet_control_widgets.workers.FieldCalculation import FieldCalculationWorker
+from gui_tester.widgets.magnet_control_widgets.workers.RaspberryPiController import RaspberryPiController
 
 
 class MagnetGeometry:
