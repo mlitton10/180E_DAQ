@@ -83,9 +83,9 @@ class Controller:
             self.outputs = values
 
             # Replace these with your actual PWM calls.
-            self.set_pwm(0, values[0])
-            self.set_pwm(1, values[1])
-            self.set_pwm(2, values[2])
+            self.set_pwm(self.psu_1, values[0])
+            self.set_pwm(self.psu_2, values[1])
+            self.set_pwm(self.psu_3, values[2])
 
     def set_pwm(self, psu: PSUController, current: float) -> None:
         psu.set_current(current)
