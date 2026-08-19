@@ -63,6 +63,9 @@ class Controller:
     def __init__(self):
         self.lock = threading.Lock()
 
+        self.psu_1 = PSUController(19, I1_MAX)
+        self.psu_2 = PSUController(20, I2_MAX)
+        self.psu_3 = PSUController(21, I3_MAX)
 
         self.outputs = [0.0, 0.0, 0.0]
         self.running = True
