@@ -84,26 +84,8 @@ class MagnetWidget(QWidget):
             return
 
         self.current_control.setEnabled(False)
-#		self.status_label.setText(f"Loading {os.path.basename(filepath)}...")
 
-        self.thread = QThread(self)
-        self.worker = FieldCalculationWorker(currents, plot_only)
-        self.worker.moveToThread(self.thread)
-
-        self.thread.started.connect(self.worker.compute_fields_and_set_currents)
-        self.worker.finished.connect(self.on_load_finished)
-        self.worker.failed.connect(self.on_load_failed)
-
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.failed.connect(self.thread.quit)
-
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.worker.failed.connect(self.worker.deleteLater)
-
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.finished.connect(self.on_thread_finished)
-
-        self.thread.start()
+        self.run_worker_async(FieldCalculationWorker(currents, plot_only))
 
     def on_load_finished(self, results):
         self.fieldLine.update_field_lines(results)
