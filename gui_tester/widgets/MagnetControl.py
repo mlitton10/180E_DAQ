@@ -57,7 +57,28 @@ class MagnetWidget(QWidget):
         self.current_control.currentRequested.connect(self.compute_field_async)
         pass
 
-    def compute_field_async(self, currents, plot_only: bool):
+    def run_worker_async(self, worker):
+        self.thread = QThread(self)
+        self.worker = worker
+
+        self.worker.moveToThread(self.thread)
+
+        self.worker.started.connect(self.worker.run)
+        self.worker.finished.connect(self.on_load_finished)
+        self.worker.failed.connect(self.on_load_failed)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.failed.connect(self.thread.quit)
+
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.failed.connect(self.worker.deleteLater)
+
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(self.on_thread_finished)
+
+        self.thread.start()
+
+    def update_current_async(self, currents, plot_only: bool):
         # If a load is already running, ignore new requests for simplicity.
         if self.thread is not None and self.thread.isRunning():
             return
