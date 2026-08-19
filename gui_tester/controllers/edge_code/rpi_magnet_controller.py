@@ -84,6 +84,7 @@ class Controller:
 
         values = [float(v) for v in values]
 
+        # need to adjust this
         if not all(0.0 <= v <= 100.0 for v in values):
             raise ValueError("Output values must be between 0 and 100")
 
