@@ -4,6 +4,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QLabel, QGridLayout, QMessageBox,
 )
+
+from gui_tester.widgets.basic_templates.generic_worker import Worker
 from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
 from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
 from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
@@ -54,10 +56,10 @@ class MagnetWidget(QWidget):
         layout.addWidget(self.current_control, 2, 1)
 
     def connect_signals(self):
-        self.current_control.currentRequested.connect(self.compute_field_async)
+        self.current_control.currentRequested.connect(self.update_current_async)
         pass
 
-    def run_worker_async(self, worker):
+    def run_worker_async(self, worker: Worker):
         self.thread = QThread(self)
         self.worker = worker
 
