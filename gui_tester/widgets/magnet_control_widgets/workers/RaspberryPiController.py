@@ -25,7 +25,7 @@ class RaspberryPiController(QObject):
         except Exception as exc:
             self.failed.emit(str(exc))
 
-    def send_command(self, command):
+    def _send_command(self, command):
         if self.socket is None:
             raise RuntimeError("Not connected to Raspberry Pi")
 
@@ -85,6 +85,7 @@ class RaspberryPiController(QObject):
             self.statusReceived.emit(response)
         except Exception as exc:
             self.failed.emit(str(exc))
+            self._disconnect()
 
     @pyqtSlot()
     def stop(self):
@@ -96,9 +97,9 @@ class RaspberryPiController(QObject):
             })
         except Exception as exc:
             self.failed.emit(str(exc))
-            self.close()
+            self._disconnect()
 
-    def close(self):
+    def _disconnect(self):
         if self.socket is not None:
             self.socket.close()
             self.socket = None
