@@ -3,7 +3,7 @@ import socket
 
 
 class RaspberryPiController:
-    def __init__(self, host, port=5000):
+    def __init__(self, host: str, port=5000):
         self.host = host
         self.port = port
         self.socket = None
