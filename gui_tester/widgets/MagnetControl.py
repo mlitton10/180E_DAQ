@@ -30,10 +30,10 @@ class MagnetGeometry:
 
 
 class MagnetWidget(QWidget):
-    def __init__(self, geometry):
+    def __init__(self, geometry, magnet_ip):
         super().__init__()
 
-        self.current_control = CurrentControlWidget()
+        self.current_control = CurrentControlWidget(magnet_ip)
         self.fieldLine = FieldLine(geometry)
         self.fieldStrength = FieldStrength()
         self.currentDisplay = CurrentDisplay()
