@@ -33,7 +33,7 @@ def main():
 		"dark.qss"
 	)
 
-	config_path = Path("config/network_settings.json")
+	config_path = Path("config","network_setup.json")
 
 	app = QApplication(sys.argv)
 	app.setStyle(QStyleFactory.create("Fusion"))
@@ -41,8 +41,7 @@ def main():
 	with open(style_path) as f:
 		app.setStyleSheet(f.read())
 
-	config = AppConfig(config_path)
-
+	config = AppConfig("config/network_setup.json")
 
 	machine_configuration_dir = "./data/machine_configurations/"
 	magnet_geometry_dir = "./data/magnet_information/"
