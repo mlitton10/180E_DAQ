@@ -99,6 +99,7 @@ class RaspberryPiController(QObject):
         if self.socket is not None:
             self.socket.close()
             self.socket = None
+        self.disconnected.emit()
 
 
 class RaspberryPiWorker(QObject):
