@@ -1,6 +1,8 @@
 import json
 import socket
 
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+
 
 class RaspberryPiController:
     def __init__(self, host: str, port=5000):
@@ -69,3 +71,33 @@ class RaspberryPiController:
         if self.socket is not None:
             self.socket.close()
             self.socket = None
+
+
+class RaspberryPiWorker(QObject):
+    connected = pyqtSignal()
+    disconnected = pyqtSignal()
+    outputsChanged = pyqtSignal(list)
+    error = pyqtSignal(str)
+    def __init__(self):
+        super().__init__()
+
+    @pyqtSlot()
+    def send_command(self):
+        pass
+
+class RaspberryPiCurrentControlWorker(RaspberryPiWorker):
+    def __init__(self, currents: str):
+        super().__init__()
+        self.command = currents
+
+    @pyqtSlot()
+    def send_command(self):
+        try:
+            client = RaspberryPiController()
+
+            self.finished.emit({'total_field':total_field,
+                                'solutions': solutions,
+                                'solution_cathode': solution_cathode,
+                                'coordinates': coords})
+        except Exception as exc:
+            self.error.emit(str(exc))
