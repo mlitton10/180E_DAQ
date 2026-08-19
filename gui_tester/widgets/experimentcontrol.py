@@ -1,7 +1,8 @@
 import os.path
 
+from gui_tester.widgets.basic_templates.generic_worker import Worker
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
-from gui_tester.workers.LoadMachineConfig import LoadMachineWorker
+from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
 from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
 from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import AcquisitionControls
 from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid
@@ -87,17 +88,10 @@ class ExperimentControl(QWidget):
 		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
 		self.resize(1600, 700)
 
-
-	def load_file_async(self, filepath: str):
-		# If a load is already running, ignore new requests for simplicity.
-		if self.thread is not None and self.thread.isRunning():
-			return
-
-		self.ds.setEnabled(False)
-#		self.status_label.setText(f"Loading {os.path.basename(filepath)}...")
-
+	def run_worker_async(self, worker: Worker):
 		self.thread = QThread(self)
-		self.worker = LoadMachineWorker(filepath)
+		self.worker = worker
+
 		self.worker.moveToThread(self.thread)
 
 		self.thread.started.connect(self.worker.run)
@@ -114,6 +108,15 @@ class ExperimentControl(QWidget):
 		self.thread.finished.connect(self.on_thread_finished)
 
 		self.thread.start()
+
+	def load_file_async(self, filepath: str):
+		# If a load is already running, ignore new requests for simplicity.
+		if self.thread is not None and self.thread.isRunning():
+			return
+
+		self.ds.setEnabled(False)
+
+		self.run_worker_async(LoadMachineWorker(filepath))
 
 	def on_load_finished(self, filepath: str, length: float, radius: float):
 		self.canvas.update_machine_radial_outline(radius)
