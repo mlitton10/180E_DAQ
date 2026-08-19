@@ -56,6 +56,7 @@ class RaspberryPiController(QObject):
 
         return response
 
+    @pyqtSlot(float, float, float)
     def set_outputs(self, output1, output2, output3):
         if self.socket is None:
             self.failed.emit("Not connected to Raspberry Pi")
@@ -73,6 +74,7 @@ class RaspberryPiController(QObject):
             self.failed.emit(str(exc))
             self._disconnect()
 
+    @pyqtSlot()
     def get_status(self):
         if self.socket is None:
             self.failed.emit("Not connected to Raspberry Pi")
@@ -84,6 +86,7 @@ class RaspberryPiController(QObject):
         except Exception as exc:
             self.failed.emit(str(exc))
 
+    @pyqtSlot()
     def stop(self):
         if self.socket is None:
             self.failed.emit("Not connected to Raspberry Pi")
