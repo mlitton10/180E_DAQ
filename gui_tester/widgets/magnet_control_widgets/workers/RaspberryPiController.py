@@ -16,10 +16,14 @@ class RaspberryPiController(QObject):
         self.socket = None
 
     def connect(self):
-        self.socket = socket.create_connection(
-            (self.host, self.port),
-            timeout=2.0,
-        )
+        try:
+            self.socket = socket.create_connection(
+                (self.host, self.port),
+                timeout=2.0,
+            )
+            self.connected.emit()
+        except Exception as exc:
+            self.failed.emit(str(exc))
 
     def send_command(self, command):
         if self.socket is None:
@@ -53,24 +57,43 @@ class RaspberryPiController(QObject):
         return response
 
     def set_outputs(self, output1, output2, output3):
-        return self.send_command({
-            "command": "set_outputs",
-            "values": [
-                output1,
-                output2,
-                output3,
-            ],
-        })
+        if self.socket is None:
+            self.failed.emit("Not connected to Raspberry Pi")
+            return
+        try:
+            self._send_command({
+                "command": "set_outputs",
+                "values": [
+                    output1,
+                    output2,
+                    output3,
+                ],
+            })
+        except Exception as exc:
+            self.failed.emit(str(exc))
+            self._disconnect()
 
     def get_status(self):
-        return self.send_command({
-            "command": "get_status",
-        })
+        if self.socket is None:
+            self.failed.emit("Not connected to Raspberry Pi")
+        try:
+            response = self._send_command({
+                "command": "get_status",
+            })
+            self.statusReceived.emit(response)
+        except Exception as exc:
+            self.failed.emit(str(exc))
 
     def stop(self):
-        return self.send_command({
-            "command": "stop",
-        })
+        if self.socket is None:
+            self.failed.emit("Not connected to Raspberry Pi")
+        try:
+            self._send_command({
+                "command": "stop",
+            })
+        except Exception as exc:
+            self.failed.emit(str(exc))
+            self.close()
 
     def close(self):
         if self.socket is not None:
