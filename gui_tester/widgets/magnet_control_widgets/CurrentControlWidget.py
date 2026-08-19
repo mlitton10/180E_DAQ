@@ -8,9 +8,9 @@ from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_fo
 
 class CurrentControlWidget(QGroupBox):
     currentRequested = pyqtSignal(list, bool)
-    def __init__(self):
+    def __init__(self, magnet_ip):
         super().__init__()
-
+        self.magnet_ip = magnet_ip
         self.current_input_1 = UserDoubleSpinBoxRow("Current 1:")
         self.current_input_2 = UserDoubleSpinBoxRow("Current 2:")
         self.current_input_3 = UserDoubleSpinBoxRow("Current 3:")
