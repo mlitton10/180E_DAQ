@@ -87,8 +87,8 @@ class Controller:
             self.set_pwm(1, values[1])
             self.set_pwm(2, values[2])
 
-    def set_pwm(self, channel, duty):
-        print(f"PWM {channel}: {duty}%")
+    def set_pwm(self, psu: PSUController, current: float) -> None:
+        psu.set_current(current)
 
     def stop(self):
         with self.lock:
