@@ -1,8 +1,6 @@
 from PyQt6.QtCore import QThread, QThreadPool
 from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel, QGridLayout, QMessageBox,
+    QWidget, QGridLayout, QMessageBox,
 )
 
 from gui_tester.widgets.basic_templates.generic_worker import Worker
