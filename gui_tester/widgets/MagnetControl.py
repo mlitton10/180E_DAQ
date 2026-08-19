@@ -63,6 +63,11 @@ class MagnetWidget(QWidget):
         self.current_control.currentRequested.connect(self.update_plot_async)
         pass
 
+    def _initialize_pi_client(self):
+        self.pi_worker.moveToThread(self.pi_thread)
+        self.pi_thread.started.connect(self.pi_worker.connect)
+        self.pi_thread.start()
+
     def run_worker_async(self, worker: Worker):
         self.thread = QThread(self)
         self.worker = worker
