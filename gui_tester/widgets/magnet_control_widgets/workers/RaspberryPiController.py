@@ -4,8 +4,13 @@ import socket
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 
-class RaspberryPiController:
+class RaspberryPiController(QObject):
+    connected = pyqtSignal()
+    disconnected = pyqtSignal()
+    statusReceived = pyqtSignal(str)
+    failed = pyqtSignal(str)
     def __init__(self, host: str, port=5000):
+        super().__init__()
         self.host = host
         self.port = port
         self.socket = None
