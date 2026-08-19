@@ -2,24 +2,18 @@ import csv
 import time
 
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+from gui_tester.widgets.basic_templates.generic_worker import Worker
 
 
-class LoadMachineWorker(QObject):
+class LoadMachineWorker(Worker):
     finished = pyqtSignal(str, float, float)   # filepath, length, radius
-    failed = pyqtSignal(str)
 
     def __init__(self, filepath: str):
         super().__init__()
         self.filepath = filepath
 
-    @pyqtSlot()
-    def run(self):
-        try:
-            length, radius = self.load_csv(self.filepath)
-
-            self.finished.emit(self.filepath, length, radius)
-        except Exception as exc:
-            self.failed.emit(f"{type(exc).__name__}: {exc}")
+    def do_work(self):
+        return self.load_csv(self.filepath)
 
     def load_csv(self, filepath: str):
 
