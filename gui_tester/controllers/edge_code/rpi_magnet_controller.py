@@ -94,8 +94,9 @@ class Controller:
         with self.lock:
             self.outputs = [0.0, 0.0, 0.0]
 
-            for channel in range(3):
-                self.set_pwm(channel, 0.0)
+            self.set_pwm(self.psu_1, 0.0)
+            self.set_pwm(self.psu_2, 0.0)
+            self.set_pwm(self.psu_3, 0.0)
 
     def get_status(self):
         with self.lock:
