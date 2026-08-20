@@ -7,7 +7,8 @@ from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_fo
 
 
 class CurrentControlWidget(QGroupBox):
-    currentRequested = pyqtSignal(list, bool)
+    currentPlot = pyqtSignal(list)
+    currentSet = pyqtSignal(list)
     def __init__(self, magnet_ip):
         super().__init__()
         self.magnet_ip = magnet_ip
@@ -29,7 +30,11 @@ class CurrentControlWidget(QGroupBox):
         current_3 = self.current_input_3.read_value()
         plot_only = self.plot_only.isChecked()
 
-        self.currentRequested.emit([current_1, current_2, current_3], plot_only)
+        if plot_only:
+            self.currentPlot.emit([current_1, current_2, current_3])
+        else:
+            self.currentSet.emit([current_1, current_2, current_3])
+            self.currentPlot.emit([current_1, current_2, current_3])
 
     def build_layout(self):
         layout = QGridLayout(self)

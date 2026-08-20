@@ -118,14 +118,11 @@ class FieldLines:
 
 
 class FieldCalculationWorker(Worker):
-    def __init__(self, currents, plot_only=False):
+    def __init__(self, currents):
         super().__init__()
         self.currents = currents
-        self.plot_only = plot_only
 
     def do_work(self):
-        if not self.plot_only:
-            print('Running FieldCalculation...')
         total_field, coords = calculate_magnetic_field(self.currents)
         field_line_solver = FieldLines(total_field, coords, 10)
         cathode_z_displacement = -158 * 1e-3

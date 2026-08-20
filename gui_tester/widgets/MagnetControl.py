@@ -59,7 +59,7 @@ class MagnetWidget(QWidget):
         layout.addWidget(self.current_control, 2, 1)
 
     def connect_signals(self):
-        self.current_control.currentRequested.connect(self.update_plot_async)
+        self.current_control.currentPlot.connect(self.update_plot_async)
         pass
 
     def _initialize_pi_client(self):
@@ -88,14 +88,14 @@ class MagnetWidget(QWidget):
 
         self.thread.start()
 
-    def update_plot_async(self, currents, plot_only: bool):
+    def update_plot_async(self, currents):
         # If a load is already running, ignore new requests for simplicity.
         if self.thread is not None and self.thread.isRunning():
             return
 
         self.current_control.setEnabled(False)
 
-        self.run_worker_async(FieldCalculationWorker(currents, plot_only))
+        self.run_worker_async(FieldCalculationWorker(currents))
 
     def on_load_finished(self, results):
         self.fieldLine.update_field_lines(results)
