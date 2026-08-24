@@ -1,6 +1,7 @@
 import os.path
 
 from gui_tester.widgets.basic_templates.TextInputBox import UserSpinBoxRow
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -11,7 +12,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 
 
-class AxisControls(QGroupBox):
+class AxisControls(BasicAppWidget):
 	def __init__(self):
 		super().__init__()
 
@@ -23,8 +24,7 @@ class AxisControls(QGroupBox):
 		self.y_high = UserSpinBoxRow("y-axis range:")
 		self.y_low = UserSpinBoxRow("to: ")
 
-		self.build_layout()
-		self.initialize_values()
+		self.initialize_widget()
 		pass
 
 	def build_layout(self):
@@ -46,6 +46,14 @@ class AxisControls(QGroupBox):
 
 		self.y_high.set_value(35)
 		self.y_low.set_value(-35)
+
+	def connect_signals(self):
+		pass
+
+	def initialize_widget(self):
+		self.build_layout()
+		self.initialize_values()
+		self.connect_signals()
 
 	def read_axis(self):
 		x_high = self.x_high.read_value()

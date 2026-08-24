@@ -1,6 +1,8 @@
 import os.path
 import sys
 
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
+
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
@@ -10,7 +12,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
-class MotorMovement(QGroupBox):
+class MotorMovement(BasicAppWidget):
 
 	def __init__(self, x_ip_addr = None, y_ip_addr = None, motor_port = None):
 		super().__init__()
@@ -48,7 +50,7 @@ class MotorMovement(QGroupBox):
 		self.velocityInput.setReadOnly(True)
 		self.velocityButton.clicked.connect(self.display_current_speed)  # example of a signal?
 
-		self.build_layout()
+		self.initialize_widget()
 
 	def build_layout(self):
 		main_layout = QGridLayout(self)
@@ -81,6 +83,13 @@ class MotorMovement(QGroupBox):
 
 		main_layout.addWidget(self.velocityButton, 4, 0)
 		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
+
+	def connect_signals(self):
+		pass
+
+	def initialize_widget(self):
+		self.build_layout()
+		self.connect_signals()
 #----------------------------------------------------------------------
 
 	def move_to_position(self):

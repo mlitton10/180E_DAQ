@@ -3,12 +3,13 @@ import os.path
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QGroupBox, QPushButton, QGridLayout
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
 
-class PositionControls(QGroupBox):
+class PositionControls(BasicAppWidget):
 	confirm = pyqtSignal()
 	def __init__(self):
 		super().__init__()
@@ -23,9 +24,7 @@ class PositionControls(QGroupBox):
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
-		self.build_layout()
-		self.initialize_boxes()
-		self.connect_signals()
+		self.initialize_widget()
 
 	def connect_signals(self):
 		self.ConfirmButton.clicked.connect(self.confirm)
@@ -59,6 +58,11 @@ class PositionControls(QGroupBox):
 		self.yMin.update_text("0")
 		self.nx.update_text("1")
 		self.ny.update_text("1")
+
+	def initialize_widget(self):
+		self.build_layout()
+		self.initialize_boxes()
+		self.connect_signals()
 
 	def collect_parameters(self):
 		parameters = {'xmax': float(self.xMax.read_text()), 'xmin': float(self.xMin.read_text()),

@@ -13,7 +13,8 @@ class LoadMachineWorker(Worker):
         self.filepath = filepath
 
     def do_work(self):
-        return self.load_csv(self.filepath)
+        filepath, length, radius = self.load_csv(self.filepath)
+        return filepath, length, radius
 
     def load_csv(self, filepath: str):
         with open(filepath, "r", newline="") as f:

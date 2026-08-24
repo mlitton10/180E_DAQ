@@ -1,6 +1,7 @@
 import os.path
 
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -11,7 +12,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 
 
-class ScopeChannel(QGroupBox):
+class ScopeChannel(BasicAppWidget):
 	def __init__(self):
 		super().__init__()
 		self.setTitle("Enter channel descriptions")
@@ -20,7 +21,7 @@ class ScopeChannel(QGroupBox):
 		self.c3 = UserTextRow("Channel 3:")
 		self.c4 = UserTextRow("Channel 4:")
 
-		self.build_layout()
+		self.initialize_widget()
 
 	def build_layout(self):
 		sc_layout = QGridLayout(self)
@@ -28,6 +29,13 @@ class ScopeChannel(QGroupBox):
 		channel_box = make_form_table([self.c1, self.c2, self.c3, self.c4])
 
 		sc_layout.addWidget(channel_box, 0, 0, 3, 1)
+
+	def connect_signals(self):
+		pass
+
+	def initialize_widget(self):
+		self.build_layout()
+		self.connect_signals()
 
 	def get_channel_description(self):
 		channel_description = {"C1": self.c1.read_text(),

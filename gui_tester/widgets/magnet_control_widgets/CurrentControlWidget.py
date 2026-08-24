@@ -4,9 +4,10 @@ from PyQt6.QtCore import pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QGroupBox, QPushButton, QGridLayout, QCheckBox, QFormLayout, QDoubleSpinBox
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table, UserTextColumn, \
     UserDoubleSpinBoxRow
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 
-class CurrentControlWidget(QGroupBox):
+class CurrentControlWidget(BasicAppWidget):
     currentPlot = pyqtSignal(list)
     currentSet = pyqtSignal(list)
     def __init__(self, magnet_ip):
@@ -19,9 +20,7 @@ class CurrentControlWidget(QGroupBox):
         self.plot_only = QCheckBox("Plot only")
         self.set_button = QPushButton("Set Current")
 
-        self.initialize_boxes()
-        self.connect_signals()
-        self.build_layout()
+        self.initialize_widget()
 
     @pyqtSlot()
     def _request_current(self):
@@ -64,3 +63,8 @@ class CurrentControlWidget(QGroupBox):
 
         self.current_input_3.set_range(0.0, 100.0)
         self.current_input_3.spin_box.setSuffix(" A")
+
+    def initialize_widget(self):
+        self.build_layout()
+        self.connect_signals()
+        self.initialize_boxes()

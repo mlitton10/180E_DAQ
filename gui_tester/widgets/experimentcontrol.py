@@ -48,7 +48,6 @@ class ExperimentControl(QWidget):
 
 		self.thread = None
 		self.worker = None
-
 		self.load_file_async(self.ds.current_file())
 
 		self.threadpool = QThreadPool()
@@ -101,9 +100,7 @@ class ExperimentControl(QWidget):
 		self.worker.finished.connect(self.thread.quit)
 		self.worker.failed.connect(self.thread.quit)
 
-		self.worker.finished.connect(self.worker.deleteLater)
-		self.worker.failed.connect(self.worker.deleteLater)
-
+		self.thread.finished.connect(self.worker.deleteLater)
 		self.thread.finished.connect(self.thread.deleteLater)
 		self.thread.finished.connect(self.on_thread_finished)
 
@@ -130,6 +127,13 @@ class ExperimentControl(QWidget):
 		self.ds.setEnabled(True)
 		self.thread = None
 		self.worker = None
+
+	def shutdown(self):
+		"""Stop the active loader before Qt destroys this widget's QThread."""
+		self.timer.stop()
+		if self.thread is not None and self.thread.isRunning():
+			self.thread.quit()
+			self.thread.wait()
 
 	def update_current_position(self):
 		if not data_running:
@@ -247,6 +251,3 @@ class ExperimentControl(QWidget):
 
 	def file_quit(self):
 		self.close()
-
-	def closeEvent(self, ce):
-		self.file_quit()

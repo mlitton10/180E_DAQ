@@ -45,7 +45,7 @@ class MagnetWidget(QWidget):
         self.thread = None
         self.worker = None
 
-        self.pi_thread = QThread()
+        self.pi_thread = QThread(self)
         self.pi_worker = RaspberryPiController(host=magnet_ip, port=5000)
         self._initialize_pi_client()
 
@@ -65,7 +65,18 @@ class MagnetWidget(QWidget):
     def _initialize_pi_client(self):
         self.pi_worker.moveToThread(self.pi_thread)
         self.pi_thread.started.connect(self.pi_worker.connect)
+        self.pi_thread.finished.connect(self.pi_worker.deleteLater)
         self.pi_thread.start()
+
+    def shutdown(self):
+        """Stop both the calculation thread and the persistent Pi thread."""
+        if self.thread is not None and self.thread.isRunning():
+            self.thread.quit()
+            self.thread.wait()
+
+        if self.pi_thread.isRunning():
+            self.pi_thread.quit()
+            self.pi_thread.wait()
 
     def run_worker_async(self, worker: Worker, finished_call, failed_call):
         self.thread = QThread(self)

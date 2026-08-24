@@ -1,6 +1,7 @@
 import os.path
 
 from gui_tester.widgets.basic_templates.TextInputBox import UserSpinBoxRow, UserTextRow, make_form_table
+from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
@@ -10,7 +11,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 
-class AcquisitionControls(QGroupBox):
+class AcquisitionControls(BasicAppWidget):
 
 	def __init__(self):
 		super().__init__()
@@ -20,9 +21,7 @@ class AcquisitionControls(QGroupBox):
 		self.num_run = UserSpinBoxRow("Number of total runs:")
 		self.num_shots = UserSpinBoxRow("Shots per position:")
 
-		self.initialize_values()
-
-		self.build_layout()
+		self.initialize_widget()
 
 	def build_layout(self):
 		layout = QGridLayout(self)
@@ -47,3 +46,10 @@ class AcquisitionControls(QGroupBox):
 
 		self.num_run.set_value(1)
 		self.num_shots.set_value(1)
+
+	def connect_signals(self):
+		pass
+
+	def initialize_widget(self):
+		self.build_layout()
+		self.connect_signals()
