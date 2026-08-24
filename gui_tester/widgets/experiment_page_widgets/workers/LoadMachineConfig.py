@@ -16,7 +16,6 @@ class LoadMachineWorker(Worker):
         return self.load_csv(self.filepath)
 
     def load_csv(self, filepath: str):
-
         with open(filepath, "r", newline="") as f:
             reader = csv.DictReader(f)
             for row in reader:
