@@ -9,6 +9,7 @@ class DeviceSpecification(QWidget):
         super().__init__(parent)
         self.file_drop_down = DropdownRow("Select Device: ", file_paths, parent)
         self.build_layout()
+        self.connect_signals()
 
 
     def connect_signals(self):
