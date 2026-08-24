@@ -130,7 +130,7 @@ class FieldCalculationWorker(Worker):
         solutions = field_line_solver.solveFieldLines()
         solution_cathode = field_line_solver.solveFieldLines(stepsize=-0.01, initial_conditions=[
             (3.45 + cathode_z_displacement - 0.3, 0.075)])
-        return {'total_field':total_field,
+        return [{'total_field':total_field,
                 'solutions': solutions,
                 'solution_cathode': solution_cathode,
-                'coordinates': coords}
+                'coordinates': coords}]
