@@ -19,7 +19,8 @@ class MainWindow(QMainWindow):
 		self.setWindowTitle("DAQ and Controls")
 		geometry = MagnetGeometry(magnet_geometry_dir)
 
-		magnet_tab = MagnetWidget(geometry, magnet_ip=self.config.device_ip("magnet_control"))
+		self.magnet_tab = MagnetWidget(geometry, magnet_ip=self.config.device_ip("magnet_control"))
+		self.experiment_tab = ExperimentControl(machine_config_paths)
 		tabs = QTabWidget()
 		tabs.addTab(ExperimentControl(machine_config_paths), "ExperimentControl")
 		tabs.addTab(magnet_tab, "Magnets")
