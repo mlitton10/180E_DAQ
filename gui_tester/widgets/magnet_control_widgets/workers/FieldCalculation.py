@@ -118,6 +118,7 @@ class FieldLines:
 
 
 class FieldCalculationWorker(Worker):
+    finished = pyqtSignal(dict)
     def __init__(self, currents):
         super().__init__()
         self.currents = currents
