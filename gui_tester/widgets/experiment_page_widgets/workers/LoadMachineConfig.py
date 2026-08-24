@@ -23,4 +23,5 @@ class LoadMachineWorker(Worker):
                 length = float(row["length"])
                 radius = float(row["radius"])
 
-        return length, radius
+        f.close()
+        return filepath, length, radius
