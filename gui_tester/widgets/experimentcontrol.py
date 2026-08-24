@@ -116,7 +116,7 @@ class ExperimentControl(QWidget):
 
 		self.ds.setEnabled(False)
 
-		self.run_worker_async(LoadMachineWorker(filepath))
+		self.run_worker_async(LoadMachineWorker(filepath), self.on_load_finished, self.on_load_failed)
 
 	def on_load_finished(self, filepath: str, length: float, radius: float):
 		self.canvas.update_machine_radial_outline(radius)

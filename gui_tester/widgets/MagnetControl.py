@@ -95,7 +95,7 @@ class MagnetWidget(QWidget):
 
         self.current_control.setEnabled(False)
 
-        self.run_worker_async(FieldCalculationWorker(currents))
+        self.run_worker_async(FieldCalculationWorker(currents), self.on_load_finished, self.on_load_failed)
 
     def on_load_finished(self, results):
         self.fieldLine.update_field_lines(results)
