@@ -1,5 +1,3 @@
-import os
-
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget, QLineEdit, QFormLayout, QSpinBox, QDoubleSpinBox, QLabel, QComboBox, QHBoxLayout, \
     QVBoxLayout

@@ -1,7 +1,6 @@
 import csv
-import time
 
-from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import pyqtSignal
 from gui_tester.widgets.basic_templates.generic_worker import Worker
 
 

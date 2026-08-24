@@ -1,16 +1,9 @@
 from PyQt6.QtCore import QThread, QThreadPool
 from PyQt6.QtWidgets import (
-    QWidget, QGridLayout, QMessageBox,
+    QWidget
 )
 
 from gui_tester.widgets.basic_templates.generic_worker import Worker
-from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
-from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
-from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
-from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
-
-from gui_tester.widgets.magnet_control_widgets.workers.FieldCalculation import FieldCalculationWorker
-from gui_tester.widgets.magnet_control_widgets.workers.RaspberryPiController import RaspberryPiController
 
 
 class ApplicationTab(QWidget):

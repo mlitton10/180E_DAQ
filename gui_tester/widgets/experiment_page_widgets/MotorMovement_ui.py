@@ -1,15 +1,12 @@
 import os.path
 import sys
 
+from PyQt6.QtWidgets import QPushButton, QGridLayout, QMessageBox, QApplication, QLineEdit
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
-from PyQt6 import QtCore
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
 from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
 
 class MotorMovement(BasicAppWidget):

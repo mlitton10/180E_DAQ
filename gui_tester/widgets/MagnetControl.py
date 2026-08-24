@@ -1,10 +1,9 @@
 from PyQt6.QtCore import QThread, QThreadPool
 from PyQt6.QtWidgets import (
-    QWidget, QGridLayout, QMessageBox,
+    QGridLayout, QMessageBox,
 )
 from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
 
-from gui_tester.widgets.basic_templates.generic_worker import Worker
 from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
 from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
 from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine

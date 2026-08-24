@@ -1,9 +1,6 @@
-import os.path
-
 from PyQt6.QtCore import pyqtSignal, pyqtSlot
-from PyQt6.QtWidgets import QGroupBox, QPushButton, QGridLayout, QCheckBox, QFormLayout, QDoubleSpinBox
-from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table, UserTextColumn, \
-    UserDoubleSpinBoxRow
+from PyQt6.QtWidgets import QPushButton, QGridLayout, QCheckBox
+from gui_tester.widgets.basic_templates.TextInputBox import UserDoubleSpinBoxRow
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 

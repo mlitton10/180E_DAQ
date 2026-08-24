@@ -5,10 +5,9 @@ import datetime
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
-from PyQt6 import QtCore
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
+
+from PyQt6.QtWidgets import QGroupBox, QLabel, QGridLayout
+
 
 class SoftwareVersion(QGroupBox):
 	def __init__(self):

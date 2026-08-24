@@ -1,7 +1,9 @@
 import os.path
 
+from PyQt6.QtCore import QThreadPool
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox
 from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
-from gui_tester.widgets.basic_templates.generic_worker import Worker
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
 from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
@@ -15,9 +17,6 @@ dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
 from PyQt6 import QtCore
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
 
 data_running = False
 

@@ -1,5 +1,5 @@
 from PyQt6.QtCore import pyqtSignal
-from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QHBoxLayout, QGroupBox, QGridLayout
+from PyQt6.QtWidgets import QGridLayout
 from gui_tester.widgets.basic_templates.TextInputBox import DropdownRow
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
