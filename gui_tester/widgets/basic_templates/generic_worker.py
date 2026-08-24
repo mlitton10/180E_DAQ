@@ -1,8 +1,7 @@
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, QObject
-from abc import ABC, abstractmethod
 
 
-class Worker(QObject, ABC):
+class Worker(QObject):
     finished = pyqtSignal()
     failed = pyqtSignal(str)
     def __init__(self):
@@ -16,6 +15,5 @@ class Worker(QObject, ABC):
         except Exception as e:
             self.failed.emit(str(e))
 
-    @abstractmethod
     def do_work(self):
         raise NotImplementedError()
