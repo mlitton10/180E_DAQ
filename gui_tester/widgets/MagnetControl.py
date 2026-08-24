@@ -67,15 +67,15 @@ class MagnetWidget(QWidget):
         self.pi_thread.started.connect(self.pi_worker.connect)
         self.pi_thread.start()
 
-    def run_worker_async(self, worker: Worker):
+    def run_worker_async(self, worker: Worker, finished_call, failed_call):
         self.thread = QThread(self)
         self.worker = worker
 
         self.worker.moveToThread(self.thread)
 
         self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.on_load_finished)
-        self.worker.failed.connect(self.on_load_failed)
+        self.worker.finished.connect(finished_call)
+        self.worker.failed.connect(failed_call)
 
         self.worker.finished.connect(self.thread.quit)
         self.worker.failed.connect(self.thread.quit)
