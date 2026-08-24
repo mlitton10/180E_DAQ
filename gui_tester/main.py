@@ -22,8 +22,8 @@ class MainWindow(QMainWindow):
 		self.magnet_tab = MagnetWidget(geometry, magnet_ip=self.config.device_ip("magnet_control"))
 		self.experiment_tab = ExperimentControl(machine_config_paths)
 		tabs = QTabWidget()
-		tabs.addTab(ExperimentControl(machine_config_paths), "ExperimentControl")
-		tabs.addTab(magnet_tab, "Magnets")
+		tabs.addTab(self.experiment_tab, "ExperimentControl")
+		tabs.addTab(self.magnet_tab, "Magnets")
 
 		self.setCentralWidget(tabs)
 
