@@ -27,6 +27,11 @@ class MainWindow(QMainWindow):
 
 		self.setCentralWidget(tabs)
 
+	def closeEvent(self, event):
+		self.experiment_tab.shutdown()
+		self.magnet_tab.shutdown()
+		super().closeEvent(event)
+
 def main():
 	style_path = os.path.join(
 		"resources",
