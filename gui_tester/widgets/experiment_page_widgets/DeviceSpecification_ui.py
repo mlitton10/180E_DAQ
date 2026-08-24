@@ -15,7 +15,6 @@ class DeviceSpecification(QWidget):
     def connect_signals(self):
         self.file_drop_down.optionSelected.connect(self.fileSelected)
 
-
     def build_layout(self):
         main_layout = QGridLayout(self)
 
