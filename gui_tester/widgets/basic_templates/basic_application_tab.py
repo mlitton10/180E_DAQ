@@ -1,0 +1,67 @@
+from PyQt6.QtCore import QThread, QThreadPool
+from PyQt6.QtWidgets import (
+    QWidget, QGridLayout, QMessageBox,
+)
+
+from gui_tester.widgets.basic_templates.generic_worker import Worker
+from gui_tester.widgets.magnet_control_widgets.CurrentDisplay import CurrentDisplay
+from gui_tester.widgets.magnet_control_widgets.CurrentControlWidget import CurrentControlWidget
+from gui_tester.widgets.magnet_control_widgets.FieldLine import FieldLine
+from gui_tester.widgets.magnet_control_widgets.FieldStrength import FieldStrength
+
+from gui_tester.widgets.magnet_control_widgets.workers.FieldCalculation import FieldCalculationWorker
+from gui_tester.widgets.magnet_control_widgets.workers.RaspberryPiController import RaspberryPiController
+
+
+class ApplicationTab(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.build_layout()
+        self.connect_signals()
+
+        self.thread = None
+        self.worker = None
+
+        self.threadpool = QThreadPool()
+
+    def build_layout(self):
+        raise NotImplementedError("build_layout not implemented")
+
+    def connect_signals(self):
+        raise NotImplementedError("connect_signals not implemented")
+
+    def initialize_tab(self):
+        raise NotImplementedError("initialize_tab not implemented")
+
+    def shutdown(self):
+        """Stop both the calculation thread and the persistent Pi thread."""
+        if self.thread is not None and self.thread.isRunning():
+            self.thread.quit()
+            self.thread.wait()
+
+    def run_worker_async(self, worker: Worker, finished_call, failed_call, widget):
+        self.thread = QThread(self)
+        self.worker = worker
+
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(finished_call)
+        self.worker.failed.connect(failed_call)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.failed.connect(self.thread.quit)
+
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.failed.connect(self.worker.deleteLater)
+
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(self.on_thread_finished(widget))
+
+        self.thread.start()
+
+    def on_thread_finished(self, widget):
+        widget.setEnabled(True)
+        self.thread = None
+        self.worker = None

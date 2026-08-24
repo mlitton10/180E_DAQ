@@ -1,5 +1,6 @@
 import os.path
 
+from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
 from gui_tester.widgets.basic_templates.generic_worker import Worker
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
@@ -20,7 +21,7 @@ from PyQt6.QtCore import *
 
 data_running = False
 
-class ExperimentControl(QWidget):
+class ExperimentControl(ApplicationTab):
 
 	def __init__(self, machine_config_paths):
 		super(ExperimentControl, self).__init__()
@@ -39,15 +40,11 @@ class ExperimentControl(QWidget):
 		self.mm.set_input_usage(3)
 		self.mm.set_steps_per_rev(20000, 20000)
 
-		self.build_signals()
-
 		self.ScopeScreen = QLabel(self)
 		self.update_screen_dump()
 
-		self.build_layout()
+		self.initialize_tab()
 
-		self.thread = None
-		self.worker = None
 		self.load_file_async(self.ds.current_file())
 
 		self.threadpool = QThreadPool()
@@ -64,7 +61,7 @@ class ExperimentControl(QWidget):
 		port_ip = int(7776)
 		return x_ip, y_ip, scope_ip, port_ip
 
-	def build_signals(self):
+	def connect_signals(self):
 
 		self.pc.confirm.connect(self.update_geometry)
 
@@ -87,24 +84,9 @@ class ExperimentControl(QWidget):
 		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
 		self.resize(1600, 700)
 
-	def run_worker_async(self, worker: Worker, finished_call, failed_call):
-		self.thread = QThread(self)
-		self.worker = worker
-
-		self.worker.moveToThread(self.thread)
-
-		self.thread.started.connect(self.worker.run)
-		self.worker.finished.connect(finished_call)
-		self.worker.failed.connect(failed_call)
-
-		self.worker.finished.connect(self.thread.quit)
-		self.worker.failed.connect(self.thread.quit)
-
-		self.thread.finished.connect(self.worker.deleteLater)
-		self.thread.finished.connect(self.thread.deleteLater)
-		self.thread.finished.connect(self.on_thread_finished)
-
-		self.thread.start()
+	def initialize_tab(self):
+		self.build_layout()
+		self.connect_signals()
 
 	def load_file_async(self, filepath: str):
 		# If a load is already running, ignore new requests for simplicity.
@@ -113,7 +95,7 @@ class ExperimentControl(QWidget):
 
 		self.ds.setEnabled(False)
 
-		self.run_worker_async(LoadMachineWorker(filepath), self.on_load_finished, self.on_load_failed)
+		self.run_worker_async(LoadMachineWorker(filepath), self.on_load_finished, self.on_load_failed, self.ds)
 
 	def on_load_finished(self, filepath: str, length: float, radius: float):
 		self.canvas.update_machine_radial_outline(radius)
@@ -122,18 +104,6 @@ class ExperimentControl(QWidget):
 	def on_load_failed(self, message: str):
 #		self.status_label.setText("Load failed")
 		QMessageBox.critical(self, "Load Error", message)
-
-	def on_thread_finished(self):
-		self.ds.setEnabled(True)
-		self.thread = None
-		self.worker = None
-
-	def shutdown(self):
-		"""Stop the active loader before Qt destroys this widget's QThread."""
-		self.timer.stop()
-		if self.thread is not None and self.thread.isRunning():
-			self.thread.quit()
-			self.thread.wait()
 
 	def update_current_position(self):
 		if not data_running:
