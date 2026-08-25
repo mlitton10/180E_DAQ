@@ -51,14 +51,6 @@ class PositionControls(BasicAppWidget):
 		layout.addWidget(self.ConfirmButton, 5, 0, 1, 1)
 		self.setLayout(layout)
 
-	def initialize_boxes(self):
-		self.xMax.update_text("0")
-		self.xMin.update_text("0")
-		self.yMax.update_text("0")
-		self.yMin.update_text("0")
-		self.nx.update_text("1")
-		self.ny.update_text("1")
-
 	def initialize_widget(self):
 		self.build_layout()
 		self.connect_signals()
