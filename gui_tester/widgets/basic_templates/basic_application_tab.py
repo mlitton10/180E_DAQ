@@ -10,9 +10,6 @@ class ApplicationTab(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.build_layout()
-        self.connect_signals()
-
         self.thread = None
         self.worker = None
 
