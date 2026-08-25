@@ -2,7 +2,7 @@ import os.path
 
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QPushButton, QGridLayout
-from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
+from gui_tester.widgets.basic_templates.TextInputBox import make_form_table, UserDoubleSpinBoxRow, UserSpinBoxRow
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -15,12 +15,12 @@ class PositionControls(BasicAppWidget):
 		super().__init__()
 		self.setTitle("Set up DAQ position")
 
-		self.xMax = UserTextRow("Max x:")
-		self.xMin = UserTextRow("Min x:")
-		self.yMax = UserTextRow("Max y:")
-		self.yMin = UserTextRow("Min y:")
-		self.nx = UserTextRow("Nx:")
-		self.ny = UserTextRow("Ny:")
+		self.xMax = UserDoubleSpinBoxRow("Max x:")
+		self.xMin = UserDoubleSpinBoxRow("Min x:")
+		self.yMax = UserDoubleSpinBoxRow("Max y:")
+		self.yMin = UserDoubleSpinBoxRow("Min y:")
+		self.nx = UserSpinBoxRow("Nx:")
+		self.ny = UserSpinBoxRow("Ny:")
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
