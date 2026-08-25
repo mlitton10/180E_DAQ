@@ -7,7 +7,8 @@ from gui_tester.widgets.basic_templates.basic_application_widget import BasicApp
 dir_path=os.path.dirname(os.path.realpath(__file__))
 version_number="03/01/2018 12:37pm"			# update this when a change has been made
 
-from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table
+from gui_tester.widgets.basic_templates.TextInputBox import UserTextRow, make_form_table, UserDoubleSpinBoxRow
+
 
 class MotorMovement(BasicAppWidget):
 
