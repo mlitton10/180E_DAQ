@@ -22,8 +22,10 @@ data_running = False
 
 class ExperimentControl(ApplicationTab):
 
-	def __init__(self, machine_config_paths):
+	def __init__(self, machine_config_paths, device_ips):
 		super(ExperimentControl, self).__init__()
+
+		self.device_ips = device_ips
 
 		self.update = None
 		self.pc = PositionControls()
@@ -54,9 +56,9 @@ class ExperimentControl(ApplicationTab):
 		self.timer.start(500)
 
 	def set_ip_address(self):
-		x_ip = "192.168.0.70"
-		y_ip = "192.168.0.80"
-		scope_ip = "192.168.0.60"
+		x_ip = self.device_ips.device_ip("x_motor")
+		y_ip = self.device_ips.device_ip("y_motor")
+		scope_ip = self.device_ips.device_ip("scope_1")
 		port_ip = int(7776)
 		return x_ip, y_ip, scope_ip, port_ip
 
