@@ -61,7 +61,6 @@ class PositionControls(BasicAppWidget):
 
 	def initialize_widget(self):
 		self.build_layout()
-		self.initialize_boxes()
 		self.connect_signals()
 
 	def collect_parameters(self):
