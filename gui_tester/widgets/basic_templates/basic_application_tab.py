@@ -50,7 +50,7 @@ class ApplicationTab(QWidget):
         self.worker.failed.connect(self.worker.deleteLater)
 
         self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.finished.connect(self.on_thread_finished(widget))
+        self.thread.finished.connect(lambda: self.on_thread_finished(widget))
 
         self.thread.start()
 
