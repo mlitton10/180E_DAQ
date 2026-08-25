@@ -56,7 +56,7 @@ class PositionControls(BasicAppWidget):
 		self.connect_signals()
 
 	def collect_parameters(self):
-		parameters = {'xmax': float(self.xMax.read_text()), 'xmin': float(self.xMin.read_text()),
-					  'ymax': float(self.yMax.read_text()), 'ymin': float(self.yMin.read_text()),
-					  'nx': int(self.nx.read_text()), 'ny': int(self.ny.read_text())}
+		parameters = {'xmax': float(self.xMax.read_value()), 'xmin': float(self.xMin.read_value()),
+					  'ymax': float(self.yMax.read_value()), 'ymin': float(self.yMin.read_value()),
+					  'nx': int(self.nx.read_value()), 'ny': int(self.ny.read_value())}
 		return parameters

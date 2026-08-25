@@ -26,7 +26,7 @@ class UserTextColumn(QWidget):
     def update_text(self, update_string):
         self.text_box.setText(update_string)
 
-    def read_text(self):
+    def read_value(self):
         return str(self.text_box.text())
 
 class UserTextRow(QWidget):
@@ -42,7 +42,7 @@ class UserTextRow(QWidget):
     def update_text(self, update_string):
         self.text_box.setText(update_string)
 
-    def read_text(self):
+    def read_value(self):
         return str(self.text_box.text())
 
 class UserSpinBoxRow(QWidget):
