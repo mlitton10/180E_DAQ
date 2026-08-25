@@ -46,6 +46,6 @@ class CurrentDisplay(BasicAppWidget):
         self.initialize_boxes()
 
     def collect_parameters(self):
-        parameters = {'I_1': float(self.psuCurrentOne.read_text()), 'I_2': float(self.psuCurrentTwo.read_text()),
-                      'I_3': float(self.psuCurrentThree.read_text())}
+        parameters = {'I_1': float(self.psuCurrentOne.read_value()), 'I_2': float(self.psuCurrentTwo.read_value()),
+                      'I_3': float(self.psuCurrentThree.read_value())}
         return parameters

@@ -36,8 +36,8 @@ class ScopeChannel(BasicAppWidget):
 		self.connect_signals()
 
 	def get_channel_description(self):
-		channel_description = {"C1": self.c1.read_text(),
-							   "C2": self.c2.read_text(),
-							   "C3": self.c3.read_text(),
-							   "C4": self.c4.read_text()}
+		channel_description = {"C1": self.c1.read_value(),
+							   "C2": self.c2.read_value(),
+							   "C3": self.c3.read_value(),
+							   "C4": self.c4.read_value()}
 		return channel_description
