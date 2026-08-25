@@ -34,18 +34,12 @@ class MotorMovement(BasicAppWidget):
 		self.SetZero = QPushButton("Set Zero")
 		self.SetVelocity = QPushButton("Set Velocity")
 
-		self.MoveButton.clicked.connect(self.move_to_position)
-		self.StopNowButton.clicked.connect(self.stop_now)
-		self.SetZero.clicked.connect(self.zero)
-		self.SetVelocity.clicked.connect(self.set_velocity)
-
 		# Position display
 		self.current_position_display = UserTextRow("Current probe position (cm, cm):", read_only=False)
 
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit()
 		self.velocityInput.setReadOnly(True)
-		self.velocityButton.clicked.connect(self.display_current_speed)  # example of a signal?
 
 		self.initialize_widget()
 
@@ -82,6 +76,11 @@ class MotorMovement(BasicAppWidget):
 		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
 
 	def connect_signals(self):
+		self.MoveButton.clicked.connect(self.move_to_position)
+		self.StopNowButton.clicked.connect(self.stop_now)
+		self.SetZero.clicked.connect(self.zero)
+		self.SetVelocity.clicked.connect(self.set_velocity)
+		self.velocityButton.clicked.connect(self.display_current_speed)
 		pass
 
 	def initialize_widget(self):
