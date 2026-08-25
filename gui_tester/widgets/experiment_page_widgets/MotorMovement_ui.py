@@ -22,12 +22,12 @@ class MotorMovement(BasicAppWidget):
 		self.MOTOR_PORT = motor_port
 
 		# Position inputs
-		self.x_position_box = UserTextRow("Move x motor to:")
-		self.y_position_box = UserTextRow("Move y motor to:")
+		self.x_position_box = UserDoubleSpinBoxRow("Move x motor to:")
+		self.y_position_box = UserDoubleSpinBoxRow("Move y motor to:")
 
 		# Velocity inputs
-		self.x_velocity_box = UserTextRow("Set x velocity to:")
-		self.y_velocity_box = UserTextRow("Set y velocity to:")
+		self.x_velocity_box = UserDoubleSpinBoxRow("Set x velocity to:")
+		self.y_velocity_box = UserDoubleSpinBoxRow("Set y velocity to:")
 
 		self.MoveButton = QPushButton("Move Motor")
 		self.StopNowButton = QPushButton("Stop Motor")
