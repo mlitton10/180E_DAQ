@@ -45,6 +45,30 @@ def compute_point_grid(parameters):
 
 	return X, Y
 
+def compute_point_grid_polar(parameters):
+
+	r_max = parameters['r_max']
+	r_min = parameters['r_min']
+	theta_max = parameters['theta_max']
+	theta_min = parameters['theta_min']
+	n_r = parameters['n_r']
+	n_theta = parameters['n_theta']
+
+	r_pos = numpy.linspace(r_min, r_max, n_r)
+	theta_pos = numpy.linspace(theta_min, theta_max, n_theta) * np.pi / 180
+
+	X = numpy.zeros(n_r * n_theta)
+	Y = numpy.zeros(n_r * n_theta)
+
+	index = 0
+	for r in r_pos:
+		for theta in theta_pos:
+			X[index] = r * np.cos(theta)
+			Y[index] = r * np.sin(theta)
+			index += 1
+
+	return X, Y
+
 
 class MyMplCanvas(FigureCanvas):
 	"""Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
