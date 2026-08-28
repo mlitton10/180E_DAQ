@@ -8,7 +8,8 @@ from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import De
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
 from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
 from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import AcquisitionControls
-from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid
+from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid, \
+	compute_point_grid_polar
 from gui_tester.widgets.experiment_page_widgets.ScopeControls_ui import ScopeChannel
 from gui_tester.widgets.experiment_page_widgets.SoftwareVersion_ui import SoftwareVersion
 from gui_tester.widgets.experiment_page_widgets.PositionControls_ui import PositionControls
