@@ -62,9 +62,16 @@ class PositionControls(BasicAppWidget):
 		self.connect_signals()
 
 	def collect_parameters(self):
-		parameters = {'xmax': float(self.xMax.read_value()), 'xmin': float(self.xMin.read_value()),
-					  'ymax': float(self.yMax.read_value()), 'ymin': float(self.yMin.read_value()),
-					  'nx': int(self.nx.read_value()), 'ny': int(self.ny.read_value())}
+		coordinate_system = self.current_coordinate_system()
+		parameters = {}
+		if coordinate_system == "Cartesian":
+			parameters = {'xmax': float(self.xMax.read_value()), 'xmin': float(self.xMin.read_value()),
+						  'ymax': float(self.yMax.read_value()), 'ymin': float(self.yMin.read_value()),
+						  'nx': int(self.nx.read_value()), 'ny': int(self.ny.read_value())}
+		elif coordinate_system == "Polar":
+			parameters = {'r_max': float(self.xMax.read_value()), 'r_min': float(self.xMin.read_value()),
+						  'theta_max': float(self.yMax.read_value()), 'theta_min': float(self.yMin.read_value()),
+						  'n_r': int(self.nx.read_value()), 'n_theta': int(self.ny.read_value())}
 		return parameters
 
 	def current_coordinate_system(self) -> str:

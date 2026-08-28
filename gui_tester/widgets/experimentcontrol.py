@@ -142,8 +142,13 @@ class ExperimentControl(ApplicationTab):
 
 	def update_geometry(self):
 		param = self.update_parameters()
-		X, Y = compute_point_grid(param)
-		self.canvas.update_figure(X, Y)
+		coordinate_system = self.pc.current_coordinate_system()
+		if coordinate_system == "Cartesian":
+			X, Y = compute_point_grid(param)
+			self.canvas.update_figure(X, Y)
+		elif coordinate_system == "Polar":
+			X, Y = compute_point_grid_polar(param)
+			self.canvas.update_figure(X, Y)
 
 
 	def update_channel_information(self):
