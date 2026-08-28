@@ -27,7 +27,6 @@ class ExperimentControl(ApplicationTab):
 
 		self.device_ips = device_ips
 
-		self.update = None
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
@@ -139,16 +138,13 @@ class ExperimentControl(ApplicationTab):
 
 	def update_parameters(self):
 		parameters = self.pc.collect_parameters()
-		self.update = True
 		return parameters
 
 	def update_geometry(self):
 		param = self.update_parameters()
 		X, Y = compute_point_grid(param)
-		if self.update:
-			self.canvas.update_figure(X, Y)
-		else:
-			pass
+		self.canvas.update_figure(X, Y)
+
 
 	def update_channel_information(self):
 		channel_description = self.sc.get_channel_description()
