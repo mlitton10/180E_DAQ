@@ -92,8 +92,8 @@ class MotorMovement(BasicAppWidget):
 	def move_to_position(self):
 		# Directly move the motor to their absolute position
 		try:
-			x_pos = float(self.x_position_box.read_text())
-			y_pos = float(self.y_position_box.read_text())
+			x_pos = float(self.x_position_box.read_value())
+			y_pos = float(self.y_position_box.read_value())
 
 			print(x_pos, y_pos)
 			
@@ -123,8 +123,8 @@ class MotorMovement(BasicAppWidget):
 
 
 	def set_velocity(self):
-		xv = self.x_velocity_box.read_text()
-		yv = self.y_velocity_box.read_text()
+		xv = self.x_velocity_box.read_value()
+		yv = self.y_velocity_box.read_value()
 		print("set velocity: ", xv, ", ", yv)
 
 
