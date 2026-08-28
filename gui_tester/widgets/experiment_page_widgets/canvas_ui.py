@@ -1,6 +1,6 @@
-import numpy
 import os.path
 
+import numpy as np
 from PyQt6.QtWidgets import QSizePolicy
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -30,11 +30,11 @@ def compute_point_grid(parameters):
 	nx = parameters['nx']
 	ny = parameters['ny']
 
-	x_pos = numpy.linspace(x_min, x_max, nx)
-	y_pos = numpy.linspace(y_min, y_max, ny)
+	x_pos = np.linspace(x_min, x_max, nx)
+	y_pos = np.linspace(y_min, y_max, ny)
 
-	X = numpy.zeros(nx * ny)
-	Y = numpy.zeros(nx * ny)
+	X = np.zeros(nx * ny)
+	Y = np.zeros(nx * ny)
 
 	index = 0
 	for xx in x_pos:
@@ -54,11 +54,11 @@ def compute_point_grid_polar(parameters):
 	n_r = parameters['n_r']
 	n_theta = parameters['n_theta']
 
-	r_pos = numpy.linspace(r_min, r_max, n_r)
-	theta_pos = numpy.linspace(theta_min, theta_max, n_theta) * np.pi / 180
+	r_pos = np.linspace(r_min, r_max, n_r)
+	theta_pos = np.linspace(theta_min, theta_max, n_theta) * np.pi / 180
 
-	X = numpy.zeros(n_r * n_theta)
-	Y = numpy.zeros(n_r * n_theta)
+	X = np.zeros(n_r * n_theta)
+	Y = np.zeros(n_r * n_theta)
 
 	index = 0
 	for r in r_pos:
