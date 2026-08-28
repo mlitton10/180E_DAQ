@@ -84,6 +84,12 @@ class PositionControls(BasicAppWidget):
 			self.xMin.spin_box.setSuffix(" cm")
 			self.yMax.spin_box.setSuffix(" cm")
 			self.yMin.spin_box.setSuffix(" cm")
+
+			self.xMax.set_range(-100.0, 100.0)
+			self.xMin.set_range(-100.0, 100.0)
+			self.yMax.set_range(-100.0, 100.0)
+			self.yMin.set_range(-100.0, 100.0)
+
 		elif coordinate_system == "Polar":
 			self.xMax.label.setText("Max r:")
 			self.xMin.label.setText("Min r:")
@@ -96,4 +102,10 @@ class PositionControls(BasicAppWidget):
 			self.xMin.spin_box.setSuffix(" cm")
 			self.yMax.spin_box.setSuffix(" deg.")
 			self.yMin.spin_box.setSuffix(" deg.")
+
+			self.xMax.set_range(0.0, 100.0)
+			self.xMin.set_range(0.0, 100.0)
+			self.yMax.set_range(0,360.0)
+			self.yMin.set_range(0, 360.0)
+
 		self.coordinateSystemSelected.emit(coordinate_system)
