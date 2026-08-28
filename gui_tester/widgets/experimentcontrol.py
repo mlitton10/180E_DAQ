@@ -141,9 +141,13 @@ class ExperimentControl(ApplicationTab):
 		parameters = self.pc.collect_parameters()
 		return parameters
 
+	def retrieve_coordinate_system(self) -> str:
+		coordinate_system = self.pc.current_coordinate_system()
+		return coordinate_system
+
 	def update_geometry(self):
 		param = self.update_parameters()
-		coordinate_system = self.pc.current_coordinate_system()
+		coordinate_system = self.retrieve_coordinate_system()
 		if coordinate_system == "Cartesian":
 			X, Y = compute_point_grid(param)
 			self.canvas.update_figure(X, Y)
