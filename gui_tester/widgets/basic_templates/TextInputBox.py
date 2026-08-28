@@ -35,9 +35,10 @@ class UserTextRow(QWidget):
 
         layout = QFormLayout(self)
 
+        self.label = QLabel(label_string)
         self.text_box = QLineEdit()
         self.text_box.setReadOnly(read_only)
-        layout.addRow(label_string, self.text_box)
+        layout.addRow(self.label, self.text_box)
 
     def update_text(self, update_string):
         self.text_box.setText(update_string)
@@ -50,10 +51,10 @@ class UserSpinBoxRow(QWidget):
         super().__init__()
 
         layout = QFormLayout(self)
-
+        self.label = QLabel(label_string)
         self.spin_box = QSpinBox()
         self.set_range()
-        layout.addRow(label_string, self.spin_box)
+        layout.addRow(self.label, self.spin_box)
 
     def set_range(self, min_range=1, max_range=100):
         self.spin_box.setRange(min_range, max_range)
@@ -70,9 +71,10 @@ class UserDoubleSpinBoxRow(QWidget):
 
         layout = QFormLayout(self)
 
+        self.label = QLabel(label_string)
         self.spin_box = QDoubleSpinBox()
         self.initialize_spin_box_parameters()
-        layout.addRow(label_string, self.spin_box)
+        layout.addRow(self.label, self.spin_box)
 
     def initialize_spin_box_parameters(self):
         self.set_range()
