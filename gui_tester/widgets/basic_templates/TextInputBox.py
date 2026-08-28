@@ -66,9 +66,10 @@ class UserSpinBoxRow(QWidget):
         return self.spin_box.value()
 
 class UserDoubleSpinBoxRow(QWidget):
-    def __init__(self, label_string):
+    def __init__(self, label_string, suffix=None):
         super().__init__()
 
+        self.suffix = suffix
         layout = QFormLayout(self)
 
         self.label = QLabel(label_string)
@@ -81,6 +82,8 @@ class UserDoubleSpinBoxRow(QWidget):
         self.set_value(0)
         self.set_step_size()
         self.set_decimals()
+        if self.suffix is not None:
+            self.spin_box.setSuffix(self.suffix)
 
     def set_range(self, min_range=-100, max_range=100):
         self.spin_box.setRange(min_range, max_range)
