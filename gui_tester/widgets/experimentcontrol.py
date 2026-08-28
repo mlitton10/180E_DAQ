@@ -134,10 +134,10 @@ class ExperimentControl(ApplicationTab):
 		else:
 			print("Why is this called when data_running == False ?")
 
-	def display_current_speed(self):
+	def display_current_speed(self) -> None:
 		self.mm.display_current_speed()
 
-	def update_parameters(self):
+	def update_parameters(self) -> dict[str, float | int]:
 		parameters = self.pc.collect_parameters()
 		return parameters
 
