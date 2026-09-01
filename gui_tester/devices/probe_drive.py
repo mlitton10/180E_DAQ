@@ -31,7 +31,13 @@ class ProbeDriveXY:
         self.d_outside = 75.0 #cm distance from the ball valve to the motor's motion channel
         self.d_inside = 35.5 #cm distance from the ball valve to the center of the chamber (0,0) point
 
+    def connect(self):
+        self.x_mc.connect()
+        self.y_mc.connect()
 
+    def disconnect(self):
+        self.x_mc.disconnect()
+        self.y_mc.disconnect()
 
     def set_steps_per_rev(self, xsteps, ysteps):
         # Set up the steps per revolution
