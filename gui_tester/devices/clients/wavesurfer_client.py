@@ -13,8 +13,8 @@ class WaveSurferClient(DeviceClient):
 
         self.connected = False
         self.rm = visa.ResourceManager()
-
-        self.connection = self.connect()   # use resource manager to open 'VICP::'+ipv4_addr+'::INSTR'; assign self.scope to this "instrument"
+        self.connection = None
+        self.connect()   # use resource manager to open 'VICP::'+ipv4_addr+'::INSTR'; assign self.scope to this "instrument"
 
     def connect(self):
         """ open the NI-VISA resource manager
@@ -28,12 +28,11 @@ class WaveSurferClient(DeviceClient):
 
         # attempt to open a connection to the scope
         try:
-            scope = self.rm.open_resource('VICP::' + self.ip + '::INSTR', resource_pyclass=MessageBasedResource)
+            self.connection = self.rm.open_resource('VICP::' + self.ip + '::INSTR', resource_pyclass=MessageBasedResource)
             try:
                 self.idn_string = scope.query('*IDN?')
                 if self.verbose: print('<:>', self.idn_string)  # returns scope type, name, version info
                 self.connected = True
-                return scope
             except Exception:
                 self.rm.close()
                 self.rm = None
@@ -55,3 +54,11 @@ class WaveSurferClient(DeviceClient):
 
     def is_connected(self):
         return self.connected
+
+    def rm_list_resources(self):
+        """ this is a very slow process --AND-- LeCroy scopes using VISA Passport do not show up in this list, anyway """
+        if self.verbose: print('<:> searching for VISA resources')
+        t0 = time.time()
+        self.rm.list_resources()
+        t1 = time.time()
+        if self.verbose and (t1-t0 > 1): print('    .............................%6.3g sec' % (t1-t0))
