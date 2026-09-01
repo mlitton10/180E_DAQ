@@ -111,11 +111,11 @@ class Motor:
         # 	# T = Wait Time (WT command executing)
         # 	# W = Wait Input (WI command executing)
         # 	""")
-        return self.send_text('RS')
+        return self.client.send_command('RS')
 
     def reset_motor(self):
 
-        self.send_text('RE',timeout=5)
+        self.client.send_command('RE',timeout=5)
         print("reset motor\n")
 
     def inhibit(self, inh=True):
@@ -130,7 +130,7 @@ class Motor:
             print('motor enabled\n', sep='', end='', flush=True)
 
         try:
-            self.send_text(cmd)  # INHIBIT or ENABLE
+            self.client.send_command(cmd)  # INHIBIT or ENABLE
 
         except ConnectionResetError as err:
             print('*** connection to server failed: "'+err.strerror+'"')
@@ -159,6 +159,6 @@ class Motor:
         return self.inhibit(not en)
 
     def set_input_usage(self, usage):
-        self.send_text('SI'+str(usage))
+        self.client.send_command('SI'+str(usage))
         print('set x3 input usage to SI' + str(usage) + '\n')
 
