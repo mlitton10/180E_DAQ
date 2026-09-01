@@ -152,12 +152,6 @@ class Motor:
         """
         return self.inhibit(not en)
 
-    def enable(self, en=True):
-        """ en = True:  Lowers the inhibit line on the PWM controller to disable the output
-                 False: Raises the inhibit line
-        """
-        return self.inhibit(not en)
-
     def set_input_usage(self, usage):
         self.client.send_command('SI'+str(usage))
         print('set x3 input usage to SI' + str(usage) + '\n')
