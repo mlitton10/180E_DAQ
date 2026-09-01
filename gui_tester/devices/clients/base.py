@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Device(ABC):
+class DeviceClient(ABC):
 
     @abstractmethod
     def connect(self):
