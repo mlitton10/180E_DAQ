@@ -107,11 +107,8 @@ EXPANDED_TRACE_NAMES = {'F1': 'Math1'   , 'F2': 'Math2'   , 'F3': 'Math3'   , 'F
                       'C1': 'Channel1', 'C2': 'Channel2', 'C3': 'Channel3', 'C4': 'Channel4' }
 KNOWN_TRACE_NAMES = sorted(list(EXPANDED_TRACE_NAMES.keys()))
 
-class LecroyScope:
+class WaveSurfer:
     """ implements communication with a LeCroy X-Stream scope """
-    scope     = None        # the common scope instance
-    rm        = None        # the common resource manager instance
-    rm_status = False
     valid_trace_names = ()  # list of trace names recognized by the scope (filled in on first call)
     gaaak_count = 0         # peculiar error described below (see wait_for_sweeps())
     idn_string = ''         # scope *idn response
@@ -128,19 +125,10 @@ class LecroyScope:
         self.client = WaveSurferClient(ipv4_addr, verbose=verbose)
         self.hdr = None
         self.verbose = verbose
+        self.timeout = timeout
 
-        self.scope = self.client.connection
-        self.scope.timeout    = timeout
-        self.scope.chunk_size = 1000000
-        self.scope.write('COMM_HEADER OFF')
+        self.scope = None
 
-        if len(self.valid_trace_names) == 0:
-            for tr in KNOWN_TRACE_NAMES:
-                self.scope.write(tr+':TRACE?')     # this makes a characteristic set of beeps on the scope, as it fails for several of the entries in the list
-                self.scope.write('CMR?')           # read (and clear) the Command Status Register to check for errors
-                error_code = int(self.scope.read())
-                if error_code == 0:
-                    self.valid_trace_names += (tr,)  # no error, assume ok
 
     def __repr__(self):
         """ return a printable version: not a useful function """
@@ -182,13 +170,27 @@ class LecroyScope:
 
     #-------------------------------------------------------------------------
 
-    def rm_list_resources(self):
-        """ this is a very slow process --AND-- LeCroy scopes using VISA Passport do not show up in this list, anyway """
-        if self.verbose: print('<:> searching for VISA resources')
-        t0 = time.time()
-        self.rm.list_resources()
-        t1 = time.time()
-        if self.verbose and (t1-t0 > 1): print('    .............................%6.3g sec' % (t1-t0))
+    def connect(self):
+        self.client.connect()
+        self.scope = self.client.connection
+        self.scope.timeout = self.timeout
+        self.scope.chunk_size = 1000000
+        self.scope.write('COMM_HEADER OFF')
+
+        if len(self.valid_trace_names) == 0:
+            for tr in KNOWN_TRACE_NAMES:
+                self.scope.write(
+                    tr + ':TRACE?')  # this makes a characteristic set of beeps on the scope, as it fails for several of the entries in the list
+                self.scope.write('CMR?')  # read (and clear) the Command Status Register to check for errors
+                error_code = int(self.scope.read())
+                if error_code == 0:
+                    self.valid_trace_names += (tr,)  # no error, assume ok
+
+    def disconnect(self):
+        self.client.disconnect()
+
+    def _list_resources(self):
+        self.client.rm_list_resources()
 
     def screen_dump(self, white_background = False, png_fn = 'scope_screen_dump.png', full_screen = True):
         """ obtain a screen dump from the scope, in the form of a .png file
