@@ -95,3 +95,70 @@ class Motor:
         except KeyboardInterrupt:
             print('\n______Halted due to Ctrl-C______')
             return False
+
+    def check_status(self):
+        # print("""
+        # 	# A = An Alarm code is present (use AL command to see code, AR command to clear code)
+        # 	# D = Disabled (the drive is disabled)
+        # 	# E = Drive Fault (drive must be reset by AR command to clear this fault)
+        # 	# F = Motor moving
+        # 	# H = Homing (SH in progress)
+        # 	# J = Jogging (CJ in progress)
+        # 	# M = Motion in progress (Feed & Jog Commands)
+        # 	# P = In position
+        # 	# R = Ready (Drive is enabled and ready)
+        # 	# S = Stopping a motion (ST or SK command executing)
+        # 	# T = Wait Time (WT command executing)
+        # 	# W = Wait Input (WI command executing)
+        # 	""")
+        return self.send_text('RS')
+
+    def reset_motor(self):
+
+        self.send_text('RE',timeout=5)
+        print("reset motor\n")
+
+    def inhibit(self, inh=True):
+        """ inh = True:  Raises the disable line on the PWM controller to disable the output
+                  False: Lowers the inhibit line
+        """
+        if inh:
+            cmd = 'MD'
+            print('motor disabled\n', sep='', end='', flush=True)
+        else:
+            cmd = 'ME'
+            print('motor enabled\n', sep='', end='', flush=True)
+
+        try:
+            self.send_text(cmd)  # INHIBIT or ENABLE
+
+        except ConnectionResetError as err:
+            print('*** connection to server failed: "'+err.strerror+'"')
+            return False
+        except ConnectionRefusedError as err:
+            print('*** could not connect to server: "'+err.strerror+'"')
+            return False
+        except KeyboardInterrupt:
+            print('\n______Halted due to Ctrl-C______')
+            return False
+
+        # todo: see http://code.activestate.com/recipes/408859/  recv_end() code
+        #       We need to include a terminating character for reliability, e.g.: text += '\n'
+        return True
+
+    def enable(self, en=True):
+        """ en = True:  Lowers the inhibit line on the PWM controller to disable the output
+                 False: Raises the inhibit line
+        """
+        return self.inhibit(not en)
+
+    def enable(self, en=True):
+        """ en = True:  Lowers the inhibit line on the PWM controller to disable the output
+                 False: Raises the inhibit line
+        """
+        return self.inhibit(not en)
+
+    def set_input_usage(self, usage):
+        self.send_text('SI'+str(usage))
+        print('set x3 input usage to SI' + str(usage) + '\n')
+
