@@ -3,8 +3,10 @@ import time
 import numpy as np
 import pyvisa as visa
 from gui_tester.devices.clients.base import DeviceClient
+from pyvisa.resources import MessageBasedResource
 
-class WaveSurfer(DeviceClient):
+
+class WaveSurferClient(DeviceClient):
     def __init__(self, ip: str, verbose=True):
         self.ip = ip
         self.verbose = verbose
@@ -46,6 +48,7 @@ class WaveSurfer(DeviceClient):
 
     def disconnect(self):
         if self.rm is not None:
+            self.connection.close()
             self.rm.close()
             self.rm = None
             self.connected = False
