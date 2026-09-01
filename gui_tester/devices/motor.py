@@ -115,7 +115,7 @@ class Motor:
 
     def reset_motor(self):
 
-        self.client.send_command('RE',timeout=5)
+        self.client.send_command('RE')
         print("reset motor\n")
 
     def inhibit(self, inh=True):
