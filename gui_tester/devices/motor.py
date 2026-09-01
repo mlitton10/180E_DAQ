@@ -78,8 +78,8 @@ class Motor:
     def set_acceleration(self, acceleration):
         self.client.send_command('AC' + str(acceleration))
 
-    def set_decceleration(self, decceleration):
-        self.client.send_command('DE' + str(decceleration))
+    def set_deceleration(self, deceleration):
+        self.client.send_command('DE' + str(deceleration))
 
     def set_speed(self, speed):
         try:
