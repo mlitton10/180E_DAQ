@@ -16,20 +16,19 @@ class MotorClient(DeviceClient):
     def __init__(self, ip: str, verbose = True):
         self.ip = ip
         self.connected = False
-        self.connection = self.connect()
+        self.connection = None
 
     def connect(self):
         retries = 30
         retry_count = 0
         while retry_count < retries:  # Retries added 17-07-11
             try:
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 ##if timeout is not None:
                 ##	#not on windows: socket.settimeout(timeout)
                 ##	s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, struct.pack('LL', timeout, 0))
-                s.connect((self.ip, self.MOTOR_SERVER_PORT))
+                self.connection.connect((self.ip, self.MOTOR_SERVER_PORT))
                 self.connected = True
-                return s
             except ConnectionRefusedError:
                 retry_count += 1
                 print('...connection refused, at', time.ctime(), ' Is motor_server process running on remote machine?',
@@ -42,8 +41,6 @@ class MotorClient(DeviceClient):
         if retry_count >= retries:
             self.connected = False
             print('Unable to connect to motor at', self.ip)
-            return None
-        return None
 
     def disconnect(self):
         self.connection.close()
