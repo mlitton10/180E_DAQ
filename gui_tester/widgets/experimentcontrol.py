@@ -171,9 +171,13 @@ class ExperimentControl(ApplicationTab):
 		channel_description = self.update_channel_information()
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
-
 		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
-		self.freeze_all_controls()
+		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled,
+							  [self.pc,
+							   self.ac,
+							   self.sc,
+							   self.mm])
+
 		data_run.signals.finished.connect(self.data_run_finished)
 		data_run.signals.cancel.connect(self.acquisition_canceled)
 		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
