@@ -7,22 +7,32 @@ class Motor:
     def __init__(self, client: MotorClient):
         self.client = client
 
+    def connect(self):
+        self.client.connect()
+
+    def disconnect(self):
+        self.client.disconnect()
+
+    def send_command(self, cmd):
+        resp = self.client.send_command(cmd)
+        return resp
+
     def instant_velocity(self):
 
-        resp = self.client.send_command('IV')
+        resp = self.send_command('IV')
         # return rpm
         rpm = float(resp[5:])
         return (rpm)
 
     def motor_velocity(self):
 
-        resp = self.client.send_command('VE')
+        resp = self.send_command('VE')
         # return rpm
         rpm = float(resp[5:])
         return (rpm)
 
     def current_position(self):
-        resp = self.client.send_command('EP')
+        resp = self.send_command('EP')
         r = 0
         while r < 30:
             try:
@@ -40,7 +50,7 @@ class Motor:
 
         try:
             # self.send_text('DI'+str(step))
-            self.client.send_command('FP' + str(step))
+            self.send_command('FP' + str(step))
             time.sleep(0.5)
         #			print ('Finish moving')
 
@@ -55,14 +65,14 @@ class Motor:
             return False
 
     def stop_now(self):
-        self.client.send_command('ST')
+        self.send_command('ST')
 
     def steps_per_rev(self, stepsperrev):
-        self.client.send_command('EG' + str(stepsperrev))
+        self.send_command('EG' + str(stepsperrev))
         print('set stpes/rev = ' + str(stepsperrev) + '\n')
 
     def set_zero(self):
-        self.client.send_command('EP0')  # Set encoder position to zero
+        self.send_command('EP0')  # Set encoder position to zero
         resp = self.client.send_command('IE')
         if int(resp[5:]) == 0:
             print('Set encoder to zero\n')
@@ -76,14 +86,14 @@ class Motor:
             print('Fail to set encoder to zero\n')
 
     def set_acceleration(self, acceleration):
-        self.client.send_command('AC' + str(acceleration))
+        self.send_command('AC' + str(acceleration))
 
     def set_deceleration(self, deceleration):
-        self.client.send_command('DE' + str(deceleration))
+        self.send_command('DE' + str(deceleration))
 
     def set_speed(self, speed):
         try:
-            self.client.send_command('VE' + str(speed))
+            self.send_command('VE' + str(speed))
         #			resp = self.send_text('VE')
         #			print (resp)
         except ConnectionResetError as err:
@@ -111,11 +121,11 @@ class Motor:
         # 	# T = Wait Time (WT command executing)
         # 	# W = Wait Input (WI command executing)
         # 	""")
-        return self.client.send_command('RS')
+        return self.send_command('RS')
 
     def reset_motor(self):
 
-        self.client.send_command('RE')
+        self.send_command('RE')
         print("reset motor\n")
 
     def inhibit(self, inh=True):
@@ -130,7 +140,7 @@ class Motor:
             print('motor enabled\n', sep='', end='', flush=True)
 
         try:
-            self.client.send_command(cmd)  # INHIBIT or ENABLE
+            self.send_command(cmd)  # INHIBIT or ENABLE
 
         except ConnectionResetError as err:
             print('*** connection to server failed: "'+err.strerror+'"')
@@ -153,6 +163,6 @@ class Motor:
         return self.inhibit(not en)
 
     def set_input_usage(self, usage):
-        self.client.send_command('SI'+str(usage))
+        self.send_command('SI'+str(usage))
         print('set x3 input usage to SI' + str(usage) + '\n')
 
