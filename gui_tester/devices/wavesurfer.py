@@ -485,8 +485,38 @@ class WaveSurfer:
 
     #-------------------------------------------------------------------------
 
+    def acquire_displayed_traces(self, datasets, hdr_data, pos_ndx):
+        """ worker for below :
+            acquire enough sweeps for the averaging, then read displayed scope trace data into HDF5 datasets
+        """
+        timeout = 2000 # seconds
+        timed_out, N = self.wait_for_max_sweeps(str(pos_ndx)+': ', timeout)  # leaves scope not triggering
 
-    def acquire(self, trace, raw=False)  -> numpy.array:
+        if timed_out:
+            print('**** averaging timed out: got '+str(N)+' at %.6g s' % timeout)
+
+        traces = self.displayed_traces()
+
+        for tr in traces:
+            try:
+                n_pos,n_times = datasets[tr].shape
+                datasets[tr][pos_ndx,0:n_times] = self.acquire_trace(tr)[0:n_times]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
+                #?# datasets[tr].flush()
+            except KeyError:
+                print(tr + ' is displayed on the scope but not recorded. To record this channel, please display the trace before starting the data run.')
+                continue
+
+        for tr in traces:
+            try:
+                hdr_data[tr][pos_ndx] = numpy.void(self.header_bytes())    # valid after scope.acquire()
+                #?# hdr_data[tr].flush()
+                #?# are there consequences in timing or compression size if we do the flush()s recommend for the SWMR function?
+            except KeyError:
+                continue
+
+        self.set_trigger_mode('NORM')   # resume triggering
+
+    def acquire_trace(self, trace, raw=False)  -> numpy.array:
         """ Read a trace from the scope, and return a numpy array of floats corresponding to the data displayed.
             Saves the header.
             if raw==True returns the raw word or byte data, otherwise floating point values
@@ -665,7 +695,7 @@ class WaveSurfer:
             self.wait_for_sweeps(trace, 1, timeout=100, sleep_interval=.1)
 
             #print("acquire")
-            data = self.acquire(trace, True)     # read raw scope data
+            data = self.acquire_trace(trace, True)     # read raw scope data
 
             #print("trig mode normal")
             self.scope.write('TRIG_MODE NORM')   # try to make sure it is triggering
