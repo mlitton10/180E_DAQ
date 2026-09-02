@@ -162,7 +162,18 @@ class ExperimentControl(ApplicationTab):
 
 	def start_data_run(self):
 		# start data_run threading
-		self.hdf5_filename = None
+		file_path, _ = QFileDialog.getSaveFileName(
+			self,
+			"Save Experiment Data",
+			"",
+			"HDF5 Files (*.h5);;All Files (*)",
+		)
+
+		# User cancelled the dialog
+		if not file_path:
+			return
+
+		output_path = Path(file_path)
 
 		pos_param = self.update_parameters()
 		pos_param["num_shots"] = self.ac.num_shots.value()
