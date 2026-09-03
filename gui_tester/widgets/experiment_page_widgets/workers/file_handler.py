@@ -6,45 +6,104 @@ import numpy as np
 
 
 class HDF5FileHandler:
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
-        ofn = self.get_hdf5_filename()  # callback arg to the current function
+    def __init__(self, path: Path) -> None:
+        self.path = path
 
-    def get_hdf5_filename(self) -> str:
+        self._pos_ds = None
+        self._file = None
+        self._positions = None
+        self._data = None
+        self._hdr_data = None
+        self._time = None
+        self._acq_grp = None
+        self._scope_grp = None
+        self._header_grp = None
+        self._ctl_grp = None
+        self._pos_grp = None
 
-        avoid_overwrite = True     # <-- setting this to False will allow overwriting an existing file without a prompt
+    def open(self, n_pos, n_times, names, WAVEDESC_SIZE=346):
+        self._file = h5py.File(self.path, "w")
 
-        fn = self.filename
-        if fn is None  or len(fn) == 0  or  (avoid_overwrite  and  os.path.isfile(fn)):
-            # if we are not allowing possible overwrites as default, and the file already exists, use file open dialog
-            tk = tkinter.Tk()
-            tk.withdraw()		# prevent tk GUI from popping up
+        # This assumes every acquisition has the same
+        # waveform shape.
+        self._data = None
 
-            fnoptions = {'title': 'Save file as ...', 'defaultextension': '.hdf5',
-                         'filetypes': [("Hierarchical Data Format",'*.hdf5'), ("All files",'*.*')]}
 
-            fn = filedialog.asksaveasfilename(**fnoptions)
-            if not fn: 		# if user pressed 'cancel', fn = None
-                print("\nUser cancelled save file input.")
-                # if len(fn) == 0:
-                # 	#raise SystemExit(0)
-                # 	fn = exit
-            tk.destroy()
+        self._acq_grp = self._file.create_group('/Acquisition')  # /Acquisition
+        self._acq_grp.attrs['run_time'] = time.ctime()  # not legacy
+        self._scope_grp = self._acq_grp.create_group('LeCroy_scope')  # /Acquisition/LeCroy_scope
+        self._header_grp = self._scope_grp.create_group('Headers')  # not legacy
 
-        self.hdf5_filename = fn    # save it for later
-        return fn
+        self._ctl_grp = self._file.create_group('/Control')  # /Control
+        self._pos_grp = self._ctl_grp.create_group('Positions')  # /Control/Positions
 
-    def create_file(self) -> None:
-        fn = self.get_hdf5_filename()
-        f = h5py.File(fn,
-                      'w')  # 'w' - overwrite (we should have determined whether we want to overwrite in get_hdf5_filename())
-        # ============================
-        # create HDF5 groups similar to those in the legacy format:
+        self._positions = self._file.create_dataset(
+            "positions",
+            shape=(0,3),
+            maxshape=(None,3),
+            dtype="f8",
+        )
 
-        acq_grp = f.create_group('/Acquisition')  # /Acquisition
-        acq_grp.attrs['run_time'] = time.ctime()  # not legacy
-        scope_grp = acq_grp.create_group('LeCroy_scope')  # /Acquisition/LeCroy_scope
-        header_grp = scope_grp.create_group('Headers')  # not legacy
+        pass
 
-        ctl_grp = f.create_group('/Control')  # /Control
-        pos_grp = ctl_grp.create_group('Positions')  # /Control/Positions
+    def write_meta_data(self, positions, xpos, ypos, num_duplicate_shots, idn_string):
+        self._pos_ds = self._pos_grp.create_dataset('positions_requested',
+                                                    data=positions)
+        self._pos_ds.attrs['xpos'] = xpos  # not legacy
+        self._pos_ds.attrs['ypos'] = ypos  # not legacy
+        self._pos_ds.attrs['shotperpos'] = num_duplicate_shots  # not legacy
+
+        self._scope_grp.attrs['ScopeType'] = idn_string
+
+    def append(self, position: float,
+               dataset: dict[str, np.ndarray],
+               hdr_data,
+               time,
+               WAVEDESC_SIZE=364) -> None:
+        if self._file is None:
+            raise RuntimeError("HDF5 file is not open.")
+
+        if self._data is None:
+            self._data = {}
+            self._hdr_data = {}
+            for name, data in dataset.items():
+                data = np.asarray(data)
+                self._data[name] = self._scope_grp.create_dataset(
+                    name,
+                    shape=(0, *data.shape),
+                    maxshape=(None, *data.shape),
+                    dtype=data.dtype,
+                )
+                self._hdr_data[name] = self._scope_grp.create_dataset(name,
+                                                                      shape=(0,),
+                                                                      max_shape=(None,),
+                                                                      dtype="V%i" % WAVEDESC_SIZE,
+                                                                      fletcher32=True,
+                                                                      compression='gzip',
+                                                                      compression_opts=9)
+                self._time = self._scope_grp.create_dataset('time',
+                                                 shape=(len(time),),
+                                                 fletcher32=True,
+                                                 compression='gzip',
+                                                 compression_opts=9)
+
+        index = self._data.shape[0]
+
+        self._positions.resize(index + 1, axis=0)
+        self._positions[index] = position
+        for name, data in dataset.items():
+            self._data[name].resize(index + 1, axis=0)
+            self._data[name][index] = data
+            self.data[name].attrs()
+
+
+        self._file.flush()
+
+
+    def close(self) -> None:
+        if self._file is not None:
+            self._file.close()
+            self._file = None
+
+            self._positions = None
+            self._data = None
