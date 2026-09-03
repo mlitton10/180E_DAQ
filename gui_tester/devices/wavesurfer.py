@@ -496,11 +496,13 @@ class WaveSurfer:
             print('**** averaging timed out: got '+str(N)+' at %.6g s' % timeout)
 
         traces = self.displayed_traces()
-
+        n_times = self.scope.max_samples()
+        dataset = {}
+        hdr_data = {}
         for tr in traces:
+            dataset[tr] = {}
             try:
-                n_pos,n_times = datasets[tr].shape
-                datasets[tr][pos_ndx,0:n_times] = self.acquire_trace(tr)[0:n_times]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
+                dataset[tr]['data'] = self.acquire_trace(tr)[0:n_times]    # sometimes for 10000 the scope hardware returns 10001 samples, so we have to specify [0:NTimes]
                 #?# datasets[tr].flush()
             except KeyError:
                 print(tr + ' is displayed on the scope but not recorded. To record this channel, please display the trace before starting the data run.')
@@ -508,7 +510,7 @@ class WaveSurfer:
 
         for tr in traces:
             try:
-                hdr_data[tr][pos_ndx] = numpy.void(self.header_bytes())    # valid after scope.acquire()
+                hdr_data[tr] = numpy.void(self.header_bytes())    # valid after scope.acquire()
                 #?# hdr_data[tr].flush()
                 #?# are there consequences in timing or compression size if we do the flush()s recommend for the SWMR function?
             except KeyError:
