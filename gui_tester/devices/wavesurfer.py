@@ -517,6 +517,7 @@ class WaveSurfer:
                 continue
 
         self.set_trigger_mode('NORM')   # resume triggering
+        return dataset, hdr_data
 
     def acquire_trace(self, trace, raw=False)  -> numpy.array:
         """ Read a trace from the scope, and return a numpy array of floats corresponding to the data displayed.
