@@ -1,9 +1,8 @@
-import os
 import time
-import tkinter
-from tkinter import filedialog
+from pathlib import Path
 
 import h5py
+import numpy as np
 
 
 class HDF5FileHandler:
