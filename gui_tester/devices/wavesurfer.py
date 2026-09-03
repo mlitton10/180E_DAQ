@@ -485,7 +485,7 @@ class WaveSurfer:
 
     #-------------------------------------------------------------------------
 
-    def acquire_displayed_traces(self, datasets, hdr_data, pos_ndx):
+    def acquire_displayed_traces(self):
         """ worker for below :
             acquire enough sweeps for the averaging, then read displayed scope trace data into HDF5 datasets
         """
