@@ -3,7 +3,6 @@ from __future__ import annotations
 import time
 from pathlib import Path
 
-import h5py
 import numpy as np
 from gui_tester.devices.probe_drive import ProbeDriveXY
 from gui_tester.devices.wavesurfer import WaveSurfer
