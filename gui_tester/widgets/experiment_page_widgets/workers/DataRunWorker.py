@@ -10,7 +10,7 @@ from gui_tester.widgets.basic_templates.generic_worker import Worker
 
 import threading
 import traceback
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, QObject
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, QObject, QRunnable
 from gui_tester.widgets.experiment_page_widgets.workers.file_handler import HDF5FileHandler
 
 
@@ -41,7 +41,7 @@ class ExperimentWorker(Worker):
 
         self.config = config
 
-        self.motor = ProbeDriveXY(config.motor_ip)
+        self.probe_drive = ProbeDriveXY(config.motor_ip)
         self.scope = WaveSurfer(config.scope_ip)
         self.writer = HDF5FileHandler(config.output_path)
 
@@ -75,10 +75,18 @@ class ExperimentWorker(Worker):
         positions = self.config.positions
         total_positions = len(positions)
 
+        self.writer.write_meta_data(positions,
+                                  self.config.num_duplicate_shots,
+                                  self.scope.idn_string)
+
+        n_times = self.scope.max_samples()
+
+        traces = self.scope.displayed_traces()
+
         self._set_status(
             f"Starting experiment: {total_positions} positions"
         )
-
+        nowx, nowy = (-999, -999)  # why not just get the current position
         for index, position in enumerate(positions):
 
             if self.is_stop_requested():
@@ -88,8 +96,19 @@ class ExperimentWorker(Worker):
             self._set_status(
                 f"Moving motor to position {position}"
             )
+            if nowx!=pos[1] or nowy!=pos[2]:
+                # enable motor
+                self.probe_drive.enable()
 
-            self.motor.move_to_position(*position)
+                # move to next position
+                self.probe_drive.move_to_position(*position)
+                self.updated_position.emit(*position)
+                nowx, nowy = (position[1], position[2])
+                x_encoder, y_encoder = self.probe_drive.current_probe_position()
+                self.updated_position.emit(x_encoder, y_encoder)
+
+                # Disable the motor current output when taking the data
+                self.probe_drive.disable()
 
             if self.is_stop_requested():
                 self.stopped.emit()
@@ -99,18 +118,19 @@ class ExperimentWorker(Worker):
                 f"Acquiring data at position {position}"
             )
 
-            data = self.scope.acquire_trace()
+            dataset, hdr_data = self.scope.acquire_displayed_traces()
+            time_ds = self.scope.time_array()[0:n_times]
+            for tr in traces:
+                dataset[tr]['description'] = self.config.channel_description[tr]  # callback arg to the current function
+                dataset[tr]['recorded'] = True
+                dataset[tr]['shots per position'] = self.config.num_duplicate_shots
+            self.writer.append(position, dataset, hdr_data, time_ds)
 
             if self.is_stop_requested():
                 self.stopped.emit()
                 return
 
             self._set_status("Writing data...")
-
-            self.writer.append(position, data)
-
-            # Send acquired data to GUI
-            self.data_ready.emit(data)
 
             # Update position information
             self.position_changed.emit(
@@ -132,7 +152,7 @@ class ExperimentWorker(Worker):
     def _connect_devices(self) -> None:
 
         self._set_status("Connecting to motor...")
-        self.motor.connect()
+        self.probe_drive.connect()
 
         self._set_status("Connecting to oscilloscope...")
         self.scope.connect()
@@ -163,7 +183,7 @@ class ExperimentWorker(Worker):
             try:
                 self.scope.disconnect()
             finally:
-                self.motor.disconnect()
+                self.probe_drive.disconnect()
 
         self.finished.emit()
 
@@ -187,11 +207,12 @@ class ExperimentWorker(Worker):
 
 class DataRunThread(QRunnable):
 
-    def __init__(self, hdf5_filename: Path, pos_param, channel_description, ip_addrs):
+    def __init__(self, hdf5_filename: Path, position_list,n_shots, channel_description, ip_addrs):
         super(DataRunThread, self).__init__()
 
         self.hdf5_filename = hdf5_filename
-        self.pos_param = pos_param
+        self.positions = position_list
+        self.num_duplicate_shots = n_shots
         self.channel = channel_description
         self.ip_addrs = ip_addrs
 
@@ -219,54 +240,11 @@ class DataRunThread(QRunnable):
         return '**** get_channel_description(): unknown trace indicator "'+tr+'". How did we get here?'
 
 
-
-    def get_positions(self) -> ([(),(),(),()], numpy.array, numpy.array, numpy.array):
-        """ callback function to return the positions array
-            This function is baroque because we need to to match the legacy format:
-              in particular, we assign the positions array as an array of tuples
-        """
-
-        xmax = self.pos_param["xmax"]
-        xmin = self.pos_param["xmin"]
-        ymax = self.pos_param["ymax"]
-        ymin = self.pos_param["ymin"]
-        nx = self.pos_param["nx"]
-        ny = self.pos_param["ny"]
-
-        xpos = numpy.linspace(xmin,xmax,nx)
-        ypos = numpy.linspace(ymin,ymax,ny)
-
-        num_duplicate_shots = self.pos_param["num_shots"]       # number of duplicate shots recorded at the ith location
-        num_run_repeats = self.pos_param["num_run"]           # number of times to repeat sequentially over all locations
-
-        # allocate the positions array, fill it with zeros
-        positions = numpy.zeros((nx*ny*num_duplicate_shots*num_run_repeats), dtype=[('Line_number', '>u4'), ('x', '>f4'), ('y', '>f4')])
-
-        #create rectangular shape position array
-        index = 0
-        for repeat_cnt in range(num_run_repeats):
-            for y in ypos:
-                for x in xpos:
-                    for dup_cnt in range(num_duplicate_shots):
-                        positions[index] = (index+1, x, y)
-                        index += 1
-
-        # print(positions)       # for debugging
-
-        return positions, xpos, ypos, num_duplicate_shots
-
-
     def run(self):
 
-        positions, xpos, ypos, num_duplicate_shots = self.get_positions()
-
-        # Create empty position arrays
-        if xpos is None:
-            xpos = np.array([])
-        if ypos is None:
-            ypos = np.array([])
-
-        self.file.write_meta_data(positions, xpos, ypos, num_duplicate_shots, self.scope.idn_string)
+        self.file.write_meta_data(self.positions,
+                                  self.num_duplicate_shots,
+                                  self.scope.idn_string)
 
         n_times = self.scope.max_samples()
 
@@ -277,7 +255,7 @@ class DataRunThread(QRunnable):
         acquisition_loop_start_time = time.time()
 
         nowx, nowy = (-999, -999) # why not just get the current position
-        for pos in positions:
+        for pos in self.positions:
             # prevent motor from enabling/disabling when taking data at the same position
             # this stops the motor noise from being picked up by the data in between shots
             if nowx!=pos[1] or nowy!=pos[2]:
@@ -297,7 +275,7 @@ class DataRunThread(QRunnable):
 
 
             if pos[0] > 1:
-                print ('Estimated remaining time:%6.2f'%((len(positions) - pos[0]) * (time.time()-acquisition_loop_start_time)/pos[0] / 3600))
+                print ('Estimated remaining time:%6.2f'%((len(self.positions) - pos[0]) * (time.time()-acquisition_loop_start_time)/pos[0] / 3600))
             else:
                 print ('')
 
@@ -319,7 +297,6 @@ class DataRunThread(QRunnable):
 
             self.signals.finished_position.emit(x_encoder, y_encoder)
             ######### END MAIN ACQUISITION LOOP #########
-
 
         f.close()  # close the HDF5 file
 
