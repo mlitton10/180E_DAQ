@@ -1,6 +1,6 @@
-import numpy
 import os.path
 
+import numpy as np
 from PyQt6.QtWidgets import QSizePolicy
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -30,17 +30,41 @@ def compute_point_grid(parameters):
 	nx = parameters['nx']
 	ny = parameters['ny']
 
-	x_pos = numpy.linspace(x_min, x_max, nx)
-	y_pos = numpy.linspace(y_min, y_max, ny)
+	x_pos = np.linspace(x_min, x_max, nx)
+	y_pos = np.linspace(y_min, y_max, ny)
 
-	X = numpy.zeros(nx * ny)
-	Y = numpy.zeros(nx * ny)
+	X = np.zeros(nx * ny)
+	Y = np.zeros(nx * ny)
 
 	index = 0
 	for xx in x_pos:
 		for yy in y_pos:
 			X[index] = xx
 			Y[index] = yy
+			index += 1
+
+	return X, Y
+
+def compute_point_grid_polar(parameters):
+
+	r_max = parameters['r_max']
+	r_min = parameters['r_min']
+	theta_max = parameters['theta_max']
+	theta_min = parameters['theta_min']
+	n_r = parameters['n_r']
+	n_theta = parameters['n_theta']
+
+	r_pos = np.linspace(r_min, r_max, n_r)
+	theta_pos = np.linspace(theta_min, theta_max, n_theta) * np.pi / 180
+
+	X = np.zeros(n_r * n_theta)
+	Y = np.zeros(n_r * n_theta)
+
+	index = 0
+	for r in r_pos:
+		for theta in theta_pos:
+			X[index] = r * np.cos(theta)
+			Y[index] = r * np.sin(theta)
 			index += 1
 
 	return X, Y

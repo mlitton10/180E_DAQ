@@ -23,12 +23,12 @@ class MotorMovement(BasicAppWidget):
 		self.MOTOR_PORT = motor_port
 
 		# Position inputs
-		self.x_position_box = UserDoubleSpinBoxRow("Move x motor to:")
-		self.y_position_box = UserDoubleSpinBoxRow("Move y motor to:")
+		self.x_position_box = UserDoubleSpinBoxRow("Move x motor to:", suffix=' cm')
+		self.y_position_box = UserDoubleSpinBoxRow("Move y motor to:", suffix=' cm')
 
 		# Velocity inputs
-		self.x_velocity_box = UserDoubleSpinBoxRow("Set x velocity to:")
-		self.y_velocity_box = UserDoubleSpinBoxRow("Set y velocity to:")
+		self.x_velocity_box = UserDoubleSpinBoxRow("Set x velocity to:", suffix=' rpm')
+		self.y_velocity_box = UserDoubleSpinBoxRow("Set y velocity to:", suffix=' rpm')
 
 		self.MoveButton = QPushButton("Move Motor")
 		self.StopNowButton = QPushButton("Stop Motor")
@@ -42,9 +42,9 @@ class MotorMovement(BasicAppWidget):
 		self.velocityInput = QLineEdit()
 		self.velocityInput.setReadOnly(True)
 
-		self.initialize_widget()
+		self._initialize_widget()
 
-	def build_layout(self):
+	def _build_layout(self):
 		main_layout = QGridLayout(self)
 
 		position_box = make_form_table([self.x_position_box, self.y_position_box])
@@ -76,7 +76,7 @@ class MotorMovement(BasicAppWidget):
 		main_layout.addWidget(self.velocityButton, 4, 0)
 		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		self.MoveButton.clicked.connect(self.move_to_position)
 		self.StopNowButton.clicked.connect(self.stop_now)
 		self.SetZero.clicked.connect(self.zero)
@@ -84,16 +84,16 @@ class MotorMovement(BasicAppWidget):
 		self.velocityButton.clicked.connect(self.display_current_speed)
 		pass
 
-	def initialize_widget(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_widget(self):
+		self._build_layout()
+		self._connect_signals()
 #----------------------------------------------------------------------
 
 	def move_to_position(self):
 		# Directly move the motor to their absolute position
 		try:
-			x_pos = float(self.x_position_box.read_text())
-			y_pos = float(self.y_position_box.read_text())
+			x_pos = float(self.x_position_box.read_value())
+			y_pos = float(self.y_position_box.read_value())
 
 			print(x_pos, y_pos)
 			
@@ -123,8 +123,8 @@ class MotorMovement(BasicAppWidget):
 
 
 	def set_velocity(self):
-		xv = self.x_velocity_box.read_text()
-		yv = self.y_velocity_box.read_text()
+		xv = self.x_velocity_box.read_value()
+		yv = self.y_velocity_box.read_value()
 		print("set velocity: ", xv, ", ", yv)
 
 

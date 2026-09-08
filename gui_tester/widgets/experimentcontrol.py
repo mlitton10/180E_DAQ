@@ -1,14 +1,18 @@
 import os.path
+from pathlib import Path
 
 from PyQt6.QtCore import QThreadPool
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox
+from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox, QFileDialog
 from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
+from gui_tester.widgets.experiment_page_widgets.status_ui import StatusWidget
+from gui_tester.widgets.experiment_page_widgets.workers.DataRunWorker import ExperimentWorker
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
 from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
 from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import AcquisitionControls
-from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid
+from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid, \
+	compute_point_grid_polar
 from gui_tester.widgets.experiment_page_widgets.ScopeControls_ui import ScopeChannel
 from gui_tester.widgets.experiment_page_widgets.SoftwareVersion_ui import SoftwareVersion
 from gui_tester.widgets.experiment_page_widgets.PositionControls_ui import PositionControls
@@ -27,11 +31,10 @@ class ExperimentControl(ApplicationTab):
 
 		self.device_ips = device_ips
 
-		self.update = None
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
-		self.sv = SoftwareVersion()
+		self.status = StatusWidget()
 		self.sc = ScopeChannel()
 		self.ds = DeviceSpecification(machine_config_paths)
 
@@ -44,7 +47,7 @@ class ExperimentControl(ApplicationTab):
 		self.ScopeScreen = QLabel(self)
 		self.update_screen_dump()
 
-		self.initialize_tab()
+		self._initialize_tab()
 
 		self.load_file_async(self.ds.current_file())
 
@@ -62,7 +65,7 @@ class ExperimentControl(ApplicationTab):
 		port_ip = int(7776)
 		return x_ip, y_ip, scope_ip, port_ip
 
-	def connect_signals(self):
+	def _connect_signals(self):
 
 		self.pc.confirm.connect(self.update_geometry)
 
@@ -71,23 +74,23 @@ class ExperimentControl(ApplicationTab):
 
 		self.ds.fileSelected.connect(self.load_file_async)
 
-	def build_layout(self):
+	def _build_layout(self):
 		layout = QGridLayout(self)
 		layout.addWidget(self.canvas, 0, 0, 1, 2)
 		layout.addWidget(self.mm, 2, 0, 2, 1)  # motor movement
 		layout.addWidget(self.pc, 2, 1, 2, 1)  # position control
 		layout.addWidget(self.ac, 2, 2)  # acquisition control
 		layout.addWidget(self.sc, 2, 3, 1, 1)  # scope channel comments
-		layout.addWidget(self.sv, 3, 2)
+		layout.addWidget(self.status, 3, 2)
 		layout.addWidget(self.ds, 3, 3)
 		layout.addWidget(self.ScopeScreen, 0, 2, 2, 2)
 
 		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
 		self.resize(1600, 700)
 
-	def initialize_tab(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_tab(self):
+		self._build_layout()
+		self._connect_signals()
 
 	def load_file_async(self, filepath: str):
 		# If a load is already running, ignore new requests for simplicity.
@@ -134,21 +137,27 @@ class ExperimentControl(ApplicationTab):
 		else:
 			print("Why is this called when data_running == False ?")
 
-	def display_current_speed(self):
+	def display_current_speed(self) -> None:
 		self.mm.display_current_speed()
 
-	def update_parameters(self):
+	def update_parameters(self) -> dict[str, float | int]:
 		parameters = self.pc.collect_parameters()
-		self.update = True
 		return parameters
+
+	def retrieve_coordinate_system(self) -> str:
+		coordinate_system = self.pc.current_coordinate_system()
+		return coordinate_system
 
 	def update_geometry(self):
 		param = self.update_parameters()
-		X, Y = compute_point_grid(param)
-		if self.update:
+		coordinate_system = self.retrieve_coordinate_system()
+		if coordinate_system == "Cartesian":
+			X, Y = compute_point_grid(param)
 			self.canvas.update_figure(X, Y)
-		else:
-			pass
+		elif coordinate_system == "Polar":
+			X, Y = compute_point_grid_polar(param)
+			self.canvas.update_figure(X, Y)
+
 
 	def update_channel_information(self):
 		channel_description = self.sc.get_channel_description()
@@ -156,7 +165,18 @@ class ExperimentControl(ApplicationTab):
 
 	def start_data_run(self):
 		# start data_run threading
-		self.hdf5_filename = None
+		file_path, _ = QFileDialog.getSaveFileName(
+			self,
+			"Save Experiment Data",
+			"",
+			"HDF5 Files (*.h5);;All Files (*)",
+		)
+
+		# User cancelled the dialog
+		if not file_path:
+			return
+
+		output_path = Path(file_path)
 
 		pos_param = self.update_parameters()
 		pos_param["num_shots"] = self.ac.num_shots.value()
@@ -165,14 +185,18 @@ class ExperimentControl(ApplicationTab):
 		channel_description = self.update_channel_information()
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
+		data_run = ExperimentWorker(output_path, pos_param, channel_description, ip_addrs)
+		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled,
+							  [self.pc,
+							   self.ac,
+							   self.sc,
+							   self.mm])
 
-		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
-		self.freeze_all_controls()
-		data_run.signals.finished.connect(self.data_run_finished)
-		data_run.signals.cancel.connect(self.acquisition_canceled)
-		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
-		data_run.signals.finished_position.connect(self.mark_finished_positions)
-		data_run.signals.new_screen_dump.connect(self.update_screen_dump)
+		data_run.finished.connect(self.data_run_finished)
+		data_run.cancel.connect(self.acquisition_canceled)
+		data_run.updated_position.connect(self.update_current_position_during_data_run)
+		data_run.finished_position.connect(self.mark_finished_positions)
+		data_run.new_screen_dump.connect(self.update_screen_dump)
 		self.threadpool.start(data_run)
 
 	def acquisition_canceled(self):

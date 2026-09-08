@@ -42,18 +42,18 @@ class MagnetWidget(ApplicationTab):
         self.pi_thread = QThread(self)
         self.pi_worker = RaspberryPiController(host=magnet_ip, port=5000)
 
-        self.initialize_tab()
+        self._initialize_tab()
 
         self.threadpool = QThreadPool()
 
-    def build_layout(self):
+    def _build_layout(self):
         layout = QGridLayout(self)
         layout.addWidget(self.fieldLine, 0, 0, 1, 2)
         layout.addWidget(self.fieldStrength, 1, 0, 2, 1)
         layout.addWidget(self.currentDisplay, 1, 1)
         layout.addWidget(self.current_control, 2, 1)
 
-    def connect_signals(self):
+    def _connect_signals(self):
         self.current_control.currentPlot.connect(self.update_plot_async)
         pass
 
@@ -63,9 +63,9 @@ class MagnetWidget(ApplicationTab):
         self.pi_thread.finished.connect(self.pi_worker.deleteLater)
         self.pi_thread.start()
 
-    def initialize_tab(self):
-        self.build_layout()
-        self.connect_signals()
+    def _initialize_tab(self):
+        self._build_layout()
+        self._connect_signals()
         self._initialize_pi_client()
 
     def shutdown(self):

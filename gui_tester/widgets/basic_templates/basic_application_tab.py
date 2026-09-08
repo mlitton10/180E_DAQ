@@ -15,13 +15,13 @@ class ApplicationTab(QWidget):
 
         self.threadpool = QThreadPool()
 
-    def build_layout(self):
+    def _build_layout(self):
         raise NotImplementedError("build_layout not implemented")
 
-    def connect_signals(self):
+    def _connect_signals(self):
         raise NotImplementedError("connect_signals not implemented")
 
-    def initialize_tab(self):
+    def _initialize_tab(self):
         raise NotImplementedError("initialize_tab not implemented")
 
     def shutdown(self):

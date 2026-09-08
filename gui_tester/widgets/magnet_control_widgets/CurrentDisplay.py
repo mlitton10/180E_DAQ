@@ -16,9 +16,9 @@ class CurrentDisplay(BasicAppWidget):
         self.psuCurrentTwo = UserTextColumn('PSU 2',read_only=True)
         self.psuCurrentThree = UserTextColumn('PSU 3',read_only=True)
 
-        self.initialize_widget()
+        self._initialize_widget()
 
-    def build_layout(self):
+    def _build_layout(self):
         layout = QGridLayout(self)
         layout.setContentsMargins(0,0,0,0)
 
@@ -37,12 +37,12 @@ class CurrentDisplay(BasicAppWidget):
         self.psuCurrentTwo.update_text("0")
         self.psuCurrentThree.update_text("0")
 
-    def connect_signals(self):
+    def _connect_signals(self):
         pass
 
-    def initialize_widget(self):
-        self.build_layout()
-        self.connect_signals()
+    def _initialize_widget(self):
+        self._build_layout()
+        self._connect_signals()
         self.initialize_boxes()
 
     def collect_parameters(self):

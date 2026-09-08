@@ -17,9 +17,9 @@ class AcquisitionControls(BasicAppWidget):
 		self.num_run = UserSpinBoxRow("Number of total runs:")
 		self.num_shots = UserSpinBoxRow("Shots per position:")
 
-		self.initialize_widget()
+		self._initialize_widget()
 
-	def build_layout(self):
+	def _build_layout(self):
 		layout = QGridLayout(self)
 		layout.setContentsMargins(0, 0, 0, 0)
 
@@ -43,9 +43,9 @@ class AcquisitionControls(BasicAppWidget):
 		self.num_run.set_value(1)
 		self.num_shots.set_value(1)
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		pass
 
-	def initialize_widget(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_widget(self):
+		self._build_layout()
+		self._connect_signals()

@@ -20,10 +20,10 @@ class AxisControls(BasicAppWidget):
 		self.y_high = UserSpinBoxRow("y-axis range:")
 		self.y_low = UserSpinBoxRow("to: ")
 
-		self.initialize_widget()
+		self._initialize_widget()
 		pass
 
-	def build_layout(self):
+	def _build_layout(self):
 		layout = QGridLayout(self)
 		layout.addWidget(self.x_high, 0, 0)
 		layout.addWidget(self.x_low, 0, 1)
@@ -43,13 +43,13 @@ class AxisControls(BasicAppWidget):
 		self.y_high.set_value(35)
 		self.y_low.set_value(-35)
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		pass
 
-	def initialize_widget(self):
-		self.build_layout()
+	def _initialize_widget(self):
+		self._build_layout()
 		self.initialize_values()
-		self.connect_signals()
+		self._connect_signals()
 
 	def read_axis(self):
 		x_high = self.x_high.read_value()
