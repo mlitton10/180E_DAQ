@@ -1,10 +1,13 @@
 import os.path
+from pathlib import Path
 
 from PyQt6.QtCore import QThreadPool
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox
+from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox, QFileDialog
 from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
+from gui_tester.widgets.experiment_page_widgets.status_ui import StatusWidget
+from gui_tester.widgets.experiment_page_widgets.workers.DataRunWorker import ExperimentWorker
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
 from gui_tester.widgets.experiment_page_widgets.MotorMovement_ui import MotorMovement
 from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import AcquisitionControls
@@ -31,7 +34,7 @@ class ExperimentControl(ApplicationTab):
 		self.pc = PositionControls()
 		self.canvas = MyMplCanvas()
 		self.ac = AcquisitionControls()
-		self.sv = SoftwareVersion()
+		self.status = StatusWidget()
 		self.sc = ScopeChannel()
 		self.ds = DeviceSpecification(machine_config_paths)
 
@@ -44,7 +47,7 @@ class ExperimentControl(ApplicationTab):
 		self.ScopeScreen = QLabel(self)
 		self.update_screen_dump()
 
-		self.initialize_tab()
+		self._initialize_tab()
 
 		self.load_file_async(self.ds.current_file())
 
@@ -62,7 +65,7 @@ class ExperimentControl(ApplicationTab):
 		port_ip = int(7776)
 		return x_ip, y_ip, scope_ip, port_ip
 
-	def connect_signals(self):
+	def _connect_signals(self):
 
 		self.pc.confirm.connect(self.update_geometry)
 
@@ -71,23 +74,23 @@ class ExperimentControl(ApplicationTab):
 
 		self.ds.fileSelected.connect(self.load_file_async)
 
-	def build_layout(self):
+	def _build_layout(self):
 		layout = QGridLayout(self)
 		layout.addWidget(self.canvas, 0, 0, 1, 2)
 		layout.addWidget(self.mm, 2, 0, 2, 1)  # motor movement
 		layout.addWidget(self.pc, 2, 1, 2, 1)  # position control
 		layout.addWidget(self.ac, 2, 2)  # acquisition control
 		layout.addWidget(self.sc, 2, 3, 1, 1)  # scope channel comments
-		layout.addWidget(self.sv, 3, 2)
+		layout.addWidget(self.status, 3, 2)
 		layout.addWidget(self.ds, 3, 3)
 		layout.addWidget(self.ScopeScreen, 0, 2, 2, 2)
 
 		self.setWindowTitle("180E Data Acquisition System for XY Probe Drives")
 		self.resize(1600, 700)
 
-	def initialize_tab(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_tab(self):
+		self._build_layout()
+		self._connect_signals()
 
 	def load_file_async(self, filepath: str):
 		# If a load is already running, ignore new requests for simplicity.
@@ -182,18 +185,18 @@ class ExperimentControl(ApplicationTab):
 		channel_description = self.update_channel_information()
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
-		data_run = DataRunThread(self.hdf5_filename, pos_param, channel_description, ip_addrs)
+		data_run = ExperimentWorker(output_path, pos_param, channel_description, ip_addrs)
 		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled,
 							  [self.pc,
 							   self.ac,
 							   self.sc,
 							   self.mm])
 
-		data_run.signals.finished.connect(self.data_run_finished)
-		data_run.signals.cancel.connect(self.acquisition_canceled)
-		data_run.signals.updated_position.connect(self.update_current_position_during_data_run)
-		data_run.signals.finished_position.connect(self.mark_finished_positions)
-		data_run.signals.new_screen_dump.connect(self.update_screen_dump)
+		data_run.finished.connect(self.data_run_finished)
+		data_run.cancel.connect(self.acquisition_canceled)
+		data_run.updated_position.connect(self.update_current_position_during_data_run)
+		data_run.finished_position.connect(self.mark_finished_positions)
+		data_run.new_screen_dump.connect(self.update_screen_dump)
 		self.threadpool.start(data_run)
 
 	def acquisition_canceled(self):
