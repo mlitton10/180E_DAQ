@@ -28,9 +28,7 @@ class MotorClient(DeviceClient):
         for attempt in range(1, retries + 1):
             try:
                 self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                ##if timeout is not None:
-                ##	#not on windows: socket.settimeout(timeout)
-                ##	s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, struct.pack('LL', timeout, 0))
+
                 self.connection.connect((self.ip, self.MOTOR_SERVER_PORT))
                 self.connected = True
                 return
