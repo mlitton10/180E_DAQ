@@ -16,8 +16,12 @@ class MotorClient(DeviceClient):
     def __init__(self, ip: str, verbose = True):
         self.ip = ip
         self.connected = False
-        self.connection = None
-        self._connected = False
+        self.connection: socket.socket | None = None
+
+    def connect(self,
+                retries: int = 30):
+        if self.connected and self.connection is not None:
+            return
 
         last_exception: Exception | None = None
 
