@@ -46,11 +46,9 @@ class HDF5FileHandler:
 
         pass
 
-    def write_meta_data(self, positions, xpos, ypos, num_duplicate_shots, idn_string):
+    def write_meta_data(self, positions, num_duplicate_shots, idn_string):
         self._pos_ds = self._pos_grp.create_dataset('positions_requested',
                                                     data=positions)
-        self._pos_ds.attrs['xpos'] = xpos  # not legacy
-        self._pos_ds.attrs['ypos'] = ypos  # not legacy
         self._pos_ds.attrs['shotperpos'] = num_duplicate_shots  # not legacy
 
         self._scope_grp.attrs['ScopeType'] = idn_string
@@ -94,7 +92,7 @@ class HDF5FileHandler:
         for name, data in dataset.items():
             self._data[name].resize(index + 1, axis=0)
             self._data[name][index] = data
-            self.data[name].attrs()
+            self._hdr_data[name][index] = hdr_data[name]
 
 
         self._file.flush()
