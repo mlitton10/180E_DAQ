@@ -185,7 +185,7 @@ class ExperimentControl(ApplicationTab):
 		channel_description = self.update_channel_information()
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
-		data_run = ExperimentWorker(output_path, pos_param, channel_description, ip_addrs)
+		data_run = ExperimentWorker(output_path, self.mm, pos_param, channel_description, ip_addrs)
 		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled,
 							  [self.pc,
 							   self.ac,

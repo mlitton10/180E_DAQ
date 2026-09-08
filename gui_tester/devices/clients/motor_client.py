@@ -17,6 +17,7 @@ class MotorClient(DeviceClient):
         self.ip = ip
         self.connected = False
         self.connection = None
+        self._connected = False
 
     def connect(self):
         retries = 30
@@ -48,6 +49,17 @@ class MotorClient(DeviceClient):
 
     def is_connected(self):
         return self.connected
+
+    @property
+    def connected(self):
+        return self._connected
+
+    @connected.setter
+    def connected(self, value: bool):
+        if not isinstance(value, bool):
+            self._connected = False
+            return
+        self._connected = value
 
     def send_command(self, command:str):
         if not self.connected:

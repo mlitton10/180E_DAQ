@@ -36,12 +36,12 @@ class ExperimentWorker(Worker):
     # Fatal error
     error = pyqtSignal(str)
 
-    def __init__(self, config: ExperimentConfig):
+    def __init__(self, config: ExperimentConfig, motor_control):
         super().__init__()
 
         self.config = config
 
-        self.probe_drive = ProbeDriveXY(config.motor_ip)
+        self.probe_drive = motor_control
         self.scope = WaveSurfer(config.scope_ip)
         self.writer = HDF5FileHandler(config.output_path)
 
@@ -151,9 +151,6 @@ class ExperimentWorker(Worker):
 
     def _connect_devices(self) -> None:
 
-        self._set_status("Connecting to motor...")
-        self.probe_drive.connect()
-
         self._set_status("Connecting to oscilloscope...")
         self.scope.connect()
 
@@ -182,8 +179,8 @@ class ExperimentWorker(Worker):
         finally:
             try:
                 self.scope.disconnect()
-            finally:
-                self.probe_drive.disconnect()
+            except Exception as e:
+                print(e)
 
         self.finished.emit()
 

@@ -2,6 +2,8 @@ import os.path
 import sys
 
 from PyQt6.QtWidgets import QPushButton, QGridLayout, QMessageBox, QApplication, QLineEdit
+
+from gui_tester.devices.probe_drive import ProbeDriveXY
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
@@ -41,6 +43,9 @@ class MotorMovement(BasicAppWidget):
 		self.velocityButton = QPushButton("Get motor speed (rpm):")
 		self.velocityInput = QLineEdit()
 		self.velocityInput.setReadOnly(True)
+
+		self.probe_drive = ProbeDriveXY(x_ip_addr=self.x_ip_addr, y_ip_addr=self.y_ip_addr)
+		self.probe_drive.connect()
 
 		self._initialize_widget()
 
@@ -95,18 +100,20 @@ class MotorMovement(BasicAppWidget):
 			x_pos = float(self.x_position_box.read_value())
 			y_pos = float(self.y_position_box.read_value())
 
-			print(x_pos, y_pos)
+			self.probe_drive.enable()
+			self.probe_drive.move_to_position(x_pos, y_pos)
+			self.probe_drive.disable()
 			
 		except ValueError:
 			QMessageBox.about(self, "Error", "Position should be valid numbers.")
 
 	def disable(self):
-		print('Disabled')
+		self.probe_drive.disable()
 		self.enabled = False
 
 	def stop_now(self):
 		# Stop motor movement now
-		print('Stopped')
+		self.probe_drive.stop_now()
 
 
 	def zero(self):
@@ -115,21 +122,21 @@ class MotorMovement(BasicAppWidget):
 			QMessageBox.Yes, QMessageBox.No)
 		if zeroreply == QMessageBox.Yes:
 			QMessageBox.about(self, "Set Zero", "Probe position is now (0,0).")
-			print('set zero')
+			self.probe_drive.set_zero()
 
 
 	def ask_velocity(self):
-		return 1,1
+		return self.probe_drive.ask_velocity()
 
 
 	def set_velocity(self):
 		xv = self.x_velocity_box.read_value()
 		yv = self.y_velocity_box.read_value()
-		print("set velocity: ", xv, ", ", yv)
+		self.probe_drive.set_velocity(xv, yv)
 
 
 	def current_probe_position(self):
-		return 0,0
+		return self.probe_drive.current_probe_position()
 
 	def display_current_speed(self):
 		speedx, speedy = self.ask_velocity()
@@ -142,9 +149,10 @@ class MotorMovement(BasicAppWidget):
 	def set_input_usage(self, usage):
 		print('Usage update call:', usage)
 		self.usage_update = True
+		self.probe_drive.set_input_usage(usage)
 
 	def set_steps_per_rev(self, stepsx, stepsy):
-		print("Set speed: ", stepsx, ", ", stepsy)
+		self.probe_drive.set_steps_per_rev(stepsx, stepsy)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
