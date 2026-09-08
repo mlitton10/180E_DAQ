@@ -43,7 +43,7 @@ class ExperimentWorker(Worker):
 
         self.motor = ProbeDriveXY(config.motor_ip)
         self.scope = WaveSurfer(config.scope_ip)
-        self.writer = HDF5Writer(config.output_path)
+        self.writer = HDF5FileHandler(config.output_path)
 
         self._stop_event = threading.Event()
 
@@ -194,7 +194,6 @@ class DataRunThread(QRunnable):
         self.pos_param = pos_param
         self.channel = channel_description
         self.ip_addrs = ip_addrs
-        self.signals = Signals()
 
         self.probe_drive = ProbeDriveXY(x_ip_addr=self.ip_addrs['x'], y_ip_addr=self.ip_addrs['y'])
         self.file = HDF5FileHandler(hdf5_filename)
@@ -258,27 +257,7 @@ class DataRunThread(QRunnable):
 
 
     def run(self):
-        # The main data acquisition routine
-        #
-        # 	Arguments are user-provided callback functions that return the following:
-        # 		get_hdf5_filename()          the output HDF5 filename,
-        # 		get_positions()              the positions array,
-        # 		get_channel_description(c)   the individual channel descriptions (c = 'C1', 'C2', 'C3', 'C4'),
-        # 		get_ip_addresses()           a dict of the form {'scope':'10.0.1.122', 'x':'10.0.0.123', 'y':'10.0.0.124', 'z':''}
-        # 		                                  if a key is not specified, no motion will be attempted on that axis
-        #
-        # 	Creates the HDF5 file, creates the various groups and datasets, adds metadata (see "HDF5 OUTPUT FILE SETUP")
-        #
-        # 	Iterates through the positions array (see "MAIN ACQUISITION LOOP"):
-        # 	    calls motor_control.set_position(pos)
-        # 	    Waits for the scope to average the data, as per scope settings
-        # 	    Writes the acquired scope data to the HDF5 output file
-        #
-        # 	Closes the HDF5 file when done
-        #
 
-        #============================
-        # position array given by Data_Run_GUI_xy.py:
         positions, xpos, ypos, num_duplicate_shots = self.get_positions()
 
         # Create empty position arrays
@@ -292,70 +271,54 @@ class DataRunThread(QRunnable):
         n_times = self.scope.max_samples()
 
         traces = self.scope.displayed_traces()
-        try:  # try-catch for Ctrl-C keyboard interrupt
 
             ######### BEGIN MAIN ACQUISITION LOOP #########
-            print('starting acquisition loop at', time.ctime())
-            acquisition_loop_start_time = time.time()
+        print('starting acquisition loop at', time.ctime())
+        acquisition_loop_start_time = time.time()
 
-            nowx, nowy = (-999, -999) # why not just get the current position
-            for pos in positions:
-                # prevent motor from enabling/disabling when taking data at the same position
-                # this stops the motor noise from being picked up by the data in between shots
-                if nowx!=pos[1] or nowy!=pos[2]:
-                    # enable motor
-                    self.probe_drive.enable()
+        nowx, nowy = (-999, -999) # why not just get the current position
+        for pos in positions:
+            # prevent motor from enabling/disabling when taking data at the same position
+            # this stops the motor noise from being picked up by the data in between shots
+            if nowx!=pos[1] or nowy!=pos[2]:
+                # enable motor
+                self.probe_drive.enable()
 
-                    # move to next position
-                    print('position index =', pos[0], '  x =', pos[1], '  y =', pos[2], end='\n')
-                    self.probe_drive.move_to_position(pos[1], pos[2])
-                    self.signals.updated_position.emit(pos[1], pos[2])
-                    nowx, nowy = (pos[1], pos[2])
-                    x_encoder, y_encoder = self.probe_drive.current_probe_position()
-                    self.signals.updated_position.emit(x_encoder, y_encoder)
+                # move to next position
+                print('position index =', pos[0], '  x =', pos[1], '  y =', pos[2], end='\n')
+                self.probe_drive.move_to_position(pos[1], pos[2])
+                self.signals.updated_position.emit(pos[1], pos[2])
+                nowx, nowy = (pos[1], pos[2])
+                x_encoder, y_encoder = self.probe_drive.current_probe_position()
+                self.signals.updated_position.emit(x_encoder, y_encoder)
 
-                    # Disable the motor current output when taking the data
-                    self.probe_drive.disable()
+                # Disable the motor current output when taking the data
+                self.probe_drive.disable()
 
 
-                if pos[0] > 1:
-                    print ('Estimated remaining time:%6.2f'%((len(positions) - pos[0]) * (time.time()-acquisition_loop_start_time)/pos[0] / 3600))
-                else:
-                    print ('')
+            if pos[0] > 1:
+                print ('Estimated remaining time:%6.2f'%((len(positions) - pos[0]) * (time.time()-acquisition_loop_start_time)/pos[0] / 3600))
+            else:
+                print ('')
 
-                dataset, hdr_data = self.scope.acquire_displayed_traces()
-                time_ds = self.scope.time_array()[0:n_times]
-                for tr in traces:
-                    dataset[tr]['description'] = self.get_channel_description(tr)  # callback arg to the current function
-                    dataset[tr]['recorded'] = True
-                    dataset[tr]['shots per position'] = self.pos_param["num_shots"]
-                self.file.append(pos, dataset, hdr_data, time_ds)
-
-                # Show plot traces on GUI
-                try:
-                    self.scope.screen_dump()
-                    self.signals.new_screen_dump.emit()
-                except:
-                    print ('Unable to grab screen due to unknown Error')
-                    continue
-
-                self.signals.finished_position.emit(x_encoder, y_encoder)
-                ######### END MAIN ACQUISITION LOOP #########
-
-            except KeyboardInterrupt:
-                print('\n______Halted due to Ctrl-C______', '  at', time.ctime())
-
-            # Set any unused datasets to 0 (e.g. any C1-4 that was not acquired); when compressed they require negligible space
-            # Also add the text descriptions.    Do these together to be able to be able to make a note in the description
+            dataset, hdr_data = self.scope.acquire_displayed_traces()
+            time_ds = self.scope.time_array()[0:n_times]
             for tr in traces:
-                if datasets[tr].len() == 0:
-                    datasets[tr] = np.zeros(shape=(n_pos,n_times))
-                    datasets[tr].attrs['description'] = 'NOT RECORDED: ' + self.get_channel_description(tr)           # callback arg to the current function
-                    datasets[tr].attrs['recorded']    = False
-                else:
-                    datasets[tr].attrs['description'] = self.get_channel_description(tr)                              # callback arg to the current function
-                    datasets[tr].attrs['recorded']    = True
-                    datasets[tr].attrs['shots per position']    = self.pos_param["num_shots"]
+                dataset[tr]['description'] = self.get_channel_description(tr)  # callback arg to the current function
+                dataset[tr]['recorded'] = True
+                dataset[tr]['shots per position'] = self.pos_param["num_shots"]
+            self.file.append(pos, dataset, hdr_data, time_ds)
+
+            # Show plot traces on GUI
+            try:
+                self.scope.screen_dump()
+                self.signals.new_screen_dump.emit()
+            except:
+                print ('Unable to grab screen due to unknown Error')
+                continue
+
+            self.signals.finished_position.emit(x_encoder, y_encoder)
+            ######### END MAIN ACQUISITION LOOP #########
 
 
         f.close()  # close the HDF5 file
