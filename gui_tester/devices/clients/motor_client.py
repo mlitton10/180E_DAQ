@@ -19,10 +19,9 @@ class MotorClient(DeviceClient):
         self.connection = None
         self._connected = False
 
-    def connect(self):
-        retries = 30
-        retry_count = 0
-        while retry_count < retries:  # Retries added 17-07-11
+        last_exception: Exception | None = None
+
+        for attempt in range(1, retries + 1):
             try:
                 self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 ##if timeout is not None:
