@@ -30,6 +30,7 @@ class MotorClient(DeviceClient):
                 ##	s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, struct.pack('LL', timeout, 0))
                 self.connection.connect((self.ip, self.MOTOR_SERVER_PORT))
                 self.connected = True
+                return
             except ConnectionRefusedError:
                 retry_count += 1
                 print('...connection refused, at', time.ctime(), ' Is motor_server process running on remote machine?',
