@@ -42,9 +42,9 @@ class MotorMovement(BasicAppWidget):
 		self.velocityInput = QLineEdit()
 		self.velocityInput.setReadOnly(True)
 
-		self.initialize_widget()
+		self._initialize_widget()
 
-	def build_layout(self):
+	def _build_layout(self):
 		main_layout = QGridLayout(self)
 
 		position_box = make_form_table([self.x_position_box, self.y_position_box])
@@ -76,7 +76,7 @@ class MotorMovement(BasicAppWidget):
 		main_layout.addWidget(self.velocityButton, 4, 0)
 		main_layout.addWidget(self.velocityInput, 4, 1, 1, 1)
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		self.MoveButton.clicked.connect(self.move_to_position)
 		self.StopNowButton.clicked.connect(self.stop_now)
 		self.SetZero.clicked.connect(self.zero)
@@ -84,9 +84,9 @@ class MotorMovement(BasicAppWidget):
 		self.velocityButton.clicked.connect(self.display_current_speed)
 		pass
 
-	def initialize_widget(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_widget(self):
+		self._build_layout()
+		self._connect_signals()
 #----------------------------------------------------------------------
 
 	def move_to_position(self):

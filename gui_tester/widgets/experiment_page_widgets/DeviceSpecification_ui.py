@@ -10,13 +10,13 @@ class DeviceSpecification(BasicAppWidget):
     def __init__(self, file_paths: list[str], parent=None):
         super().__init__(parent)
         self.file_drop_down = DropdownRow("Select Device: ", file_paths, parent)
-        self.initialize_widget()
+        self._initialize_widget()
 
 
-    def connect_signals(self):
+    def _connect_signals(self):
         self.file_drop_down.optionSelected.connect(self.fileSelected)
 
-    def build_layout(self):
+    def _build_layout(self):
         main_layout = QGridLayout(self)
 
         self.file_drop_down.layout().setContentsMargins(0, 0, 0, 0)
@@ -24,9 +24,9 @@ class DeviceSpecification(BasicAppWidget):
 
         main_layout.addWidget(self.file_drop_down, 0, 1)
 
-    def initialize_widget(self):
-        self.build_layout()
-        self.connect_signals()
+    def _initialize_widget(self):
+        self._build_layout()
+        self._connect_signals()
 
     def current_file(self) -> str:
         return self.file_drop_down.current_option()

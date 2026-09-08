@@ -17,7 +17,7 @@ class CurrentControlWidget(BasicAppWidget):
         self.plot_only = QCheckBox("Plot only")
         self.set_button = QPushButton("Set Current")
 
-        self.initialize_widget()
+        self._initialize_widget()
 
     @pyqtSlot()
     def _request_current(self):
@@ -32,7 +32,7 @@ class CurrentControlWidget(BasicAppWidget):
             self.currentSet.emit([current_1, current_2, current_3])
             self.currentPlot.emit([current_1, current_2, current_3])
 
-    def build_layout(self):
+    def _build_layout(self):
         layout = QGridLayout(self)
         layout.setContentsMargins(0,0,0,0)
 
@@ -48,7 +48,7 @@ class CurrentControlWidget(BasicAppWidget):
         layout.addWidget(self.plot_only, 3,1,1,1)
         self.setLayout(layout)
 
-    def connect_signals(self):
+    def _connect_signals(self):
         self.set_button.clicked.connect(self._request_current)
 
     def initialize_boxes(self):
@@ -61,7 +61,7 @@ class CurrentControlWidget(BasicAppWidget):
         self.current_input_3.set_range(0.0, 100.0)
         self.current_input_3.spin_box.setSuffix(" A")
 
-    def initialize_widget(self):
-        self.build_layout()
-        self.connect_signals()
+    def _initialize_widget(self):
+        self._build_layout()
+        self._connect_signals()
         self.initialize_boxes()

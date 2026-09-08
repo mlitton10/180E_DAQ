@@ -8,11 +8,11 @@ class BasicAppWidget(QGroupBox):
             self.setTitle(title)
 
 
-    def build_layout(self):
+    def _build_layout(self):
         raise NotImplementedError("Build the layout")
 
-    def connect_signals(self):
+    def _connect_signals(self):
         raise NotImplementedError("Connect the signals")
 
-    def initialize_widget(self):
+    def _initialize_widget(self):
         raise NotImplementedError("Initialize the widget")

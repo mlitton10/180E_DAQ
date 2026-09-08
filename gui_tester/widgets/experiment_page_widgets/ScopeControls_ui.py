@@ -19,21 +19,21 @@ class ScopeChannel(BasicAppWidget):
 		self.c3 = UserTextRow("Channel 3:")
 		self.c4 = UserTextRow("Channel 4:")
 
-		self.initialize_widget()
+		self._initialize_widget()
 
-	def build_layout(self):
+	def _build_layout(self):
 		sc_layout = QGridLayout(self)
 
 		channel_box = make_form_table([self.c1, self.c2, self.c3, self.c4])
 
 		sc_layout.addWidget(channel_box, 0, 0, 3, 1)
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		pass
 
-	def initialize_widget(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_widget(self):
+		self._build_layout()
+		self._connect_signals()
 
 	def get_channel_description(self):
 		channel_description = {"C1": self.c1.read_value(),

@@ -29,14 +29,14 @@ class PositionControls(BasicAppWidget):
 
 		self.ConfirmButton = QPushButton("Confirm Input",self)
 
-		self.initialize_widget()
+		self._initialize_widget()
 
-	def connect_signals(self):
+	def _connect_signals(self):
 		self.ConfirmButton.clicked.connect(self.confirm)
 		self.drop_down.optionSelected.connect(self.display_coordinates)
 		pass
 
-	def build_layout(self):
+	def _build_layout(self):
 		layout = QGridLayout(self)
 		layout.setContentsMargins(0,0,0,0)
 
@@ -57,9 +57,9 @@ class PositionControls(BasicAppWidget):
 		layout.addWidget(self.ConfirmButton, 6, 0, 1, 1)
 		self.setLayout(layout)
 
-	def initialize_widget(self):
-		self.build_layout()
-		self.connect_signals()
+	def _initialize_widget(self):
+		self._build_layout()
+		self._connect_signals()
 
 	def collect_parameters(self):
 		coordinate_system = self.current_coordinate_system()
