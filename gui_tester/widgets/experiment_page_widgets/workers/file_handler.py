@@ -21,7 +21,7 @@ class HDF5FileHandler:
         self._ctl_grp = None
         self._pos_grp = None
 
-    def open(self, n_pos, n_times, names, WAVEDESC_SIZE=346):
+    def open(self):
         self._file = h5py.File(self.path, "w")
 
         # This assumes every acquisition has the same
