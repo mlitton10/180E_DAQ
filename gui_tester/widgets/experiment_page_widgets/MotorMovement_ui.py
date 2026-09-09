@@ -119,8 +119,9 @@ class MotorMovement(BasicAppWidget):
 	def zero(self):
 		zeroreply=QMessageBox.question(self, "Set Zero",
 			"You are about to set the current probe position to (0,0). Are you sure?",
-			QMessageBox.Yes, QMessageBox.No)
-		if zeroreply == QMessageBox.Yes:
+			QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+									   QMessageBox.StandardButton.No)
+		if zeroreply == QMessageBox.StandardButton.Yes:
 			QMessageBox.about(self, "Set Zero", "Probe position is now (0,0).")
 			self.probe_drive.set_zero()
 
