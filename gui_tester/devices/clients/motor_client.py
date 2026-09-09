@@ -14,6 +14,7 @@ class MotorClient(DeviceClient):
     last_pos = 999
     def __init__(self, ip: str, verbose = True):
         self.ip = ip
+        self.verbose = verbose
         self.connected = False
         self.connection: socket.socket | None = None
 
