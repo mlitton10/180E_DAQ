@@ -27,9 +27,11 @@ class MotorClient(DeviceClient):
 
         for attempt in range(1, retries + 1):
             try:
-                self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-                self.connection.connect((self.ip, self.MOTOR_SERVER_PORT))
+                connection.connect((self.ip, self.MOTOR_SERVER_PORT))
+
+                self.connection = connection
                 self.connected = True
                 return
             except ConnectionRefusedError:
