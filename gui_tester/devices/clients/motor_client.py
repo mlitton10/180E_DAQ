@@ -40,18 +40,32 @@ class MotorClient(DeviceClient):
                     )
 
                 return
-            except ConnectionRefusedError:
-                retry_count += 1
-                print('...connection refused, at', time.ctime(), ' Is motor_server process running on remote machine?',
-                      '  Retry', retry_count, '/', retries, "on", str(self.ip))
-            except TimeoutError:
-                retry_count += 1
-                print('...connection attempt timed out, at', time.ctime(),
-                      '  Retry', retry_count, '/', retries, "on", str(self.ip))
+            except (ConnectionRefusedError, TimeoutError, OSError) as exc:
+                last_exception = exc
 
-        if retry_count >= retries:
-            self.connected = False
-            print('Unable to connect to motor at', self.ip)
+                if self.verbose:
+                    print(
+                        f"Motor connection attempt "
+                        f"{attempt}/{retries} failed: "
+                        f"{exc}"
+                    )
+
+                try:
+                    connection.close()
+                except (UnboundLocalError, OSError):
+                    pass
+
+                if attempt < retries:
+                    time.sleep(retry_delay)
+
+        self.connected = False
+        self.connection = None
+
+        raise ConnectionError(
+            f"Unable to connect to motor at "
+            f"{self.ip}:{self.MOTOR_SERVER_PORT}"
+        ) from last_exception
+
 
     def disconnect(self):
         if self.connection is not None:
