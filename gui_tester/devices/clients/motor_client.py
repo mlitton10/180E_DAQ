@@ -46,7 +46,12 @@ class MotorClient(DeviceClient):
             print('Unable to connect to motor at', self.ip)
 
     def disconnect(self):
-        self.connection.close()
+        if self.connection is not None:
+            try:
+                self.connection.close()
+            except OSError:
+                pass
+        self.connection = None
         self.connected = False
 
     def is_connected(self):
