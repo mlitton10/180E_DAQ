@@ -33,6 +33,12 @@ class MotorClient(DeviceClient):
 
                 self.connection = connection
                 self.connected = True
+
+                if self.verbose:
+                    print(
+                        f"Connected to motor at {self.ip}"
+                    )
+
                 return
             except ConnectionRefusedError:
                 retry_count += 1
