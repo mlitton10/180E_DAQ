@@ -8,7 +8,6 @@ class MotorClient(DeviceClient):
     MSIPA_CACHE_FN = 'motor_server_ip_address_cache.tmp'
     MOTOR_SERVER_PORT = 7776
     BUF_SIZE = 1024
-    # server_ip_addr = '10.10.10.10' # for direct ethernet connection to PC
 
     # - - - - - - - - - - - - - - - - -
     # To search IP address:
