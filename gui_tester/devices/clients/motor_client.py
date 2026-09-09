@@ -103,7 +103,7 @@ class MotorClient(DeviceClient):
             buf.append(message[i])
         buf.append(13)
 
-        self.connection.send(buf)
+        self.connection.sendall(buf)
 
         buf_size = 1024
         data = self.connection.recv(buf_size)
