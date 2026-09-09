@@ -90,10 +90,8 @@ class MotorClient(DeviceClient):
         self._connected = value
 
     def send_command(self, command:str):
-        if not self.connected:
-            con_res = self.connect()
-            if con_res is None:
-                raise ConnectionRefusedError("Unable to connect to motor server at", self.ip)
+        if not self.connected or self.connection is None:
+            self.connect()
 
         message = bytearray(command, encoding='ASCII')
         buf = bytearray(2)
