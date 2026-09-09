@@ -17,7 +17,8 @@ class MotorClient(DeviceClient):
         self.connection: socket.socket | None = None
 
     def connect(self,
-                retries: int = 30):
+                retries: int = 30,
+                retry_delay: int = 1):
         if self.connected and self.connection is not None:
             return
 
