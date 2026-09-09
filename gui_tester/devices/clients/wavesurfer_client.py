@@ -33,6 +33,7 @@ class WaveSurferClient(DeviceClient):
                 self.idn_string = scope.query('*IDN?')
                 if self.verbose: print('<:>', self.idn_string)  # returns scope type, name, version info
                 self.connected = True
+                return
             except Exception:
                 self.rm.close()
                 self.rm = None

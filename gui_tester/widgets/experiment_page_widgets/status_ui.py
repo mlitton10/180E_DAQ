@@ -1,7 +1,7 @@
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QGridLayout
 from gui_tester.widgets.basic_templates.basic_application_widget import BasicAppWidget
-from gui_tester.widgets.basic_templates.status_led import StatusLED
+from gui_tester.widgets.basic_templates.status_led import StatusLED, LEDState
 
 
 class StatusWidget(BasicAppWidget):
@@ -87,19 +87,19 @@ class StatusWidget(BasicAppWidget):
         self.status_label.setText(message)
 
     @pyqtSlot(bool)
-    def set_motor_status(self, connected: bool) -> None:
+    def set_motor_status(self, connected: LEDState) -> None:
         self.motor_led.set_status(connected)
 
     @pyqtSlot(bool)
-    def set_scope_status(self, connected: bool) -> None:
+    def set_scope_status(self, connected: LEDState) -> None:
         self.scope_led.set_status(connected)
 
     @pyqtSlot(bool)
-    def set_acquisition_status(self, active: bool) -> None:
+    def set_acquisition_status(self, active: LEDState) -> None:
         self.acquisition_led.set_status(active)
 
     @pyqtSlot(bool)
-    def set_saving_status(self, active: bool) -> None:
+    def set_saving_status(self, active: LEDState) -> None:
         self.saving_led.set_status(active)
 
     def reset(self) -> None:
