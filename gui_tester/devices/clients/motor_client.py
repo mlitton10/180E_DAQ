@@ -9,10 +9,8 @@ class MotorClient(DeviceClient):
     MOTOR_SERVER_PORT = 7776
     BUF_SIZE = 1024
 
-    # - - - - - - - - - - - - - - - - -
-    # To search IP address:
-    last_pos = 999
-    def __init__(self, ip: str, verbose = True):
+    def __init__(self, ip: str,
+                 verbose = True):
         self.ip = ip
         self.verbose = verbose
         self.connected = False
