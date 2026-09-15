@@ -11,6 +11,8 @@ from gui_tester.widgets.basic_templates.generic_worker import Worker
 import threading
 import traceback
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, QObject, QRunnable
+
+from gui_tester.widgets.experiment_page_widgets.schemas.schemas import QuickExperimentRunConfig
 from gui_tester.widgets.experiment_page_widgets.workers.file_handler import HDF5FileHandler
 
 
