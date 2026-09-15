@@ -16,7 +16,6 @@ from gui_tester.widgets.experiment_page_widgets.AcquisitionControls_ui import Ac
 from gui_tester.widgets.experiment_page_widgets.canvas_ui import MyMplCanvas, compute_point_grid, \
 	compute_point_grid_polar
 from gui_tester.widgets.experiment_page_widgets.ScopeControls_ui import ScopeChannel
-from gui_tester.widgets.experiment_page_widgets.SoftwareVersion_ui import SoftwareVersion
 from gui_tester.widgets.experiment_page_widgets.PositionControls_ui import PositionControls
 
 dir_path=os.path.dirname(os.path.realpath(__file__))
