@@ -250,13 +250,14 @@ class ExperimentControl(ApplicationTab):
 		run_positions = get_experiment_positions(pos_param, coordinate_system)
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
-		data_run = ExperimentWorker(output_path, self.mm.probe_drive, pos_param, channel_description, ip_addrs)
-		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled,
-							  [self.pc,
-							   self.ac,
-							   self.sc,
-							   self.mm])
-
+		config = QuickExperimentRunConfig(self.scope_ip,
+										  output_path,
+										  run_positions,
+										  pos_param["num_shots"],
+										  channel_description,
+										  self.mm.probe_drive)
+		data_run = ExperimentWorker(config)
+		data_run.started.connect(self.freeze_all_controls)
 		data_run.finished.connect(self.data_run_finished)
 		data_run.cancel.connect(self.acquisition_canceled)
 		data_run.updated_position.connect(self.update_current_position_during_data_run)
