@@ -86,6 +86,7 @@ class ExperimentWorker(Worker):
         self._set_status(
             f"Starting experiment: {total_positions} positions"
         )
+
         nowx, nowy = (-999, -999)  # why not just get the current position
         for index, position in enumerate(positions):
 
@@ -96,16 +97,15 @@ class ExperimentWorker(Worker):
             self._set_status(
                 f"Moving motor to position {position}"
             )
-            if nowx!=pos[1] or nowy!=pos[2]:
+            if nowx!=position[0] or nowy!=position[1]:
                 # enable motor
                 self.probe_drive.enable()
 
                 # move to next position
                 self.probe_drive.move_to_position(*position)
-                self.updated_position.emit(*position)
-                nowx, nowy = (position[1], position[2])
+                nowx, nowy = (position[0], position[1])
                 x_encoder, y_encoder = self.probe_drive.current_probe_position()
-                self.updated_position.emit(x_encoder, y_encoder)
+                self.position_changed.emit(x_encoder, y_encoder)
 
                 # Disable the motor current output when taking the data
                 self.probe_drive.disable()
