@@ -24,6 +24,68 @@ from PyQt6 import QtCore
 
 data_running = False
 
+
+def compute_cartesian_experiment_position_list(parameters):
+
+	x_max = parameters['xmax']
+	x_min = parameters['xmin']
+	y_max = parameters['ymax']
+	y_min = parameters['ymin']
+	nx = parameters['nx']
+	ny = parameters['ny']
+
+	x_pos = np.linspace(x_min, x_max, nx)
+	y_pos = np.linspace(y_min, y_max, ny)
+
+	position_list = []
+
+	counter = 0
+	for i, y in enumerate(y_pos):
+		for j, x in enumerate(x_pos):
+			if i % 2 == 0:
+				position_list.append([x_pos[j], y])
+			else:
+				position_list.append([x_pos[nx - 1 - j], y])
+
+	position_list_final = []
+	for pos in position_list:
+		for i in range(parameters["num_shots"]):
+			position_list_final.append(pos)
+
+	return position_list_final
+
+def compute_polar_experiment_position_list(parameters):
+
+	r_max = parameters['r_max']
+	r_min = parameters['r_min']
+	theta_max = parameters['theta_max']
+	theta_min = parameters['theta_min']
+	n_r = parameters['n_r']
+	n_theta = parameters['n_theta']
+
+	r_pos = np.linspace(r_min, r_max, n_r)
+	theta_pos = np.linspace(theta_min, theta_max, n_theta) * np.pi / 180
+
+	X = np.zeros(n_r * n_theta)
+	Y = np.zeros(n_r * n_theta)
+
+	index = 0
+	for r in r_pos:
+		for theta in theta_pos:
+			X[index] = r * np.cos(theta)
+			Y[index] = r * np.sin(theta)
+			index += 1
+
+	return X, Y
+
+def get_experiment_positions(params, coordinate_system):
+	if coordinate_system == "Cartesian":
+		position_list = compute_point_grid(params)
+	elif coordinate_system == "Polar":
+		position_list = compute_point_grid_polar(params)
+	return position_list
+
+
 class ExperimentControl(ApplicationTab):
 
 	def __init__(self, machine_config_paths, device_ips):
