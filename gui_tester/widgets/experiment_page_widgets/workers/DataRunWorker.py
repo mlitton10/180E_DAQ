@@ -23,7 +23,8 @@ class ExperimentWorker(Worker):
     progress_changed = pyqtSignal(int)
 
     # More detailed progress information
-    position_changed = pyqtSignal(int, int, float)
+    position_changed = pyqtSignal(float, float)
+    finished_position = pyqtSignal(float, float)
 
     # Acquisition data for the GUI/plot
     new_screen_dump = pyqtSignal()
