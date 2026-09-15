@@ -53,7 +53,7 @@ class HDF5FileHandler:
 
         self._scope_grp.attrs['ScopeType'] = idn_string
 
-    def append(self, position: float,
+    def append(self, position: tuple,
                dataset: dict[str, np.ndarray],
                hdr_data,
                time,
