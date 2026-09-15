@@ -250,7 +250,6 @@ class ExperimentControl(ApplicationTab):
 
 		run_positions = get_experiment_positions(pos_param, coordinate_system)
 
-		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
 		config = QuickExperimentRunConfig(self.scope_ip,
 										  output_path,
 										  run_positions,
