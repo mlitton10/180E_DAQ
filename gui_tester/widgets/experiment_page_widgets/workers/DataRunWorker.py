@@ -26,7 +26,7 @@ class ExperimentWorker(Worker):
     position_changed = pyqtSignal(int, int, float)
 
     # Acquisition data for the GUI/plot
-    data_ready = pyqtSignal(object)
+    new_screen_dump = pyqtSignal()
 
     # Experiment lifecycle
     started = pyqtSignal()
