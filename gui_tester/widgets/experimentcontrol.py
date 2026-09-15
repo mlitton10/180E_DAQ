@@ -6,6 +6,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel, QGridLayout, QMessageBox, QFileDialog
 from gui_tester.widgets.basic_templates.basic_application_tab import ApplicationTab
 from gui_tester.widgets.experiment_page_widgets.DeviceSpecification_ui import DeviceSpecification
+from gui_tester.widgets.experiment_page_widgets.schemas.schemas import QuickExperimentRunConfig
 from gui_tester.widgets.experiment_page_widgets.status_ui import StatusWidget
 from gui_tester.widgets.experiment_page_widgets.workers.DataRunWorker import ExperimentWorker
 from gui_tester.widgets.experiment_page_widgets.workers.LoadMachineConfig import LoadMachineWorker
