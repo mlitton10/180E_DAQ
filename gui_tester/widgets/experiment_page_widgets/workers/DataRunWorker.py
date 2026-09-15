@@ -133,11 +133,11 @@ class ExperimentWorker(Worker):
             self._set_status("Writing data...")
 
             # Update position information
-            self.position_changed.emit(
-                index + 1,
-                total_positions,
-                position,
+            self.finished_position.emit(
+                position
             )
+            self.scope.screen_dump()
+            self.new_screen_dump.emit()
 
             progress = int(
                 100 * (index + 1) / total_positions
