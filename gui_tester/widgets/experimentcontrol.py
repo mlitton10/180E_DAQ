@@ -263,7 +263,9 @@ class ExperimentControl(ApplicationTab):
 		data_run.position_changed.connect(self.update_current_position_during_data_run)
 		data_run.finished_position.connect(self.mark_finished_positions)
 		data_run.new_screen_dump.connect(self.update_screen_dump)
-		self.threadpool.start(data_run)
+		data_run.finished.connect(self.data_run_finished)
+
+		self.run_worker_as/ync(data_run, self.data_run_finished, self.acquisition_canceled)
 
 	def acquisition_canceled(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
