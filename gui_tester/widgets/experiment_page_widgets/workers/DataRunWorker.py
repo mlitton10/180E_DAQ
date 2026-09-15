@@ -36,12 +36,12 @@ class ExperimentWorker(Worker):
     # Fatal error
     error = pyqtSignal(str)
 
-    def __init__(self, config: ExperimentConfig, motor_control):
+    def __init__(self, config: QuickExperimentRunConfig):
         super().__init__()
 
         self.config = config
 
-        self.probe_drive = motor_control
+        self.probe_drive = config.probe_drive
         self.scope = WaveSurfer(config.scope_ip)
         self.writer = HDF5FileHandler(config.output_path)
 
