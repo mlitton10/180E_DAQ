@@ -30,7 +30,7 @@ class ApplicationTab(QWidget):
             self.thread.quit()
             self.thread.wait()
 
-    def run_worker_async(self, worker: Worker, finished_call, failed_call, widget):
+    def run_worker_async(self, worker: Worker, finished_call, failed_call, widget=None):
         self.thread = QThread(self)
         self.worker = worker
 
