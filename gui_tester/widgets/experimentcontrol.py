@@ -245,6 +245,9 @@ class ExperimentControl(ApplicationTab):
 		pos_param["num_run"] = self.ac.num_run.value()
 
 		channel_description = self.update_channel_information()
+		coordinate_system = self.retrieve_coordinate_system()
+
+		run_positions = get_experiment_positions(pos_param, coordinate_system)
 
 		ip_addrs = {'x': self.x_ip, 'y': self.y_ip, 'scope': self.scope_ip}
 		data_run = ExperimentWorker(output_path, self.mm.probe_drive, pos_param, channel_description, ip_addrs)
