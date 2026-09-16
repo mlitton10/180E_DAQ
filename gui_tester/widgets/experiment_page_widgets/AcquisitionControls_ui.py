@@ -49,3 +49,9 @@ class AcquisitionControls(BasicAppWidget):
 	def _initialize_widget(self):
 		self._build_layout()
 		self._connect_signals()
+		self._initialize_values()
+
+	def get_values(self):
+		params = {'num_shots':self.num_shots.read_value(),
+				  'num_run':self.num_run.read_value()}
+		return params
