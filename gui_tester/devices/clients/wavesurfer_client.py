@@ -32,7 +32,7 @@ class WaveSurferClient(DeviceClient):
         try:
             self.connection = self.rm.open_resource(resource_str, resource_pyclass=MessageBasedResource)
             try:
-                self.idn_string = scope.query('*IDN?')
+                self.idn_string = self.connection.query('*IDN?')
                 if self.verbose: print('<:>', self.idn_string)  # returns scope type, name, version info
                 self.connected = True
                 return
