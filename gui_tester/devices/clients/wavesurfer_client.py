@@ -39,9 +39,10 @@ class WaveSurferClient(DeviceClient):
             except Exception:
                 self.disconnect()
                 raise ConnectionError('\n**** Scope at "', self.ip, '" did not respond to "*IDN?" query\n')
-        except Exception:
+        except Exception as e:
             self.rm.close()
             self.rm = None
+            print(e)
             raise ConnectionError('**** Scope not found at "', self.ip, '"\n')
 
         # send a (standard) *IDN? query as a way of testing whether we have a scope:
