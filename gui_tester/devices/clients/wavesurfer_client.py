@@ -37,8 +37,7 @@ class WaveSurferClient(DeviceClient):
                 self.connected = True
                 return
             except Exception:
-                self.rm.close()
-                self.rm = None
+                self.disconnect()
                 raise ConnectionError('\n**** Scope at "', self.ip, '" did not respond to "*IDN?" query\n')
         except Exception:
             self.rm.close()
