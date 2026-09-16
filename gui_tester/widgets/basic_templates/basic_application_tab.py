@@ -54,6 +54,6 @@ class ApplicationTab(QWidget):
     def on_thread_finished(self, widget=None):
         self.thread = None
         self.worker = None
-        if not widget:
+        if widget is not None:
             widget.setEnabled(True)
 
