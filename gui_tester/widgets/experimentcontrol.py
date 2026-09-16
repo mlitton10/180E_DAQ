@@ -242,8 +242,10 @@ class ExperimentControl(ApplicationTab):
 		output_path = Path(file_path)
 
 		pos_param = self.update_parameters()
-		pos_param["num_shots"] = self.ac.num_shots.value()
-		pos_param["num_run"] = self.ac.num_run.value()
+
+		run_params = self.ac.get_values()
+		pos_param["num_shots"] = run_params["num_shots"]
+		pos_param["num_run"] = run_params['num_run']
 
 		channel_description = self.update_channel_information()
 		coordinate_system = self.retrieve_coordinate_system()
