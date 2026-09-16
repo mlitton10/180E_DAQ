@@ -35,12 +35,12 @@ class MainWindow(QMainWindow):
 
 def main():
 	style_path = os.path.join(
-		"resources",
+		"gui_tester/resources",
 		"styles",
 		"dark.qss"
 	)
 
-	config_path = Path("config","network_setup.json")
+	config_path = Path("gui_tester/config", "network_setup.json")
 
 	app = QApplication(sys.argv)
 	app.setStyle(QStyleFactory.create("Fusion"))
@@ -48,10 +48,10 @@ def main():
 	with open(style_path) as f:
 		app.setStyleSheet(f.read())
 
-	config = AppConfig("config/network_setup.json")
+	config = AppConfig("gui_tester/config/network_setup.json")
 
-	machine_configuration_dir = "./data/machine_configurations/"
-	magnet_geometry_dir = "./data/magnet_information/"
+	machine_configuration_dir = "gui_tester/data/machine_configurations/"
+	magnet_geometry_dir = "gui_tester/data/magnet_information/"
 	machine_config_paths = list_data_files(machine_configuration_dir)
 	window = MainWindow(machine_config_paths, magnet_geometry_dir, config)
 
