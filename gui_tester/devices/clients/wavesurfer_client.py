@@ -30,7 +30,7 @@ class WaveSurferClient(DeviceClient):
         resource_str = 'VICP::' + self.ip + '::INSTR'  # legcy resource string format that i may need for old scopes
         resource_str = 'TCPIP0::' + self.ip + '::INSTR'  # modern resource string format TCPIP connection
         try:
-            self.connection = self.rm.open_resource('VICP::' + self.ip + '::INSTR', resource_pyclass=MessageBasedResource)
+            self.connection = self.rm.open_resource(resource_str, resource_pyclass=MessageBasedResource)
             try:
                 self.idn_string = scope.query('*IDN?')
                 if self.verbose: print('<:>', self.idn_string)  # returns scope type, name, version info
