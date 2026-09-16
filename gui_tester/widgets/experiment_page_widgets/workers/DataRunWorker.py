@@ -162,9 +162,6 @@ class ExperimentWorker(Worker):
         if not self.config.positions:
             raise ValueError("No motor positions were provided.")
 
-        if not self.config.motor_ip:
-            raise ValueError("Motor IP address is empty.")
-
         if not self.config.scope_ip:
             raise ValueError("Oscilloscope IP address is empty.")
 
