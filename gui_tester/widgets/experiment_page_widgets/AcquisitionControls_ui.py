@@ -37,7 +37,7 @@ class AcquisitionControls(BasicAppWidget):
 		layout.addWidget(self.TestShot, 0, 1)
 		layout.addWidget(shots_box, 1, 0, 2, 2)
 
-	def initialize_values(self):
+	def _initialize_values(self):
 		self.num_shots.set_range(max_range=200)
 
 		self.num_run.set_value(1)
