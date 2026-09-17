@@ -174,7 +174,7 @@ class WaveSurfer:
         self.client.connect()
         self.scope = self.client.connection
         self.scope.timeout = self.timeout
-        self.scope.chunk_size = 1000000
+        self.scope.chunk_size = 10 * 1024 * 1024
         self.write('COMM_HEADER OFF')
 
         if len(self.valid_trace_names) == 0:
