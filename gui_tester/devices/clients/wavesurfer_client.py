@@ -26,8 +26,9 @@ class WaveSurferClient(DeviceClient):
         if self.verbose: print('<:> attempting to open resource VICP::' + self.ip + '::INSTR')
 
         # attempt to open a connection to the scope
-        resource_str = 'VICP::' + self.ip + '::INSTR'  # legcy resource string format that i may need for old scopes
-        resource_str = 'TCPIP0::' + self.ip + '::INSTR'  # modern resource string format TCPIP connection
+        resource_str = 'VICP::' + self.ip# + '::INSTR'  # ALWAYS use VICP. It is far more reliable than other connection
+        # types
+
         try:
             self.connection = self.rm.open_resource(resource_str, resource_pyclass=MessageBasedResource)
             try:
