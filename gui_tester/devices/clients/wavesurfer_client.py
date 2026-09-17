@@ -14,7 +14,6 @@ class WaveSurferClient(DeviceClient):
         self.connected = False
         self.rm = visa.ResourceManager()
         self.connection = None
-        self.connect()   # use resource manager to open 'VICP::'+ipv4_addr+'::INSTR'; assign self.scope to this "instrument"
 
     def connect(self):
         """ open the NI-VISA resource manager
