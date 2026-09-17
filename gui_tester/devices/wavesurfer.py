@@ -192,6 +192,13 @@ class WaveSurfer:
     def _list_resources(self):
         self.client.rm_list_resources()
 
+    def write(self, cmd):
+        self.scope.write(cmd)
+
+    def query(self, cmd):
+        resp = self.scope.query(cmd)
+        return resp
+
     def screen_dump(self, white_background = False, png_fn = 'scope_screen_dump.png', full_screen = True):
         """ obtain a screen dump from the scope, in the form of a .png file
             write the file with filenam png_fn (=argument)
