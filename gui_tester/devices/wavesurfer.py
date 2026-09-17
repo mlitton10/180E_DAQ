@@ -212,7 +212,6 @@ class WaveSurfer:
         else:
             area = 'GRIDAREAONLY'
         # write "hardcopy" setup information:
-        self.scope.write('COMM_HEADER OFF')
         self.scope.write('HARDCOPY_SETUP DEV, PNG, BCKG, '+bckg+', DEST, "REMOTE", AREA, '+area)
         # send screen dump command
         self.write('SCREEN_DUMP')
