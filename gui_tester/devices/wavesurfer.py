@@ -173,6 +173,9 @@ class WaveSurfer:
     def connect(self) -> None:
         self.client.connect()
         self.scope = self.client.connection
+        self.configure_scope()
+
+    def configure_scope(self):
         self.scope.timeout = self.timeout
         self.scope.chunk_size = 10 * 1024 * 1024
         self.write('COMM_HEADER OFF')
