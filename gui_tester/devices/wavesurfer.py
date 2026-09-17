@@ -537,6 +537,7 @@ class WaveSurfer:
         t0 = time.time()
 
         self.scope.write(trace+':WAVEFORM?')
+#        self.scope.write("WAIT")
         self.trace_bytes = self.scope.read_raw()
 
         t1 = time.time()
