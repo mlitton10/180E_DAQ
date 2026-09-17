@@ -490,10 +490,6 @@ class WaveSurfer:
             acquire enough sweeps for the averaging, then read displayed scope trace data into HDF5 datasets
         """
         timeout = 2000 # seconds
-        timed_out, N = self.wait_for_max_sweeps()  # leaves scope not triggering
-
-        if timed_out:
-            print('**** averaging timed out: got '+str(N)+' at %.6g s' % timeout)
 
         traces = self.displayed_traces()
         n_times = self.max_samples()
