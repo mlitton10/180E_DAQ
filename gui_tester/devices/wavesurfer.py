@@ -496,7 +496,7 @@ class WaveSurfer:
             print('**** averaging timed out: got '+str(N)+' at %.6g s' % timeout)
 
         traces = self.displayed_traces()
-        n_times = self.scope.max_samples()
+        n_times = self.max_samples()
         dataset = {}
         hdr_data = {}
         for tr in traces:
