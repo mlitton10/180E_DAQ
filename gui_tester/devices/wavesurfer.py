@@ -643,6 +643,7 @@ class WaveSurfer:
         else:
             print('set_trigger_mode function receives trigger commands other than AUTO, NORM, SINGLE or STOP.')
 
+      #  self.scope.query('WaitUntilIdle')
         # for i in range(25):   #17-07-11 added verification
         # 	txt = self.scope.query('TRIG_MODE?')
         # 	if txt[0:3] == trigger_mode[0:3]:   # '\n' stuck on end it seems
