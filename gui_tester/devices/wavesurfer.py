@@ -109,7 +109,7 @@ KNOWN_TRACE_NAMES = sorted(list(EXPANDED_TRACE_NAMES.keys()))
 
 class WaveSurfer:
     """ implements communication with a LeCroy X-Stream scope """
-    valid_trace_names = KNOWN_TRACE_NAMES  # list of trace names recognized by the scope (filled in on first call)
+    valid_trace_names = ()  # list of trace names recognized by the scope (filled in on first call)
     gaaak_count = 0         # peculiar error described below (see wait_for_sweeps())
     idn_string = ''         # scope *idn response
     trace_bytes = numpy.zeros(shape=(WAVEDESC_SIZE), dtype='b')   # buffer for trace data, reassigned to the correct size later
