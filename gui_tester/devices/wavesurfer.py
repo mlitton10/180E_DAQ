@@ -214,18 +214,13 @@ class WaveSurfer:
         # write "hardcopy" setup information:
         self.scope.write('HARDCOPY_SETUP DEV, PNG, BCKG, '+bckg+', DEST, "REMOTE", AREA, '+area)
         # send screen dump command
-        self.write('SCREEN_DUMP')
+        self.scope.write('SCREEN_DUMP')
         # read screen dump information: this is exactly the contents of a .png file, typically < 40 kB
         screen_image_png = self.scope.read_raw()
         # write the .png file
         file = open(png_fn, 'wb')      # Can this be achieved without having to go to disk??
         file.write(screen_image_png)    # actually, this is not a bug, it's a feature, since we probably want the image in a file anyway
         file.close()
-        # x = mpimg.imread(png_fn)
-        # (h,w,d) = numpy.shape(x)
-        # plt.figure(num=None, figsize=(w/100, h/100), dpi=100, facecolor='w', edgecolor='k')
-        # plt.subplots_adjust(left=0.0, right=1.0, bottom=0.0, top=1.0)
-        # plt.imshow(x)
 
     #-------------------------------------------------------------------------
 
@@ -233,9 +228,9 @@ class WaveSurfer:
         """ send a message to the status line on the scope; nominally this should be < 50 chars, but not checked
         """
         if len(msg) > 49:   # specs say 49 chars max: todo: is this still the limit?
-            self.write('MESSAGE "'+msg[0:46]+'..."')
+            self.scope.write('MESSAGE "'+msg[0:46]+'..."')
         else:
-            self.write('MESSAGE "'+msg+'"')
+            self.scope.write('MESSAGE "'+msg+'"')
 
     #-------------------------------------------------------------------------
 
@@ -279,9 +274,9 @@ class WaveSurfer:
             The return value is the actual number of samples that the scope will acquire
         """
         if n_samples > 0:
-            self.write('VBS "app.Acquisition.Horizontal.MaxSamples=' + str(n_samples) + '"')
+            self.scope.write('VBS "app.Acquisition.Horizontal.MaxSamples=' + str(n_samples) + '"')
         # find out what happened:
-        return int(self.query('VBS? "return=app.Acquisition.Horizontal.NumPoints"'))
+        return int(self.scope.query('VBS? "return=app.Acquisition.Horizontal.NumPoints"'))
 
     #-------------------------------------------------------------------------
 
@@ -289,15 +284,15 @@ class WaveSurfer:
     def displayed_channels(self)  -> tuple[()]:    # returns a tuple of channel names, e.g. ('C1', 'C4')
         """ return displayed CHANNELS only, ignoring math, memory, etc """
         channels = ()
-        self.write('COMM_HEADER OFF')
+        self.scope.write('COMM_HEADER OFF')
 
-        if self.query('C1:TRACE?')[0:2] == 'ON':
+        if self.scope.query('C1:TRACE?')[0:2] == 'ON':
             channels += ('C1',)
-        if self.query('C2:TRACE?')[0:2] == 'ON':
+        if self.scope.query('C2:TRACE?')[0:2] == 'ON':
             channels += ('C2',)
-        if self.query('C3:TRACE?')[0:2] == 'ON':
+        if self.scope.query('C3:TRACE?')[0:2] == 'ON':
             channels += ('C3',)
-        if self.query('C4:TRACE?')[0:2] == 'ON':
+        if self.scope.query('C4:TRACE?')[0:2] == 'ON':
             channels += ('C4',)
         return channels
 
@@ -305,10 +300,10 @@ class WaveSurfer:
     def displayed_traces(self)  -> tuple[()]:    # returns a tuple of trace names, e.g. ('C1', 'C4', 'F1')
         """ return displayed TRACES, including math, memory, etc. """
         traces = ()
-        self.write('COMM_HEADER OFF')
+        self.scope.write('COMM_HEADER OFF')
 
         for tr in self.valid_trace_names:
-            if self.query(tr + ':TRACE?')[0:2] == 'ON':
+            if self.scope.query(tr + ':TRACE?')[0:2] == 'ON':
                 traces += (tr,)
         return traces
 
@@ -326,8 +321,8 @@ class WaveSurfer:
         """ set vertical scale setting for the trace
         """
         tn = self.validate_trace(trace)
-        self.write('VBS "app.Acquisition.'+tn+'.VerScaleVariable=True"')
-        self.write('VBS "app.Acquisition.'+tn+'.VerScale='+str(scale)+'"')
+        self.scope.write('VBS "app.Acquisition.'+tn+'.VerScaleVariable=True"')
+        self.scope.write('VBS "app.Acquisition.'+tn+'.VerScale='+str(scale)+'"')
         return self.vertical_scale(trace)   # it may not be what we asked for
 
     #-------------------------------------------------------------------------
@@ -336,7 +331,7 @@ class WaveSurfer:
         """ get count of averages specified for the channel, default = read from channel 'C1'
         """
         cn = self.validate_channel(channel)
-        n_sweeps = int(self.query('VBS? "Return=app.Acquisition.'+cn+'.AverageSweeps"'))
+        n_sweeps = int(self.scope.query('VBS? "Return=app.Acquisition.'+cn+'.AverageSweeps"'))
         #todo: should this deal with traces rather than channels?
         return n_sweeps
 
@@ -349,7 +344,7 @@ class WaveSurfer:
             n_sweeps = 1
         if n_sweeps > 1000000:
             n_sweeps = 1000000
-        self.write('VBS "app.Acquisition.' + cn +'.AverageSweeps=' + str(n_sweeps) + '"')
+        self.scope.write('VBS "app.Acquisition.' + cn +'.AverageSweeps=' + str(n_sweeps) + '"')
 
 
     def max_averaging_count(self) -> tuple[int, int | None]:
@@ -376,7 +371,7 @@ class WaveSurfer:
         """ determine maximum averaging count across all displayed channels, then wait for that many sweeps
         """
         n_sweeps, ach = self.max_averaging_count()
-        self.write_status_msg(aux_text + 'Waiting for averaging('+str(n_sweeps)+') to complete')
+        self.scope.write_status_msg(aux_text + 'Waiting for averaging('+str(n_sweeps)+') to complete')
 
         timed_out,N = self.wait_for_sweeps(ach, n_sweeps, timeout)
 
@@ -384,7 +379,7 @@ class WaveSurfer:
             msg = 'averaging('+str(n_sweeps)+') timed out: '+str(N)+' at %.6g s' % timeout
         else:
             msg = 'averaging('+str(n_sweeps)+'), completed, got '+str(N)
-        self.write_status_msg(aux_text + msg)
+        self.scope.write_status_msg(aux_text + msg)
         return timed_out,N
 
     def wait_for_sweeps(self, channel, n_sweeps, timeout=100, sleep_interval=0.1) -> (bool, int):
@@ -401,12 +396,12 @@ class WaveSurfer:
 
         #17-07-11 self.scope.write('TRIG_MODE AUTO')   # try to make sure it is triggering
         self.set_trigger_mode('AUTO')
-        self.write('CLEAR_SWEEPS')     # clear sweeps
+        self.scope.write('CLEAR_SWEEPS')     # clear sweeps
         self.set_trigger_mode('NORM')
         time.sleep(0.05)  # 17-07-11 sometimes is not clearing sweeps
-        self.write('COMM_FORMAT DEF9,BYTE,BIN')             # set byte data transfer
-        self.write('WAVEFORM_SETUP SP,0,NP,1,FP,1,SN,0')    # read 1 data points
-        self.write('COMM_HEADER OFF')
+        self.scope.write('COMM_FORMAT DEF9,BYTE,BIN')             # set byte data transfer
+        self.scope.write('WAVEFORM_SETUP SP,0,NP,1,FP,1,SN,0')    # read 1 data points
+        self.scope.write('COMM_HEADER OFF')
 
         # Some time is apparently required to allow for the scope to propagate the requested
         #   settings through to the hardware. This matters at the beginning of polling after
@@ -435,7 +430,7 @@ class WaveSurfer:
                 t0 = time.time()
                 try:
                     #print("wait_for_sweeps(): attempting to read waveform data")
-                    self.write(channel+':WAVEFORM?')              ### this is all we really want to do here:
+                    self.scope.write(channel+':WAVEFORM?')              ### this is all we really want to do here:
                     hdr_bytes = self.scope.read_raw()                   ###    get the scope waveform data
                     break                                               ###    and stop trying
                 except VisaIOError as err:
@@ -476,7 +471,7 @@ class WaveSurfer:
         self.set_trigger_mode('STOP')
 
         # get final number after we stop triggering:
-        self.write(channel+':WAVEFORM?')
+        self.scope.write(channel+':WAVEFORM?')
         hdr_bytes = self.scope.read_raw()
         sweeps_per_acq = struct.unpack('=l', hdr_bytes[15+148:15+148+4])[0]
 
@@ -533,17 +528,17 @@ class WaveSurfer:
         trace = self.validate_trace(trace)
 
         #waveform_setup:   SP=NP=0 -> send all points, for first point FP=1, segment# SN=0 - send all segments
-        self.write('WAVEFORM_SETUP SP,0,NP,0,FP,1,SN,0')
+        self.scope.write('WAVEFORM_SETUP SP,0,NP,0,FP,1,SN,0')
         #no header, WORD length data, binary
-        self.write('COMM_HEADER OFF')
-        self.write('COMM_FORMAT DEF9,WORD,BIN')
+        self.scope.write('COMM_HEADER OFF')
+        self.scope.write('COMM_FORMAT DEF9,WORD,BIN')
 
         # read raw data from scope
 
         if self.verbose: print('\n<:> reading',trace,'from scope')
         t0 = time.time()
 
-        self.write(trace+':WAVEFORM?')
+        self.scope.write(trace+':WAVEFORM?')
 #        self.scope.write("WAIT")
         self.trace_bytes = self.scope.read_raw()
         #self.scope.query('*OPC?')
@@ -637,16 +632,16 @@ class WaveSurfer:
         """ set the scope trigger mode to: 'AUTO', 'NORM', 'SINGLE', or 'STOP'
             if the argument is not one of these, does not change trigger mode
         """
-        self.write('COMM_HEADER OFF')
+        self.scope.write('COMM_HEADER OFF')
         # prev_trigger_mode = self.scope.query('TRIG_MODE?') #This oftentimes causes time out error
         if trigger_mode == 'AUTO':
-            self.write('TRIG_MODE AUTO')
+            self.scope.write('TRIG_MODE AUTO')
         elif trigger_mode == 'NORM':
-            self.write('TRIG_MODE NORM')
+            self.scope.write('TRIG_MODE NORM')
         elif trigger_mode == 'SINGLE':
-            self.write('TRIG_MODE SINGLE')
+            self.scope.write('TRIG_MODE SINGLE')
         elif trigger_mode == 'STOP':
-            self.write('TRIG_MODE STOP')
+            self.scope.write('TRIG_MODE STOP')
         else:
             print('set_trigger_mode function receives trigger commands other than AUTO, NORM, SINGLE or STOP.')
 
@@ -679,11 +674,11 @@ class WaveSurfer:
 
     def dumtest(self):
         r1 = self.scope.query('PANEL_SETUP?')
-        self.write('*SAV 1')		# save entire front panel state in nonvolatile #1
+        self.scope.write('*SAV 1')		# save entire front panel state in nonvolatile #1
         print(len(r1))
 
-        self.write('VBS app.SaveRecall.Setup.PanelFilename="REMOTE"')
-        r2 = self.query('app.SaveRecall.Setup.DoSavePanel')
+        self.scope.write('VBS app.SaveRecall.Setup.PanelFilename="REMOTE"')
+        r2 = self.scope.query('app.SaveRecall.Setup.DoSavePanel')
         print(len(r2))
 
     #-------------------------------------------------------------------------
@@ -705,7 +700,7 @@ class WaveSurfer:
             data = self.acquire_trace(trace, True)     # read raw scope data
 
             #print("trig mode normal")
-            self.write('TRIG_MODE NORM')   # try to make sure it is triggering
+            self.scope.write('TRIG_MODE NORM')   # try to make sure it is triggering
 
             #print("max =",self.hdr.min_value, "min =",self.hdr.max_value)         # edges of the grid
 
