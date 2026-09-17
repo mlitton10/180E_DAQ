@@ -512,7 +512,6 @@ class WaveSurfer:
             except KeyError:
                 continue
 
-        self.set_trigger_mode('NORM')   # resume triggering
         return dataset, hdr_data
 
     def acquire_trace(self, trace, raw=False)  -> numpy.array:
