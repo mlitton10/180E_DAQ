@@ -539,7 +539,7 @@ class WaveSurfer:
         self.scope.write(trace+':WAVEFORM?')
 #        self.scope.write("WAIT")
         self.trace_bytes = self.scope.read_raw()
-
+        #self.scope.query('*OPC?')
         t1 = time.time()
         if self.verbose and (t1-t0 > 1): print('    .............................%6.3g sec' % (t1-t0))
 
