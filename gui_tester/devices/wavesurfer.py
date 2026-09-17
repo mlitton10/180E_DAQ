@@ -212,8 +212,8 @@ class WaveSurfer:
         else:
             area = 'GRIDAREAONLY'
         # write "hardcopy" setup information:
-        self.write('COMM_HEADER OFF')
-        self.write('HARDCOPY_SETUP DEV, PNG, BCKG, '+bckg+', DEST, "REMOTE", AREA, '+area)
+        self.scope.write('COMM_HEADER OFF')
+        self.scope.write('HARDCOPY_SETUP DEV, PNG, BCKG, '+bckg+', DEST, "REMOTE", AREA, '+area)
         # send screen dump command
         self.write('SCREEN_DUMP')
         # read screen dump information: this is exactly the contents of a .png file, typically < 40 kB
