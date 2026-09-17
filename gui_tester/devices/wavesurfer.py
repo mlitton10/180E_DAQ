@@ -178,7 +178,7 @@ class WaveSurfer:
     def configure_scope(self):
         self.scope.timeout = self.timeout
         self.scope.chunk_size = 10 * 1024 * 1024
-        self.write('COMM_HEADER OFF')
+        self.scope.write('COMM_HEADER OFF')
 
         if len(self.valid_trace_names) == 0:
             for tr in KNOWN_TRACE_NAMES:
