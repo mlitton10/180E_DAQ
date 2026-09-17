@@ -182,12 +182,15 @@ class WaveSurfer:
 
         if len(self.valid_trace_names) == 0:
             for tr in KNOWN_TRACE_NAMES:
-                self.write(
-                    tr + ':TRACE?')  # this makes a characteristic set of beeps on the scope, as it fails for several of the entries in the list
-                self.scope.write('CMR?')  # read (and clear) the Command Status Register to check for errors
-                error_code = int(self.scope.read())
-                if error_code == 0:
-                    self.valid_trace_names += (tr,)  # no error, assume ok
+                self.get_valid_traces(tr)
+
+    def get_valid_traces(self, trace):
+        self.scope.write(trace + ':TRACE?')  # this makes a characteristic set of beeps on the scope, as it fails for several of the entries in the list
+        self.scope.write('CMR?')  # read (and clear) the Command Status Register to check for errors
+        error_code = int(self.scope.read())
+        if error_code == 0:
+            self.valid_trace_names += (trace,)  # no error, assume ok
+        pass
 
     def disconnect(self):
         self.client.disconnect()
