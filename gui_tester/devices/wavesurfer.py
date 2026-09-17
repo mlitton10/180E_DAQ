@@ -170,7 +170,7 @@ class WaveSurfer:
 
     #-------------------------------------------------------------------------
 
-    def connect(self):
+    def connect(self) -> None:
         self.client.connect()
         self.scope = self.client.connection
         self.scope.timeout = self.timeout
