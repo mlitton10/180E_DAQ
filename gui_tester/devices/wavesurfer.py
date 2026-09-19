@@ -622,11 +622,6 @@ class WaveSurfer:
             n_samples = int(self.hdr.wave_array_1/2)     # data returned as shorts
         t0 = self.hdr.horiz_offset
         return numpy.linspace(t0, t0+n_samples*self.hdr.horiz_interval, n_samples, endpoint=False)
-        #note on linspace construction here: suppose we have 2 samples and the trace is 10ms, the samples should be at 0 and 5 ms,
-        #                                    rather than 0 and 10ms as linspace(0,N*dt,N) would return
-        # Assume this is the case, because when requesting 10000 samples the scope actually returns 10001.  todo: test this, e.g. sample 1 kHz with 1000 pts, look at aliasing. Need the 1 kHz to be referenced to same frequency as scope
-
-    #-------------------------------------------------------------------------
 
     def arm_scope(self, timeout=10, poll_interval=0.02):
         self.scope.write('TRIG_MODE SINGLE')
