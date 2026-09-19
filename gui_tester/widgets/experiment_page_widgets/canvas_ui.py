@@ -162,7 +162,7 @@ class MyMplCanvas(FigureCanvas):
 		self.finished_x.append(x)
 		self.finished_y.append(y)
 		self.clear_visited_probe_position()
-		self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
+		self.visited_points = self.ax.scatter(self.finished_x, self.finished_y, **self.visited_probe_position_plotting_params)
 		self.draw()
 
 	def initialize_visited_points(self):
