@@ -79,11 +79,12 @@ class HDF5FileHandler:
                                                                       fletcher32=True,
                                                                       compression='gzip',
                                                                       compression_opts=9)
-                self._time = self._scope_grp.create_dataset('time',
-                                                 shape=(len(time),),
-                                                 fletcher32=True,
-                                                 compression='gzip',
-                                                 compression_opts=9)
+            self._time = self._scope_grp.create_dataset('time',
+                                             shape=(len(time),),
+                                             fletcher32=True,
+                                             compression='gzip',
+                                             compression_opts=9,
+                                                        dtype=time.dtype,)
 
         index = self._data.shape[0]
 
