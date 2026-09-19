@@ -81,9 +81,9 @@ def compute_polar_experiment_position_list(parameters):
 
 def get_experiment_positions(params, coordinate_system):
 	if coordinate_system == "Cartesian":
-		position_list = compute_point_grid(params)
+		position_list = compute_cartesian_experiment_position_list(params)
 	elif coordinate_system == "Polar":
-		position_list = compute_point_grid_polar(params)
+		position_list = compute_polar_experiment_position_list(params)
 	return position_list
 
 
