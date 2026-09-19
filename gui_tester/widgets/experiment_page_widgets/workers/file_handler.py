@@ -74,7 +74,7 @@ class HDF5FileHandler:
                 )
                 self._hdr_data[name] = self._header_grp.create_dataset(name,
                                                                       shape=(0,),
-                                                                      max_shape=(None,),
+                                                                      maxshape=(None,),
                                                                       dtype="V%i" % WAVEDESC_SIZE,
                                                                       fletcher32=True,
                                                                       compression='gzip',
