@@ -64,8 +64,8 @@ class HDF5FileHandler:
         if self._data is None:
             self._data = {}
             self._hdr_data = {}
-            for name, data in dataset.items():
-                data = np.asarray(data)
+            for name, datas in dataset.items():
+                data = np.asarray(datas['data'])
                 self._data[name] = self._scope_grp.create_dataset(
                     name,
                     shape=(0, *data.shape),
