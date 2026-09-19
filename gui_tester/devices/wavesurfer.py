@@ -666,17 +666,6 @@ class WaveSurfer:
 
     #-------------------------------------------------------------------------
 
-    def dumtest(self):
-        r1 = self.scope.query('PANEL_SETUP?')
-        self.scope.write('*SAV 1')		# save entire front panel state in nonvolatile #1
-        print(len(r1))
-
-        self.scope.write('VBS app.SaveRecall.Setup.PanelFilename="REMOTE"')
-        r2 = self.scope.query('app.SaveRecall.Setup.DoSavePanel')
-        print(len(r2))
-
-    #-------------------------------------------------------------------------
-
     def autoscale(self, trace):
         averaging_count = self.averaging_count(trace)
         self.set_averaging_count(trace, 1)
