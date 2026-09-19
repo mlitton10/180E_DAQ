@@ -91,6 +91,7 @@ class ExperimentWorker(Worker):
         )
 
         nowx, nowy = (-999, -999)  # why not just get the current position
+        self.scope.set_trigger_mode("NORM")
         for index, position in enumerate(positions):
 
             if self.is_stop_requested():
