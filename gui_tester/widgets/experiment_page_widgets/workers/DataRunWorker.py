@@ -127,6 +127,7 @@ class ExperimentWorker(Worker):
                 dataset[tr]['description'] = self.config.channel_description[tr]  # callback arg to the current function
                 dataset[tr]['recorded'] = True
                 dataset[tr]['shots per position'] = self.config.num_duplicate_shots
+            self.scope.set_trigger_mode("NORM")
             self.writer.append(position, dataset, hdr_data, time_ds)
 
             if self.is_stop_requested():
