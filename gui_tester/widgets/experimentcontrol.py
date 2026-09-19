@@ -262,6 +262,7 @@ class ExperimentControl(ApplicationTab):
 		data_run = ExperimentWorker(config)
 		data_run.started.connect(self.freeze_all_controls)
 		data_run.stopped.connect(self.acquisition_canceled)
+		data_run.status_changed.connect(self.display_status)
 		data_run.position_changed.connect(self.update_current_position_during_data_run)
 		data_run.finished_position.connect(self.mark_finished_positions)
 		data_run.new_screen_dump.connect(self.update_screen_dump)
