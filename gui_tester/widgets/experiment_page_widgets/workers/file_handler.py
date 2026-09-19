@@ -72,7 +72,7 @@ class HDF5FileHandler:
                     maxshape=(None, *data.shape),
                     dtype=data.dtype,
                 )
-                self._hdr_data[name] = self._scope_grp.create_dataset(name,
+                self._hdr_data[name] = self._header_grp.create_dataset(name,
                                                                       shape=(0,),
                                                                       max_shape=(None,),
                                                                       dtype="V%i" % WAVEDESC_SIZE,
