@@ -93,7 +93,8 @@ class HDF5FileHandler:
         self._positions[index] = position
         for name, data in dataset.items():
             self._data[name].resize(index + 1, axis=0)
-            self._data[name][index] = data
+            self._hdr_data[name].resize(index + 1, axis=0)
+            self._data[name][index] = data['data']
             self._hdr_data[name][index] = hdr_data[name]
 
 
