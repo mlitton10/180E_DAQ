@@ -530,7 +530,6 @@ class WaveSurfer:
         #waveform_setup:   SP=NP=0 -> send all points, for first point FP=1, segment# SN=0 - send all segments
         self.scope.write('WAVEFORM_SETUP SP,0,NP,0,FP,1,SN,0')
         #no header, WORD length data, binary
-        self.scope.write('COMM_HEADER OFF')
         self.scope.write('COMM_FORMAT DEF9,WORD,BIN')
 
         # read raw data from scope
@@ -549,7 +548,6 @@ class WaveSurfer:
         # Note: The first 15 bytes are not part of the WAVEDESC header, as determined by inspection of the data
 
         self.hdr = WAVEDESC._make(struct.unpack(WAVEDESC_FMT, self.trace_bytes[15:15+WAVEDESC_SIZE]))
-
 
         if self.hdr.comm_type == 0:
             # data returned as signed chars
