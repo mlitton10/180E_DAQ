@@ -39,8 +39,8 @@ class HDF5FileHandler:
 
         self._positions = self._file.create_dataset(
             "positions",
-            shape=(0,3),
-            maxshape=(None,3),
+            shape=(0,2),
+            maxshape=(None,2),
             dtype="f8",
         )
 
