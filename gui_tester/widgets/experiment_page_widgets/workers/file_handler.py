@@ -86,7 +86,8 @@ class HDF5FileHandler:
                                              compression_opts=9,
                                                         dtype=time.dtype,)
 
-        index = self._data.shape[0]
+        names = list(dataset.keys())
+        index = self._data[names[0]].shape[0]
 
         self._positions.resize(index + 1, axis=0)
         self._positions[index] = position
