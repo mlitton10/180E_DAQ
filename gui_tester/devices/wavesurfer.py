@@ -628,7 +628,15 @@ class WaveSurfer:
 
     #-------------------------------------------------------------------------
 
-    def set_trigger_mode(self, trigger_mode)  -> str:
+    def arm_scope(self, timeout=10, poll_interval=0.02):
+        self.scope.write('TRIG_MODE SINGLE')
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if self.scope.query('TRIG_MODE?').strip() == 'STOP' and int(self.scope.query("*OPC?")) == 1:
+                return
+            time.sleep(poll_interval)
+
+    def set_trigger_mode(self, trigger_mode)  -> None:
         """ set the scope trigger mode to: 'AUTO', 'NORM', 'SINGLE', or 'STOP'
             if the argument is not one of these, does not change trigger mode
         """
