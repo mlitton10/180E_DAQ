@@ -140,7 +140,7 @@ class ExperimentWorker(Worker):
 
             # Update position information
             self.finished_position.emit(
-                position
+                *position
             )
             self.scope.screen_dump()
             self.new_screen_dump.emit()
