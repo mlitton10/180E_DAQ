@@ -37,7 +37,7 @@ class ExperimentWorker(Worker):
     stopped = pyqtSignal()
 
     # Fatal error
-    error = pyqtSignal(str)
+    failed = pyqtSignal(str)
 
     def __init__(self, config: QuickExperimentRunConfig):
         super().__init__()
@@ -60,7 +60,8 @@ class ExperimentWorker(Worker):
             self._run_experiment()
 
         except Exception:
-            self.error.emit(traceback.format_exc())
+            print(traceback.format_exc())
+            self.failed.emit(traceback.format_exc())
 
         finally:
             self._cleanup()
