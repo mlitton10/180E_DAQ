@@ -121,6 +121,8 @@ class ExperimentWorker(Worker):
                 f"Acquiring data at position {position}"
             )
 
+            self.scope.arm_scope()
+
             dataset, hdr_data = self.scope.acquire_displayed_traces()
             time_ds = self.scope.time_array()[0:n_times]
             for tr in traces:
