@@ -269,6 +269,9 @@ class ExperimentControl(ApplicationTab):
 
 		self.run_worker_async(data_run, self.data_run_finished, self.acquisition_canceled)
 
+	def display_status(self, status):
+		print(status)
+
 	def acquisition_canceled(self):
 		QMessageBox.about(self, "Acquisition Status", "Data acquisition cancelled.")
 		self.enable_all_controls()
