@@ -104,8 +104,8 @@ class MotorClient(DeviceClient):
 
             self.connection.sendall(buf)
 
-        buf_size = 1024
-        data = self.connection.recv(buf_size)
-        return_text = data.decode('ASCII')
-        return return_text
+            buf_size = 1024
+            data = self.connection.recv(buf_size)
+            return_text = data.decode('ASCII')
+            return return_text
 
