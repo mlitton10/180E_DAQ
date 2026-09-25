@@ -90,16 +90,17 @@ class MotorClient(DeviceClient):
         self._connected = value
 
     def send_command(self, command:str):
-        if not self.connected or self.connection is None:
-            self.connect()
+        with self._io_lock:
+            if not self.connected or self.connection is None:
+                self.connect()
 
-        message = bytearray(command, encoding='ASCII')
-        buf = bytearray(2)
-        buf[0] = 0
-        buf[1] = 7
-        for i in range(len(message)):
-            buf.append(message[i])
-        buf.append(13)
+            message = bytearray(command, encoding='ASCII')
+            buf = bytearray(2)
+            buf[0] = 0
+            buf[1] = 7
+            for i in range(len(message)):
+                buf.append(message[i])
+            buf.append(13)
 
         self.connection.sendall(buf)
 
