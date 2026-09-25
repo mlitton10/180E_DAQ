@@ -33,8 +33,6 @@ class UserTextRow(QWidget):
     def __init__(self, label_string, read_only=False):
         super().__init__()
 
-        layout = QFormLayout(self)
-
         self.label = QLabel(label_string)
         self.text_box = QLineEdit()
         self.text_box.setReadOnly(read_only)
