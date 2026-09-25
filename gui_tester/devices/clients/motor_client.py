@@ -16,6 +16,8 @@ class MotorClient(DeviceClient):
         self.connected = False
         self.connection: socket.socket | None = None
 
+        self._io_lock = threading.Lock()
+
     def connect(self,
                 retries: int = 30,
                 retry_delay: int = 1):
