@@ -38,6 +38,15 @@ class UserTextRow(QWidget):
         self.label = QLabel(label_string)
         self.text_box = QLineEdit()
         self.text_box.setReadOnly(read_only)
+        self._build_layout()
+
+
+    def _build_layout(self):
+        layout = QFormLayout(self)
+
+        self.text_box.setMinimumWidth(150)
+        self.text_box.setMaximumWidth(400)
+        self.text_box.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         layout.addRow(self.label, self.text_box)
 
     def update_text(self, update_string):
