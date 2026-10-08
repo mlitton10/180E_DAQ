@@ -23,14 +23,35 @@ class PiClient(DeviceClient):
         self.connection = self.connect()
 
     def connect(self):
-        try:
-            self.socket = socket.create_connection(
-                (self.host, self.port),
-                timeout=2.0,
-            )
-            self.connected.emit()
-        except Exception as exc:
-            self.failed.emit(str(exc))
+        self._socket = socket.create_connection(
+            (self.host_ip, self.port),
+            timeout=self.timeout,
+        )
+        self._socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        self._socket.settimeout(None)
+        self._alive = True
+        threading.Thread(self._reader, daemon=True).start()
+        deadline = time.monotonic() + self.timeout
+        with self._cv:
+            while self.hello is None:
+                if not self._cv.wait(deadline - time.monotonic()) or not self._alive:
+                    self.close()
+                    raise MagnetError("No hello response from server")
+
+    def close(self):
+        self._alive = False
+        if self._socket:
+            try:
+                self._socket.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+        self._socket.close()
+        self._socket = None
+
+    __enter__ = connect
+    def __exit__(self, *exc):
+        self.close()
 
     def disconnect(self):
         self.connection.close()
