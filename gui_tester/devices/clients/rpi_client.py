@@ -57,8 +57,25 @@ class PiClient(DeviceClient):
     def connected(self):
         return self._alive and (time.monotonic() - self._status_rx) < self.stale_after
 
-    def is_connected(self):
-        return self.connected
+    def _reader(self):
+        try:
+            for line in self._socket.makefile('r', encoding='utf-8'):
+                msg = json.loads(line)
+                with self._cv:
+                    kind = msg.get('type')
+                    if kind == 'hello':
+                        self.hello = msg
+                    elif kind == 'status':
+                        self._status, self._status_rx = msg, time.monotonic()
+                    else:
+                        self._reply = msg
+                    self._cv.notify_all()
+        except (OSError, ValueError):
+            pass
+        finally:
+            with self._cv:
+                self._alive = False
+                self._cv.notify_all()
 
     def send_command(self, command:str):
         if not self.connected:
