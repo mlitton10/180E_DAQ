@@ -53,9 +53,9 @@ class PiClient(DeviceClient):
     def __exit__(self, *exc):
         self.close()
 
-    def disconnect(self):
-        self.connection.close()
-        self.connected = False
+    @property
+    def connected(self):
+        return self._alive and (time.monotonic() - self._status_rx) < self.stale_after
 
     def is_connected(self):
         return self.connected
