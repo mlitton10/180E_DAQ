@@ -101,5 +101,8 @@ class PiClient(DeviceClient):
         return self._command({'cmd': "set", 'psu': psu, 'current': float(current)})
 
     def set_many(self, setpoints: dict):
-        return self._command({'cmd': "set_many", 'setpoints': {ch: float(current) for ch, current in setpoints.items()}})
+        return self._command({'cmd': "set_many", 'setpoints': {psu: float(current) for psu, current in setpoints.items()}})
+
+    def ping(self):
+        return self._command({'cmd': "ping"})
 
