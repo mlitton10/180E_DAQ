@@ -100,8 +100,6 @@ class PiClient(DeviceClient):
     def set(self, psu: str, current: float):
         return self._command({'cmd': "set", 'psu': psu, 'current': float(current)})
 
-        buf_size = 1024
-        data = self.connection.recv(buf_size)
-        return_text = data.decode('ASCII')
-        return return_text
+    def set_many(self, setpoints: dict):
+        return self._command({'cmd': "set_many", 'setpoints': {ch: float(current) for ch, current in setpoints.items()}})
 
