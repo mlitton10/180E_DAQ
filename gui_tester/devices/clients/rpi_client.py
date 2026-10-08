@@ -1,4 +1,6 @@
+import json
 import socket
+import threading
 import time
 
 from gui_tester.devices.clients.base import DeviceClient
@@ -18,9 +20,7 @@ class PiClient(DeviceClient):
         self._alive = None
         self._status_rx = None
 
-
-        self.connected = False
-        self.connection = self.connect()
+        self.connect()
 
     def connect(self):
         self._socket = socket.create_connection(
@@ -111,4 +111,40 @@ class PiClient(DeviceClient):
         with self._cv:
             return self._status
 
-    def wait_settled(self):
+    def wait_settled(self, tol=0.002, timeout: float = 3.00):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            s = self.status
+            if s and self.connected and all(s['outputs'][n] - v <= tol for n, v in s['setpoints'].items()):
+                return s
+            time.sleep(0.05)
+        raise MagnetError("Timed out waiting for setpoints")
+
+def _main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('host')
+    parser.add_argument('setpoints', nargs='*')
+    parser.add_argument('--port', type=int, default=5025)
+    parser.add_argument('--monitor', action='store_true')
+    args = parser.parse_args()
+
+    with PiClient(args.host, args.port) as client:
+        if args.setpoints:
+            client.set_many({psu:float(value) for psu, value in (s.split('=') for s in args.setpoints)})
+        if args.monitor or not args.setpoints:
+            try:
+                while client.connected or client.status is None:
+                    s = client.status
+                    if s:
+                        print(time.strftime("%H:%M:%S"), "set", s['setpoints'], 'out', s['outputs'])
+                    time.sleep(1.0)
+            except KeyboardInterrupt:
+                pass
+        else:
+            print(client.wait_settled())
+    pass
+
+
+if __name__ == '__main__':
+    _main()
