@@ -7,8 +7,18 @@ class MagnetError(Exception):
     pass
 
 class PiClient(DeviceClient):
-    def __init__(self, ip: str, verbose = True):
-        self.ip = ip
+    def __init__(self, host_ip: str, port=5025, timeout=3.0, stale_after=2.0, verbose = True):
+        self.host_ip, self.port, self.timeout, self.stale_after = host_ip, port, timeout, stale_after
+
+        self.hello = None
+        self._status = None
+        self._socket = None
+        self._lock = threading.Lock()
+        self._cv = threading.Condition()
+        self._alive = None
+        self._status_rx = None
+
+
         self.connected = False
         self.connection = self.connect()
 
