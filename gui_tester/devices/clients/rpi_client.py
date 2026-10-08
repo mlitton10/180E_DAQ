@@ -77,11 +77,8 @@ class PiClient(DeviceClient):
                 self._alive = False
                 self._cv.notify_all()
 
-    def send_command(self, command:str):
-        if not self.connected:
-            con_res = self.connect()
-            if con_res is None:
-                raise ConnectionRefusedError("Unable to connect to motor server at", self.ip)
+    def _command(self, command: dict):
+        with self._lock:
 
         message = bytearray(command, encoding='ASCII')
         buf = bytearray(2)
