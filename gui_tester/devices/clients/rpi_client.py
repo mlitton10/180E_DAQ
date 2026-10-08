@@ -3,6 +3,8 @@ import time
 
 from gui_tester.devices.clients.base import DeviceClient
 
+class MagnetError(Exception):
+    pass
 
 class PiClient(DeviceClient):
     def __init__(self, ip: str, verbose = True):
