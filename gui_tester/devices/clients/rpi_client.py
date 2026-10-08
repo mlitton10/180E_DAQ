@@ -80,13 +80,22 @@ class PiClient(DeviceClient):
     def _command(self, command: dict):
         with self._lock:
 
-        message = bytearray(command, encoding='ASCII')
-        buf = bytearray(2)
-        buf[0] = 0
-        buf[1] = 7
-        for i in range(len(message)):
-            buf.append(message[i])
-        buf.append(13)
+            if not self._alive:
+                raise MagnetError("No connection")
+            with self._cv:
+                self._reply = None
+            self._socket.sendall((json.dumps(command) + '\n').encode())
+            deadline = time.monotonic() + self.timeout
+            with self._cv:
+                while self._reply is None:
+                    if not self._alive:
+                        raise MagnetError("Lost connection")
+                    if not self._cv.wait(deadline - time.monotonic()):
+                        raise MagnetError("Timed out waiting for response")
+                reply = self._reply
+            if reply.get("type") == 'error':
+                raise MagnetError(reply["error"])
+            return reply
 
         self.connection.send(buf)
 
