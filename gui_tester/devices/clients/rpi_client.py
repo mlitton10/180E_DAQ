@@ -106,3 +106,9 @@ class PiClient(DeviceClient):
     def ping(self):
         return self._command({'cmd': "ping"})
 
+    @property
+    def status(self):
+        with self._cv:
+            return self._status
+
+    def wait_settled(self):
