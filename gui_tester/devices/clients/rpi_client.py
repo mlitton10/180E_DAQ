@@ -97,7 +97,8 @@ class PiClient(DeviceClient):
                 raise MagnetError(reply["error"])
             return reply
 
-        self.connection.send(buf)
+    def set(self, psu: str, current: float):
+        return self._command({'cmd': "set", 'psu': psu, 'current': float(current)})
 
         buf_size = 1024
         data = self.connection.recv(buf_size)
